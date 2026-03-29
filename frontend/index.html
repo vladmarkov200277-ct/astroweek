@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>AstroWeek · BLONDY club</title>
+
+  <!-- Telegram Mini App SDK -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─── Reset & Base ─────────────────────────────────────── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --rose:      #c4607c;
+      --rose-dark: #a84868;
+      --rose-lt:   #f0d8e2;
+      --rose-bg:   #fdf8f9;
+      --text:      #4a2538;
+      --text-muted:#907080;
+      --text-soft: #b08898;
+      --border:    #edd8e2;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: 'Inter', sans-serif;
+      background: #fff;
+      color: var(--text);
+      overflow: hidden;
+    }
+
+    /* ─── App Shell ─────────────────────────────────────────── */
+    #app {
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* ─── Screens ───────────────────────────────────────────── */
+    .screen {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      transition: opacity 0.35s ease, transform 0.35s ease;
+      background: #fff;
+      overflow: hidden;
+    }
+    .screen.hidden {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(24px);
+    }
+    .screen.slide-left.hidden {
+      transform: translateX(-24px);
+    }
+
+    /* ─── Scrollable body inside screen ────────────────────── */
+    .screen-body {
+      flex: 1;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* ════════════════════════════════════════════════════════
+       SCREEN 1 — INPUT
+    ════════════════════════════════════════════════════════ */
+    #s-input .hero {
+      height: 248px;
+      flex-shrink: 0;
+      position: relative;
+      overflow: hidden;
+      background: radial-gradient(ellipse 80% 60% at 50% 70%,
+          #3a1030 0%, #1e0820 35%, #0d040f 70%, #060208 100%);
+    }
+    #s-input .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        radial-gradient(1px 1px at 18% 12%, rgba(255,255,255,.80) 0%,transparent 100%),
+        radial-gradient(1px 1px at 72%  8%, rgba(255,255,255,.65) 0%,transparent 100%),
+        radial-gradient(1px 1px at 40% 22%, rgba(255,255,255,.55) 0%,transparent 100%),
+        radial-gradient(1px 1px at 88% 30%, rgba(255,255,255,.75) 0%,transparent 100%),
+        radial-gradient(1px 1px at 10% 40%, rgba(255,255,255,.50) 0%,transparent 100%),
+        radial-gradient(1px 1px at 55% 35%, rgba(255,255,255,.70) 0%,transparent 100%),
+        radial-gradient(1px 1px at 30% 50%, rgba(255,255,255,.45) 0%,transparent 100%),
+        radial-gradient(1px 1px at 92% 55%, rgba(255,255,255,.60) 0%,transparent 100%),
+        radial-gradient(1px 1px at 65% 18%, rgba(255,255,255,.55) 0%,transparent 100%),
+        radial-gradient(1px 1px at 25% 65%, rgba(255,255,255,.40) 0%,transparent 100%),
+        radial-gradient(1px 1px at 80% 68%, rgba(255,255,255,.65) 0%,transparent 100%),
+        radial-gradient(2px 2px at 50% 10%, rgba(255,230,240,.90) 0%,transparent 100%),
+        radial-gradient(2px 2px at 82% 18%, rgba(255,210,230,.70) 0%,transparent 100%),
+        radial-gradient(1px 1px at 45% 58%, rgba(255,255,255,.50) 0%,transparent 100%),
+        radial-gradient(1px 1px at 20% 88%, rgba(255,255,255,.50) 0%,transparent 100%),
+        radial-gradient(1px 1px at 75% 90%, rgba(255,255,255,.40) 0%,transparent 100%);
+    }
+    #s-input .hero::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 55% 40% at 50% 45%,
+          rgba(200,80,130,.22) 0%, rgba(150,40,100,.12) 45%, transparent 75%);
+    }
+    #s-input .hero-fade {
+      position: absolute; bottom: 0; left: 0; right: 0; height: 90px;
+      background: linear-gradient(to bottom, transparent, #fff);
+      z-index: 2;
+    }
+    #s-input .hero-brand {
+      position: absolute; bottom: 20px; left: 0; right: 0;
+      text-align: center; z-index: 3;
+    }
+    .hero-channel {
+      font-size: 10px; font-weight: 500; letter-spacing: 3.5px;
+      color: rgba(255,255,255,.60); text-transform: uppercase; margin-bottom: 4px;
+    }
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 30px; font-weight: 300; letter-spacing: 7px;
+      color: rgba(255,255,255,.95);
+      text-shadow: 0 2px 24px rgba(200,80,130,.4);
+    }
+
+    /* Input form */
+    .input-body {
+      padding: 18px 22px 24px;
+      display: flex; flex-direction: column; gap: 14px;
+    }
+    .input-intro {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 15px; font-style: italic; color: var(--text-soft);
+      text-align: center; line-height: 1.55;
+    }
+    .divider {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .divider::before, .divider::after {
+      content: ''; flex: 1; height: 1px;
+      background: linear-gradient(90deg, transparent, #edd8e0, transparent);
+    }
+    .divider span {
+      font-size: 9px; letter-spacing: 2.5px;
+      color: #d4a8b8; text-transform: uppercase;
+    }
+    .field { display: flex; flex-direction: column; gap: 5px; }
+    .field label {
+      font-size: 9px; font-weight: 500; letter-spacing: 2.5px;
+      color: #c090a4; text-transform: uppercase;
+    }
+    .field input {
+      width: 100%; padding: 12px 14px;
+      background: var(--rose-bg); border: 1px solid var(--border);
+      border-radius: 10px; font-family: 'Inter', sans-serif;
+      font-size: 14px; color: var(--text); outline: none;
+      -webkit-appearance: none;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .field input:focus {
+      border-color: #d08098;
+      box-shadow: 0 0 0 3px rgba(200,100,140,.08);
+      background: #fff;
+    }
+    .field input::placeholder { color: #d4b5c4; font-style: italic; font-size: 13px; }
+    .field-row { display: flex; gap: 10px; }
+    .field-row .field { flex: 1; }
+
+    .btn-rose {
+      padding: 14px; border: none; border-radius: 10px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 17px; font-weight: 400; letter-spacing: 3px;
+      color: #fff; background: linear-gradient(135deg, #c4607c, #a84868);
+      box-shadow: 0 4px 18px rgba(180,80,110,.28);
+      cursor: pointer; transition: opacity .2s;
+    }
+    .btn-rose:active { opacity: .85; }
+    .btn-rose:disabled { opacity: .5; cursor: not-allowed; }
+
+    .error-msg {
+      font-size: 12px; color: #c44060; text-align: center;
+      padding: 8px 12px; background: #fff0f3;
+      border: 1px solid #f5c0cc; border-radius: 8px;
+      display: none;
+    }
+    .error-msg.visible { display: block; }
+
+
+    /* ════════════════════════════════════════════════════════
+       SCREEN 2 — LOADING
+    ════════════════════════════════════════════════════════ */
+    #s-loading .load-hero {
+      height: 48%;
+      flex-shrink: 0;
+      position: relative; overflow: hidden;
+      background: radial-gradient(circle 120px at 50% 55%,
+          #fff9f5 0%, #fde8f0 18%, #f5c0d5 35%,
+          #e898b8 52%, #c460a0 68%,
+          #8a3070 82%, #3a1030 100%);
+    }
+    #s-loading .load-hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        radial-gradient(1px 1px at 15%  10%, rgba(255,255,255,.70) 0%,transparent 100%),
+        radial-gradient(1px 1px at 78%   6%, rgba(255,255,255,.60) 0%,transparent 100%),
+        radial-gradient(1px 1px at 92%  22%, rgba(255,255,255,.55) 0%,transparent 100%),
+        radial-gradient(1px 1px at  8%  35%, rgba(255,255,255,.50) 0%,transparent 100%),
+        radial-gradient(1.5px 1.5px at 40% 5%, rgba(255,220,235,.80) 0%,transparent 100%);
+    }
+    #s-loading .load-fade {
+      position: absolute; bottom: 0; left: 0; right: 0; height: 70px;
+      background: linear-gradient(to bottom, transparent, #fff); z-index: 2;
+    }
+    .load-body {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 20px 28px; gap: 20px; text-align: center;
+    }
+    .load-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px; font-weight: 400; letter-spacing: 2px; color: #6a3048;
+    }
+    .steps { display: flex; flex-direction: column; gap: 9px; width: 100%; }
+    .step {
+      display: flex; align-items: center; gap: 12px;
+      padding: 11px 14px; border-radius: 12px;
+      transition: all .4s ease;
+    }
+    .step.done   { background: #fdf5f7; }
+    .step.active { background: linear-gradient(135deg,#fdf0f4,#fff6f0); border: 1px solid var(--rose-lt); }
+    .step.idle   { background: #fdfbfb; }
+    .step-ico {
+      width: 30px; height: 30px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+      transition: background .4s;
+    }
+    .step.done   .step-ico { background: #f0d8e2; }
+    .step.active .step-ico { background: var(--rose); }
+    .step.idle   .step-ico { background: #eddde4; }
+    .step-txt { font-size: 13px; font-weight: 400; color: var(--text-muted); }
+    .step.active .step-txt { color: #5a3040; font-weight: 500; }
+    .step.done   .step-txt { color: #b8969e; }
+    .step.idle   .step-txt { color: #d4b5c4; }
+
+    .pulse-dots { display: flex; gap: 7px; }
+    .pdot {
+      width: 6px; height: 6px; border-radius: 50%;
+      animation: pdot 1.4s ease-in-out infinite;
+    }
+    .pdot:nth-child(1) { background: #e8a0b8; }
+    .pdot:nth-child(2) { background: var(--rose); animation-delay:.2s; }
+    .pdot:nth-child(3) { background: #e8a0b8; animation-delay:.4s; }
+    @keyframes pdot {
+      0%,100% { opacity:.3; transform:scale(.85); }
+      50%      { opacity:1;  transform:scale(1.2); }
+    }
+
+
+    /* ════════════════════════════════════════════════════════
+       SCREEN 3 — FORECAST
+    ════════════════════════════════════════════════════════ */
+    #s-forecast .fc-hero {
+      height: 188px; flex-shrink: 0;
+      position: relative; overflow: hidden;
+      background:
+        radial-gradient(ellipse 70% 80% at 30% 60%, rgba(220,100,140,.55) 0%,transparent 60%),
+        radial-gradient(ellipse 60% 70% at 75% 40%, rgba(255,180,200,.40) 0%,transparent 55%),
+        radial-gradient(ellipse 90% 90% at 50% 50%,
+            #f0c0d4 0%, #e0a0c0 25%, #c87ea8 50%,
+            #9a5888 70%, #5a2848 90%, #2a0e20 100%);
+    }
+    #s-forecast .fc-hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        radial-gradient(1px 1px at 20% 15%, rgba(255,255,255,.80) 0%,transparent 100%),
+        radial-gradient(1px 1px at 60%  8%, rgba(255,255,255,.70) 0%,transparent 100%),
+        radial-gradient(1px 1px at 88% 20%, rgba(255,255,255,.60) 0%,transparent 100%),
+        radial-gradient(1.5px 1.5px at 42% 12%, rgba(255,230,240,.90) 0%,transparent 100%),
+        radial-gradient(1px 1px at  8% 30%, rgba(255,255,255,.55) 0%,transparent 100%);
+    }
+    #s-forecast .fc-fade {
+      position: absolute; bottom: 0; left: 0; right: 0; height: 80px;
+      background: linear-gradient(to bottom, transparent, #fff); z-index: 2;
+    }
+    .fc-hero-info {
+      position: absolute; bottom: 14px; left: 0; right: 0;
+      text-align: center; z-index: 3;
+    }
+    .fc-sign-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 25px; font-weight: 400; letter-spacing: 5px;
+      color: #fff; text-shadow: 0 2px 16px rgba(100,20,50,.4);
+    }
+    .fc-sign-sub {
+      font-size: 10px; letter-spacing: 2.5px;
+      color: rgba(255,255,255,.70); text-transform: uppercase; margin-top: 2px;
+    }
+
+    /* Back button overlay on forecast hero */
+    .hero-back {
+      position: absolute; top: 0; left: 0; right: 0; height: 52px;
+      display: flex; align-items: flex-end; padding: 0 18px 10px;
+      z-index: 10;
+    }
+    .back-btn {
+      background: none; border: none; cursor: pointer;
+      font-size: 26px; color: rgba(255,255,255,.85);
+      line-height: 1; padding: 0 6px 0 0;
+    }
+
+    .fc-body { padding: 12px 18px 28px; }
+
+    /* Natal tags */
+    .natal-tags { display: flex; gap: 5px; flex-wrap: wrap; justify-content: center; margin-bottom: 13px; }
+    .ntag {
+      font-size: 10px; font-weight: 500; letter-spacing: 1.5px;
+      color: var(--text-soft); padding: 4px 10px;
+      border: 1px solid var(--border); border-radius: 20px;
+      background: var(--rose-bg); text-transform: uppercase;
+    }
+
+    /* Week strip */
+    .week-strip {
+      display: flex; gap: 3px; margin-bottom: 14px;
+      background: var(--rose-bg); border-radius: 12px; padding: 6px;
+    }
+    .wd {
+      flex: 1; padding: 7px 0; border-radius: 8px; text-align: center;
+      cursor: default;
+    }
+    .wd .dn { font-size: 9px; font-weight: 500; letter-spacing: .5px; color: #c4a0b0; text-transform: uppercase; }
+    .wd .dd { font-size: 13px; font-weight: 500; color: #9a7080; margin-top: 2px; }
+    .wd.active { background: var(--rose); }
+    .wd.active .dn { color: rgba(255,255,255,.70); }
+    .wd.active .dd { color: #fff; }
+    .wd.fav { background: #fff8f9; }
+    .wd.fav .dd { color: var(--rose); }
+    .wd.fav .dn { color: #e8a0b8; }
+
+    /* Section separator */
+    .sep {
+      display: flex; align-items: center; gap: 8px; margin: 4px 0 10px;
+    }
+    .sep::before, .sep::after {
+      content: ''; flex: 1; height: 1px;
+      background: linear-gradient(90deg, transparent, #edd8e0, transparent);
+    }
+    .sep span { font-size: 9px; letter-spacing: 2.5px; color: #d4a8b8; text-transform: uppercase; }
+
+    /* Summary */
+    .fc-summary {
+      padding: 13px 14px; background: linear-gradient(135deg,#fff5f8,#fdf8f9);
+      border: 1px solid var(--border); border-radius: 14px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 15px; font-style: italic; color: #6a3048; line-height: 1.55;
+      margin-bottom: 10px;
+    }
+
+    /* Forecast cards */
+    .fc-card {
+      background: var(--rose-bg); border: 1px solid var(--border);
+      border-radius: 14px; padding: 13px; margin-bottom: 9px;
+    }
+    .fc-card-head { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+    .fc-ico {
+      width: 32px; height: 32px; border-radius: 9px;
+      background: #fff; border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .fc-card-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 16px; font-weight: 500; letter-spacing: .5px; color: #6a3048;
+    }
+    .fc-card p { font-size: 12px; line-height: 1.65; color: var(--text-muted); }
+    .fc-meter { display: flex; align-items: center; gap: 8px; margin-top: 9px; }
+    .fc-meter-bar { flex: 1; height: 2px; background: var(--rose-lt); border-radius: 1px; overflow: hidden; }
+    .fc-meter-fill { height: 100%; border-radius: 1px; background: linear-gradient(90deg,#f0c0d0,var(--rose)); transition: width .8s ease; }
+    .fc-meter-val { font-size: 10px; font-weight: 500; color: #c090a4; min-width: 20px; text-align: right; }
+
+    /* Refresh button */
+    .btn-ghost {
+      width: 100%; padding: 12px; background: transparent;
+      border: 1px solid #e8b0c4; border-radius: 10px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 15px; font-weight: 400; letter-spacing: 3px;
+      color: var(--rose); cursor: pointer; margin-top: 6px;
+      transition: background .2s;
+    }
+    .btn-ghost:active { background: #fdf0f4; }
+  </style>
+</head>
+<body>
+<div id="app">
+
+  <!-- ═══ SCREEN 1: INPUT ═══════════════════════════════════════════ -->
+  <div id="s-input" class="screen">
+    <div class="hero" id="hero-bg">
+      <div class="hero-fade"></div>
+      <div class="hero-brand">
+        <div class="hero-channel">@BLONDY_club</div>
+        <div class="hero-title">ASTRO WEEK</div>
+      </div>
+    </div>
+
+    <div class="screen-body">
+      <div class="input-body">
+        <p class="input-intro">
+          Введите данные рождения — звёзды расскажут,<br>что ждёт вас на этой неделе
+        </p>
+
+        <div class="divider"><span>данные рождения</span></div>
+
+        <div class="field">
+          <label for="f-date">Дата рождения</label>
+          <input id="f-date" type="text" placeholder="ДД.ММ.ГГГГ" maxlength="10" inputmode="numeric">
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="f-time">Время рождения</label>
+            <input id="f-time" type="text" placeholder="ЧЧ:ММ" maxlength="5" inputmode="numeric">
+          </div>
+          <div class="field">
+            <label for="f-city">Город рождения</label>
+            <input id="f-city" type="text" placeholder="Москва">
+          </div>
+        </div>
+
+        <div id="error-msg" class="error-msg"></div>
+
+        <button id="btn-submit" class="btn-rose">ПОЛУЧИТЬ ПРОГНОЗ</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══ SCREEN 2: LOADING ════════════════════════════════════════ -->
+  <div id="s-loading" class="screen hidden">
+    <div class="load-hero">
+      <div class="load-fade"></div>
+    </div>
+    <div class="load-body">
+      <div class="load-title">Читаем звёзды для вас</div>
+      <div class="steps">
+        <div class="step idle" id="step1">
+          <div class="step-ico">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <circle cx="7" cy="7" r="2.5" stroke="#d4a0b5" stroke-width="1.2"/>
+            </svg>
+          </div>
+          <span class="step-txt">Строим натальную карту</span>
+        </div>
+        <div class="step idle" id="step2">
+          <div class="step-ico">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <circle cx="7" cy="7" r="2.5" stroke="#d4a0b5" stroke-width="1.2"/>
+            </svg>
+          </div>
+          <span class="step-txt">Анализируем транзиты планет</span>
+        </div>
+        <div class="step idle" id="step3">
+          <div class="step-ico">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <circle cx="7" cy="7" r="2.5" stroke="#d4a0b5" stroke-width="1.2"/>
+            </svg>
+          </div>
+          <span class="step-txt">Составляем прогноз</span>
+        </div>
+      </div>
+      <div class="pulse-dots">
+        <div class="pdot"></div><div class="pdot"></div><div class="pdot"></div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══ SCREEN 3: FORECAST ═══════════════════════════════════════ -->
+  <div id="s-forecast" class="screen hidden">
+    <div class="fc-hero">
+      <div class="hero-back">
+        <button class="back-btn" id="btn-back">‹</button>
+      </div>
+      <div class="fc-fade"></div>
+      <div class="fc-hero-info">
+        <div class="fc-sign-name" id="fc-sign">РЫБЫ</div>
+        <div class="fc-sign-sub" id="fc-sub">Асц. Лев · Луна в Скорпионе</div>
+      </div>
+    </div>
+
+    <div class="screen-body">
+      <div class="fc-body">
+        <!-- Натальные теги -->
+        <div class="natal-tags" id="natal-tags"></div>
+
+        <!-- Неделя -->
+        <div class="week-strip" id="week-strip"></div>
+
+        <!-- Разделитель -->
+        <div class="sep"><span>прогноз на неделю</span></div>
+
+        <!-- Общий совет -->
+        <div class="fc-summary" id="fc-summary"></div>
+
+        <!-- Карьера -->
+        <div class="fc-card">
+          <div class="fc-card-head">
+            <div class="fc-ico">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#c4607c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="7" width="20" height="14" rx="2"/>
+                <path d="M16 7V5a2 2 0 0 0-4 0v2"/>
+                <line x1="12" y1="12" x2="12" y2="15"/>
+              </svg>
+            </div>
+            <div class="fc-card-title">Карьера</div>
+          </div>
+          <p id="fc-career-text"></p>
+          <div class="fc-meter">
+            <div class="fc-meter-bar"><div class="fc-meter-fill" id="fc-career-bar" style="width:0%"></div></div>
+            <div class="fc-meter-val" id="fc-career-val"></div>
+          </div>
+        </div>
+
+        <!-- Отношения -->
+        <div class="fc-card">
+          <div class="fc-card-head">
+            <div class="fc-ico">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#c4607c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+              </svg>
+            </div>
+            <div class="fc-card-title">Отношения</div>
+          </div>
+          <p id="fc-rel-text"></p>
+          <div class="fc-meter">
+            <div class="fc-meter-bar"><div class="fc-meter-fill" id="fc-rel-bar" style="width:0%"></div></div>
+            <div class="fc-meter-val" id="fc-rel-val"></div>
+          </div>
+        </div>
+
+        <!-- Здоровье -->
+        <div class="fc-card">
+          <div class="fc-card-head">
+            <div class="fc-ico">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#c4607c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/>
+              </svg>
+            </div>
+            <div class="fc-card-title">Здоровье</div>
+          </div>
+          <p id="fc-health-text"></p>
+          <div class="fc-meter">
+            <div class="fc-meter-bar"><div class="fc-meter-fill" id="fc-health-bar" style="width:0%"></div></div>
+            <div class="fc-meter-val" id="fc-health-val"></div>
+          </div>
+        </div>
+
+        <button class="btn-ghost" id="btn-refresh">ОБНОВИТЬ ПРОГНОЗ</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ─── Telegram Web App init ──────────────────────────────────────────────────
+const tg = window.Telegram?.WebApp;
+if (tg) {
+  tg.ready();
+  tg.expand();
+  tg.setHeaderColor('#ffffff');
+  tg.setBackgroundColor('#ffffff');
+}
+
+// ─── Config ────────────────────────────────────────────────────────────────
+// Укажите URL вашего сервера (заменится при деплое)
+const API_BASE = window.location.origin;
+
+// ─── State ─────────────────────────────────────────────────────────────────
+let lastData = null;
+
+// ─── Screens ───────────────────────────────────────────────────────────────
+function showScreen(id, direction = 'right') {
+  document.querySelectorAll('.screen').forEach(s => {
+    if (s.id === id) {
+      s.classList.remove('hidden');
+      if (direction === 'left') s.classList.add('slide-left');
+      else s.classList.remove('slide-left');
+    } else {
+      s.classList.add('hidden');
+    }
+  });
+}
+
+// ─── Input masking ─────────────────────────────────────────────────────────
+const dateInput = document.getElementById('f-date');
+const timeInput = document.getElementById('f-time');
+
+dateInput.addEventListener('input', e => {
+  let v = e.target.value.replace(/\D/g, '');
+  if (v.length > 2) v = v.slice(0,2) + '.' + v.slice(2);
+  if (v.length > 5) v = v.slice(0,5) + '.' + v.slice(5);
+  e.target.value = v.slice(0, 10);
+});
+
+timeInput.addEventListener('input', e => {
+  let v = e.target.value.replace(/\D/g, '');
+  if (v.length > 2) v = v.slice(0,2) + ':' + v.slice(2);
+  e.target.value = v.slice(0, 5);
+});
+
+// ─── Validation ────────────────────────────────────────────────────────────
+function showError(msg) {
+  const el = document.getElementById('error-msg');
+  el.textContent = msg;
+  el.classList.add('visible');
+}
+function clearError() {
+  document.getElementById('error-msg').classList.remove('visible');
+}
+
+function validate(date, time, city) {
+  if (!/^\d{2}\.\d{2}\.\d{4}$/.test(date)) return 'Введите дату в формате ДД.ММ.ГГГГ';
+  const [d, m, y] = date.split('.').map(Number);
+  if (d < 1 || d > 31 || m < 1 || m > 12 || y < 1900 || y > 2010)
+    return 'Некорректная дата рождения';
+  if (!/^\d{2}:\d{2}$/.test(time)) return 'Введите время в формате ЧЧ:ММ';
+  const [h, min] = time.split(':').map(Number);
+  if (h > 23 || min > 59) return 'Некорректное время';
+  if (!city.trim() || city.trim().length < 2) return 'Введите город рождения';
+  return null;
+}
+
+// ─── Loading animation ─────────────────────────────────────────────────────
+function animateStep(stepId, state) {
+  const el = document.getElementById(stepId);
+  el.className = `step ${state}`;
+  const ico = el.querySelector('.step-ico');
+  if (state === 'done') {
+    ico.innerHTML = `<svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+      <path d="M2.5 7L5.5 10L11.5 4" stroke="#c4607c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>`;
+  } else if (state === 'active') {
+    ico.innerHTML = `<svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+      <circle cx="7" cy="7" r="3" fill="white" opacity="0.9"/>
+    </svg>`;
+  } else {
+    ico.innerHTML = `<svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+      <circle cx="7" cy="7" r="2.5" stroke="#d4a0b5" stroke-width="1.2"/>
+    </svg>`;
+  }
+}
+
+function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+async function runLoadingAnimation() {
+  animateStep('step1', 'active');
+  animateStep('step2', 'idle');
+  animateStep('step3', 'idle');
+  await delay(1200);
+  animateStep('step1', 'done');
+  animateStep('step2', 'active');
+  await delay(1200);
+  animateStep('step2', 'done');
+  animateStep('step3', 'active');
+}
+
+// ─── Week strip builder ────────────────────────────────────────────────────
+const DAY_NAMES = ['пн','вт','ср','чт','пт','сб','вс'];
+
+function buildWeekStrip(weekStart, favorableDays) {
+  const strip = document.getElementById('week-strip');
+  strip.innerHTML = '';
+
+  const [d, m, y] = weekStart.split('.').map(Number);
+  const monday = new Date(y, m - 1, d);
+  const today  = new Date();
+  const todayDay = (today.getDay() + 6) % 7; // 0=пн
+
+  const favSet = new Set((favorableDays || []).map(s => s.toLowerCase().trim().slice(0, 2)));
+
+  for (let i = 0; i < 7; i++) {
+    const date = new Date(monday);
+    date.setDate(monday.getDate() + i);
+    const dayNum = date.getDate();
+    const dayName = DAY_NAMES[i];
+
+    const wd = document.createElement('div');
+    wd.className = 'wd';
+    if (i === todayDay &&
+        date.getMonth() === today.getMonth() &&
+        date.getFullYear() === today.getFullYear()) {
+      wd.classList.add('active');
+    } else if (favSet.has(dayName)) {
+      wd.classList.add('fav');
+    }
+
+    wd.innerHTML = `<div class="dn">${dayName}</div><div class="dd">${dayNum}</div>`;
+    strip.appendChild(wd);
+  }
+}
+
+// ─── Natal tags builder ────────────────────────────────────────────────────
+function buildNatalTags(natal) {
+  const container = document.getElementById('natal-tags');
+  container.innerHTML = '';
+  const tags = [
+    `☉ ${natal.sun.sign}`,
+    `☽ ${natal.moon.sign}`,
+    `↑ ${natal.ascendant.sign}`,
+    ...natal.planets.slice(3, 6).map(p => `${p.name.split(' ')[0]} ${p.sign}`),
+  ];
+  tags.forEach(t => {
+    const el = document.createElement('div');
+    el.className = 'ntag';
+    el.textContent = t;
+    container.appendChild(el);
+  });
+}
+
+// ─── Render forecast ────────────────────────────────────────────────────────
+function renderForecast(data) {
+  const { natal, forecast, week_start } = data;
+
+  // Hero
+  document.getElementById('fc-sign').textContent = natal.sun.sign.toUpperCase();
+  document.getElementById('fc-sub').textContent =
+    `Асц. ${natal.ascendant.sign} · Луна в ${natal.moon.sign}`;
+
+  // Tags
+  buildNatalTags(natal);
+
+  // Week
+  buildWeekStrip(week_start, forecast.favorable_days);
+
+  // Summary
+  document.getElementById('fc-summary').textContent = forecast.summary;
+
+  // Career
+  document.getElementById('fc-career-text').textContent = forecast.career.text;
+  document.getElementById('fc-career-val').textContent  = `${forecast.career.rating}/5`;
+  setTimeout(() => {
+    document.getElementById('fc-career-bar').style.width = `${forecast.career.rating * 20}%`;
+  }, 200);
+
+  // Relationships
+  document.getElementById('fc-rel-text').textContent = forecast.relationships.text;
+  document.getElementById('fc-rel-val').textContent  = `${forecast.relationships.rating}/5`;
+  setTimeout(() => {
+    document.getElementById('fc-rel-bar').style.width = `${forecast.relationships.rating * 20}%`;
+  }, 350);
+
+  // Health
+  document.getElementById('fc-health-text').textContent = forecast.health.text;
+  document.getElementById('fc-health-val').textContent  = `${forecast.health.rating}/5`;
+  setTimeout(() => {
+    document.getElementById('fc-health-bar').style.width = `${forecast.health.rating * 20}%`;
+  }, 500);
+}
+
+// ─── Submit handler ────────────────────────────────────────────────────────
+async function handleSubmit() {
+  const date = dateInput.value.trim();
+  const time = timeInput.value.trim();
+  const city = document.getElementById('f-city').value.trim();
+
+  const err = validate(date, time, city);
+  if (err) { showError(err); return; }
+  clearError();
+
+  // Переходим на экран загрузки
+  showScreen('s-loading');
+  runLoadingAnimation();
+
+  try {
+    const res = await fetch(`${API_BASE}/api/forecast`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        birth_date: date,
+        birth_time: time,
+        city: city,
+      }),
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.detail || `Ошибка сервера: ${res.status}`);
+    }
+
+    lastData = await res.json();
+
+    // Дожидаемся минимального времени анимации
+    await delay(400);
+    animateStep('step3', 'done');
+    await delay(500);
+
+    renderForecast(lastData);
+    showScreen('s-forecast');
+
+  } catch (e) {
+    showScreen('s-input');
+    showError(e.message || 'Произошла ошибка. Попробуйте ещё раз.');
+  }
+}
+
+// ─── Events ────────────────────────────────────────────────────────────────
+document.getElementById('btn-submit').addEventListener('click', handleSubmit);
+
+document.getElementById('btn-back').addEventListener('click', () => {
+  showScreen('s-input', 'left');
+});
+
+document.getElementById('btn-refresh').addEventListener('click', () => {
+  showScreen('s-input', 'left');
+});
+
+// Enter в последнем поле — сабмит
+document.getElementById('f-city').addEventListener('keydown', e => {
+  if (e.key === 'Enter') handleSubmit();
+});
+</script>
+</body>
+</html>
