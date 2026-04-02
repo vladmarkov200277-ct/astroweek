@@ -6,31 +6,29 @@
     <title>AstroWeek · BLONDY club</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,900;1,400;1,900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
-    *, *::before, *::after {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box
-    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
         --rose: #c4607c;
-        --rose-dark: #a84868;
-        --rose-lt: #f0d8e2;
+        --rose-dark: #2a0a18;
+        --rose-mid: #6a3048;
+        --rose-soft: #907080;
+        --rose-muted: #c090a4;
+        --rose-lt: #d4b5c4;
         --rose-bg: #fdf8f9;
-        --text: #4a2538;
-        --text-muted: #907080;
-        --text-soft: #b08898;
-        --border: #edd8e2
+        --border: #edd8e2;
+        --font-serif: 'Playfair Display', Georgia, serif;
+        --font-sans: 'DM Sans', sans-serif;
     }
 
     html, body {
         height: 100%;
-        font-family: 'Inter', sans-serif;
-        background: #fff;
-        color: var(--text);
-        overflow: hidden
+        font-family: var(--font-sans);
+        background: #0e0008;
+        color: var(--rose-dark);
+        overflow: hidden;
     }
 
     #app {
@@ -40,7 +38,6 @@
         margin: 0 auto;
         overflow: hidden;
         position: relative;
-        box-shadow: 0 0 60px rgba(0, 0, 0, .07)
     }
 
     .screen {
@@ -48,2106 +45,796 @@
         inset: 0;
         display: flex;
         flex-direction: column;
-        transition: opacity .35s ease, transform .35s ease;
-        background: #fff;
-        overflow: hidden
+        transition: opacity .4s ease, transform .4s ease;
+        overflow: hidden;
     }
 
     .screen.hidden {
         opacity: 0;
         pointer-events: none;
-        transform: translateX(28px)
+        transform: translateX(32px);
     }
 
     .screen.slide-left.hidden {
-        transform: translateX(-28px)
+        transform: translateX(-32px);
     }
 
-    .screen-body {
-        flex: 1;
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch
-    }/* HERO */
-
-    #s-input .hero {
-        height: 220px;
-        flex-shrink: 0;
-        position: relative;
-        overflow: hidden;
-        background: radial-gradient(ellipse 80% 60% at 50% 70%, #3a1030 0%, #1e0820 35%, #0d040f 70%, #060208 100%)
+    /* ══════════════════════════════
+       ЭКРАН 1: ВВОД
+    ══════════════════════════════ */
+    #s-input {
+        background: #0e0008;
+        justify-content: space-between;
+        padding: 52px 32px 44px;
     }
 
-    #s-input .hero::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background-image: radial-gradient(1px 1px at 18% 12%, rgba(255, 255, 255, .80) 0%, transparent 100%), radial-gradient(1px 1px at 72% 8%, rgba(255, 255, 255, .65) 0%, transparent 100%), radial-gradient(1px 1px at 40% 22%, rgba(255, 255, 255, .55) 0%, transparent 100%), radial-gradient(1px 1px at 88% 30%, rgba(255, 255, 255, .75) 0%, transparent 100%), radial-gradient(1px 1px at 10% 40%, rgba(255, 255, 255, .50) 0%, transparent 100%), radial-gradient(1px 1px at 55% 35%, rgba(255, 255, 255, .70) 0%, transparent 100%), radial-gradient(2px 2px at 50% 10%, rgba(255, 230, 240, .90) 0%, transparent 100%), radial-gradient(2px 2px at 82% 18%, rgba(255, 210, 230, .70) 0%, transparent 100%), radial-gradient(1px 1px at 30% 50%, rgba(255, 255, 255, .45) 0%, transparent 100%), radial-gradient(1px 1px at 92% 55%, rgba(255, 255, 255, .60) 0%, transparent 100%)
+    .input-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
     }
 
-    #s-input .hero-fade {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 80px;
-        background: linear-gradient(to bottom, transparent, #fff);
-        z-index: 2
-    }
-
-    #s-input .hero-brand {
-        position: absolute;
-        bottom: 16px;
-        left: 0;
-        right: 0;
-        text-align: center;
-        z-index: 3
-    }
-
-    .hero-channel {
-        font-size: 10px;
-        font-weight: 500;
-        letter-spacing: 3.5px;
-        color: rgba(255, 255, 255, .55);
-        text-transform: uppercase;
-        margin-bottom: 4px
-    }
-
-    .hero-title {
-        font-family: 'Cormorant Garamond', serif;
-        font-size: 28px;
+    .input-brand-left {
+        font-size: 9px;
         font-weight: 300;
-        letter-spacing: 7px;
-        color: rgba(255, 255, 255, .95);
-        text-shadow: 0 2px 24px rgba(200, 80, 130, .4)
-    }/* FORM */
+        letter-spacing: 3px;
+        color: rgba(255,255,255,.3);
+        text-transform: uppercase;
+        line-height: 1.8;
+    }
 
-    .input-body {
-        padding: 16px 22px 28px;
+    .input-brand-right {
+        font-size: 9px;
+        font-weight: 300;
+        letter-spacing: 2px;
+        color: rgba(255,255,255,.2);
+        text-transform: uppercase;
+        text-align: right;
+    }
+
+    .input-hero {
+        flex: 1;
         display: flex;
         flex-direction: column;
-        gap: 12px
+        justify-content: center;
+        padding: 24px 0 20px;
     }
 
-    .input-intro {
-        font-family: 'Cormorant Garamond', serif;
-        font-size: 15px;
+    .hero-word {
+        font-family: var(--font-serif);
+        font-weight: 900;
+        color: #fff;
+        line-height: 0.88;
+        letter-spacing: -2px;
+        display: block;
+        font-size: clamp(72px, 22vw, 96px);
+    }
+
+    .hero-word.accent {
         font-style: italic;
-        color: var(--text-soft);
-        text-align: center;
-        line-height: 1.55
+        color: var(--rose);
     }
 
-    .divider {
+    .hero-mid {
         display: flex;
         align-items: center;
-        gap: 10px
+        gap: 12px;
+        margin: 14px 0;
     }
 
-    .divider::before, .divider::after {
-        content: '';
+    .hero-mid-line {
         flex: 1;
-        height: 1px;
-        background: linear-gradient(90deg, transparent, #edd8e0, transparent)
+        height: 0.5px;
+        background: rgba(255,255,255,.12);
     }
 
-    .divider span {
+    .hero-mid-label {
         font-size: 9px;
-        letter-spacing: 2.5px;
-        color: #d4a8b8;
-        text-transform: uppercase
+        letter-spacing: 3px;
+        color: rgba(255,255,255,.25);
+        text-transform: uppercase;
     }
 
-    .field {
+    .hero-word-sm {
+        font-family: var(--font-serif);
+        font-size: clamp(28px, 9vw, 40px);
+        font-weight: 400;
+        font-style: italic;
+        color: rgba(255,255,255,.35);
+        line-height: 1.1;
+        letter-spacing: -1px;
+    }
+
+    .input-fields {
         display: flex;
         flex-direction: column;
-        gap: 5px
+        gap: 0;
     }
 
-    .field label {
-        font-size: 9px;
-        font-weight: 500;
-        letter-spacing: 2.5px;
-        color: #c090a4;
-        text-transform: uppercase
-    }
-
-    .field input {
-        width: 100%;
-        padding: 12px 14px;
-        background: var(--rose-bg);
-        border: 1px solid var(--border);
-        border-radius: 10px;
-        font-family: 'Inter', sans-serif;
-        font-size: 14px;
-        color: var(--text);
-        outline: none;
-        -webkit-appearance: none;
-        transition: border-color .2s, box-shadow .2s
-    }
-
-    .field input:focus {
-        border-color: #d08098;
-        box-shadow: 0 0 0 3px rgba(200, 100, 140, .08);
-        background: #fff
-    }
-
-    .field input::placeholder {
-        color: #d4b5c4;
-        font-style: italic;
-        font-size: 13px
-    }
-
-    .field-row {
+    .field-row-split {
         display: flex;
-        gap: 10px
+        gap: 20px;
     }
 
-    .field-row .field {
-        flex: 1
+    .field-row-split .ifield { flex: 1; }
+
+    .ifield {
+        border-bottom: 0.5px solid rgba(255,255,255,.15);
+        padding: 14px 0 12px;
+        transition: border-color .2s;
     }
 
-    .hint-text {
-        font-size: 11px;
-        color: var(--text-soft);
-        text-align: center;
-        font-style: italic
+    .ifield:focus-within {
+        border-color: var(--rose);
     }
 
-    .btn-rose {
-        padding: 14px;
-        border: none;
-        border-radius: 10px;
-        font-family: 'Cormorant Garamond', serif;
-        font-size: 17px;
+    .ifield label {
+        display: block;
+        font-size: 8px;
         font-weight: 400;
-        letter-spacing: 3px;
-        color: #fff;
-        background: linear-gradient(135deg, #c4607c, #a84868);
-        box-shadow: 0 4px 18px rgba(180, 80, 110, .28);
-        cursor: pointer;
-        transition: opacity .2s, transform .15s
+        letter-spacing: 2.5px;
+        color: rgba(255,255,255,.25);
+        text-transform: uppercase;
+        margin-bottom: 7px;
     }
 
-    .btn-rose:active {
-        opacity: .85;
-        transform: scale(.98)
+    .ifield input {
+        width: 100%;
+        background: transparent;
+        border: none;
+        outline: none;
+        font-family: var(--font-serif);
+        font-size: 16px;
+        font-style: italic;
+        color: rgba(255,255,255,.7);
+        caret-color: var(--rose);
+        -webkit-appearance: none;
+    }
+
+    .ifield input::placeholder {
+        color: rgba(255,255,255,.18);
+        font-style: normal;
+        font-family: var(--font-sans);
+        font-size: 13px;
+        letter-spacing: 0.5px;
     }
 
     .error-msg {
-        font-size: 12px;
-        color: #c44060;
-        text-align: center;
-        padding: 8px 12px;
-        background: #fff0f3;
-        border: 1px solid #f5c0cc;
-        border-radius: 8px;
-        display: none
+        font-size: 11px;
+        color: #f87090;
+        margin-top: 12px;
+        letter-spacing: 0.3px;
+        display: none;
+        font-style: italic;
+        font-family: var(--font-serif);
     }
 
-    .error-msg.visible {
-        display: block
-    }
+    .error-msg.visible { display: block; }
 
-    .demo-badge {
-        position: fixed;
-        top: 10px;
-        right: 10px;
-        background: #6a3048;
-        color: white;
-        font-size: 9px;
-        font-weight: 600;
-        letter-spacing: 1.5px;
-        padding: 3px 8px;
-        border-radius: 20px;
-        z-index: 9999;
-        text-transform: uppercase;
-        opacity: .65
-    }/* LOADING */
-
-    #s-loading .load-hero {
-        height: 42%;
-        flex-shrink: 0;
-        position: relative;
-        overflow: hidden;
-        background: radial-gradient(circle 120px at 50% 55%, #fff9f5 0%, #fde8f0 18%, #f5c0d5 35%, #e898b8 52%, #c460a0 68%, #8a3070 82%, #3a1030 100%)
-    }
-
-    #s-loading .load-hero::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background-image: radial-gradient(1px 1px at 15% 10%, rgba(255, 255, 255, .70) 0%, transparent 100%), radial-gradient(1px 1px at 78% 6%, rgba(255, 255, 255, .60) 0%, transparent 100%), radial-gradient(1.5px 1.5px at 40% 5%, rgba(255, 220, 235, .80) 0%, transparent 100%)
-    }
-
-    #s-loading .load-fade {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 70px;
-        background: linear-gradient(to bottom, transparent, #fff);
-        z-index: 2
-    }
-
-    .load-body {
-        flex: 1;
+    .input-cta {
         display: flex;
-        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        padding-top: 22px;
+    }
+
+    .cta-label {
+        font-family: var(--font-serif);
+        font-size: 14px;
+        font-style: italic;
+        color: rgba(255,255,255,.4);
+    }
+
+    .cta-btn {
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        background: var(--rose);
+        border: none;
+        cursor: pointer;
+        display: flex;
         align-items: center;
         justify-content: center;
-        padding: 20px 28px;
-        gap: 18px;
-        text-align: center
+        transition: transform .15s, opacity .15s;
+        flex-shrink: 0;
+    }
+
+    .cta-btn:active { transform: scale(.93); opacity: .85; }
+
+    .cta-arrow {
+        width: 18px;
+        height: 18px;
+        border-top: 2px solid white;
+        border-right: 2px solid white;
+        transform: rotate(45deg) translate(-2px, 2px);
+    }
+
+    /* ══════════════════════════════
+       ЭКРАН 2: ЗАГРУЗКА
+    ══════════════════════════════ */
+    #s-loading {
+        background: #0e0008;
+        align-items: center;
+        justify-content: center;
+        gap: 32px;
+        padding: 40px 32px;
     }
 
     .load-title {
-        font-family: 'Cormorant Garamond', serif;
-        font-size: 21px;
+        font-family: var(--font-serif);
+        font-size: 22px;
         font-weight: 400;
-        letter-spacing: 2px;
-        color: #6a3048
+        font-style: italic;
+        color: rgba(255,255,255,.6);
+        text-align: center;
     }
 
     .steps {
         display: flex;
         flex-direction: column;
-        gap: 9px;
-        width: 100%
+        gap: 18px;
+        width: 100%;
     }
 
     .step {
         display: flex;
         align-items: center;
-        gap: 12px;
-        padding: 11px 14px;
-        border-radius: 12px;
-        transition: all .4s ease
-    }
-
-    .step.done {
-        background: #fdf5f7
-    }
-
-    .step.active {
-        background: linear-gradient(135deg, #fdf0f4, #fff6f0);
-        border: 1px solid var(--rose-lt)
-    }
-
-    .step.idle {
-        background: #fdfbfb
+        gap: 16px;
+        transition: all .4s ease;
     }
 
     .step-ico {
-        width: 30px;
-        height: 30px;
+        width: 28px;
+        height: 28px;
         border-radius: 50%;
+        border: 0.5px solid rgba(255,255,255,.15);
         display: flex;
         align-items: center;
         justify-content: center;
         flex-shrink: 0;
-        font-size: 14px;
-        transition: background .4s
+        font-size: 11px;
+        color: rgba(255,255,255,.25);
+        transition: all .4s;
+        font-family: var(--font-serif);
+        font-style: italic;
     }
 
-    .step.done .step-ico {
-        background: #f0d8e2;
-        color: var(--rose)
-    }
-
-    .step.active .step-ico {
-        background: var(--rose);
-        color: white
-    }
-
-    .step.idle .step-ico {
-        background: #eddde4;
-        color: #c4a0b0
-    }
+    .step.active .step-ico { border-color: var(--rose); color: var(--rose); }
+    .step.done .step-ico   { border-color: rgba(255,255,255,.2); color: rgba(255,255,255,.35); }
 
     .step-txt {
-        font-size: 13px;
-        color: var(--text-muted)
+        font-size: 12px;
+        letter-spacing: 0.3px;
+        color: rgba(255,255,255,.22);
+        transition: color .4s;
     }
 
-    .step.active .step-txt {
-        color: #5a3040;
-        font-weight: 500
-    }
+    .step.active .step-txt { color: rgba(255,255,255,.65); }
+    .step.done .step-txt   { color: rgba(255,255,255,.28); }
 
-    .step.done .step-txt {
-        color: #b8969e
-    }
-
-    .step.idle .step-txt {
-        color: #d4b5c4
-    }
-
-    .pulse-dots {
-        display: flex;
-        gap: 7px
-    }
+    .pulse-dots { display: flex; gap: 8px; }
 
     .pdot {
-        width: 6px;
-        height: 6px;
+        width: 5px;
+        height: 5px;
         border-radius: 50%;
-        animation: pdot 1.4s ease-in-out infinite
-    }
-
-    .pdot:nth-child(1) {
-        background: #e8a0b8
-    }
-
-    .pdot:nth-child(2) {
         background: var(--rose);
-        animation-delay: .2s
+        animation: pdot 1.4s ease-in-out infinite;
+        opacity: .4;
     }
 
-    .pdot:nth-child(3) {
-        background: #e8a0b8;
-        animation-delay: .4s
-    }
+    .pdot:nth-child(2) { animation-delay: .2s; }
+    .pdot:nth-child(3) { animation-delay: .4s; }
 
     @keyframes pdot {
-        0%, 100% {
-            opacity: .3;
-            transform:scale(.85)
-        }
-
-        50% {
-            opacity: 1;
-            transform: scale(1.2)
-        }
-    }/* FORECAST */
-
-    #s-forecast .fc-hero {
-        height: 175px;
-        flex-shrink: 0;
-        position: relative;
-        overflow: hidden;
-        background: radial-gradient(ellipse 70% 80% at 30% 60%, rgba(220, 100, 140, .55) 0%, transparent 60%), radial-gradient(ellipse 90% 90% at 50% 50%, #f0c0d4 0%, #e0a0c0 25%, #c87ea8 50%, #9a5888 70%, #5a2848 90%, #2a0e20 100%)
+        0%, 100% { opacity: .3; transform: scale(.8); }
+        50%       { opacity: 1; transform: scale(1.2); }
     }
 
-    #s-forecast .fc-hero::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background-image: radial-gradient(1px 1px at 20% 15%, rgba(255, 255, 255, .80) 0%, transparent 100%), radial-gradient(1px 1px at 60% 8%, rgba(255, 255, 255, .70) 0%, transparent 100%), radial-gradient(1.5px 1.5px at 42% 12%, rgba(255, 230, 240, .90) 0%, transparent 100%)
+    /* ══════════════════════════════
+       ЭКРАН 3: ПРОГНОЗ
+    ══════════════════════════════ */
+    #s-forecast { background: var(--rose-bg); }
+
+    .fc-scroll {
+        flex: 1;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        padding: 52px 28px 48px;
     }
 
-    #s-forecast .fc-fade {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 70px;
-        background: linear-gradient(to bottom, transparent, #fff);
-        z-index: 2
-    }
-
-    .fc-hero-info {
-        position: absolute;
-        bottom: 12px;
-        left: 0;
-        right: 0;
-        text-align: center;
-        z-index: 3
-    }
-
-    .fc-sign-name {
-        font-family: 'Cormorant Garamond', serif;
-        font-size: 24px;
-        font-weight: 400;
-        letter-spacing: 5px;
-        color: #fff;
-        text-shadow: 0 2px 16px rgba(100, 20, 50, .4)
-    }
-
-    .fc-sign-sub {
-        font-size: 10px;
-        letter-spacing: 2px;
-        color: rgba(255, 255, 255, .70);
-        text-transform: uppercase;
-        margin-top: 2px
-    }
-
-    .hero-back {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 52px;
+    .fc-top {
         display: flex;
-        align-items: flex-end;
-        padding: 0 18px 10px;
-        z-index: 10
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 28px;
     }
 
-    .back-btn {
+    .fc-back {
         background: none;
         border: none;
         cursor: pointer;
-        font-size: 28px;
-        color: rgba(255, 255, 255, .85);
-        line-height: 1
+        font-family: var(--font-sans);
+        font-size: 9px;
+        letter-spacing: 2px;
+        color: var(--rose-muted);
+        text-transform: uppercase;
+        padding: 0;
     }
 
-    .fc-body {
-        padding: 10px 18px 28px
-    }
-
-    .natal-tags {
-        display: flex;
-        gap: 5px;
-        flex-wrap: wrap;
-        justify-content: center;
-        margin-bottom: 8px
-    }
-
-    .fc-geo-line {
-        font-size: 10px;
-        color: var(--text-soft);
-        text-align: center;
-        line-height: 1.45;
-        margin-bottom: 12px;
-        letter-spacing: .2px
-    }
-
-    .ntag {
-        font-size: 10px;
-        font-weight: 500;
+    .fc-week-label {
+        font-size: 9px;
         letter-spacing: 1.5px;
-        color: var(--text-soft);
-        padding: 4px 10px;
-        border: 1px solid var(--border);
-        border-radius: 20px;
-        background: var(--rose-bg);
-        text-transform: uppercase
+        color: var(--rose-lt);
+        text-transform: uppercase;
     }
 
-    .week-strip {
-        display: flex;
-        gap: 3px;
-        margin-bottom: 13px;
-        background: var(--rose-bg);
-        border-radius: 12px;
-        padding: 6px
+    .fc-sign {
+        font-family: var(--font-serif);
+        font-weight: 900;
+        color: var(--rose-dark);
+        line-height: 0.9;
+        letter-spacing: -2px;
+        margin-bottom: 8px;
+        white-space: nowrap;
     }
 
-    .wd {
-        flex: 1;
-        padding: 7px 0;
-        border-radius: 8px;
-        text-align: center
-    }
-
-    .wd .dn {
-        font-size: 9px;
-        font-weight: 500;
-        color: #c4a0b0;
-        text-transform: uppercase
-    }
-
-    .wd .dd {
-        font-size: 13px;
-        font-weight: 500;
-        color: #9a7080;
-        margin-top: 2px
-    }
-
-    .wd.active {
-        background: var(--rose)
-    }
-
-    .wd.active .dn {
-        color: rgba(255, 255, 255, .70)
-    }
-
-    .wd.active .dd {
-        color: #fff
-    }
-
-    .wd.fav {
-        background: #fff8f9
-    }
-
-    .wd.fav .dd {
-        color: var(--rose)
-    }
-
-    .wd.fav .dn {
-        color: #e8a0b8
-    }
-
-    .sep {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin: 3px 0 10px
-    }
-
-    .sep::before, .sep::after {
-        content: '';
-        flex: 1;
-        height: 1px;
-        background: linear-gradient(90deg, transparent, #edd8e0, transparent)
-    }
-
-    .sep span {
-        font-size: 9px;
-        letter-spacing: 2.5px;
-        color: #d4a8b8;
-        text-transform: uppercase
-    }
-
-    .fc-summary {
-        padding: 13px 14px;
-        background: linear-gradient(135deg, #fff5f8, #fdf8f9);
-        border: 1px solid var(--border);
-        border-radius: 14px;
-        font-family: 'Cormorant Garamond', serif;
+    .fc-sign-sub {
+        font-family: var(--font-serif);
         font-size: 15px;
         font-style: italic;
-        color: #6a3048;
-        line-height: 1.55;
-        margin-bottom: 10px
+        color: var(--rose);
+        margin-bottom: 20px;
     }
 
-    .fc-card {
-        background: var(--rose-bg);
-        border: 1px solid var(--border);
-        border-radius: 14px;
-        padding: 13px;
-        margin-bottom: 9px
+    .fc-divider {
+        height: 0.5px;
+        background: var(--border);
+        margin-bottom: 20px;
     }
 
-    .fc-card-head {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        margin-bottom: 8px
-    }
-
-    .fc-ico {
-        width: 32px;
-        height: 32px;
-        border-radius: 9px;
-        background: #fff;
-        border: 1px solid var(--border);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0
-    }
-
-    .fc-card-title {
-        font-family: 'Cormorant Garamond', serif;
-        font-size: 16px;
-        font-weight: 500;
-        letter-spacing: .5px;
-        color: #6a3048
-    }
-
-    .fc-card p {
-        font-size: 12px;
-        line-height: 1.65;
-        color: var(--text-muted)
-    }
-
-    .fc-meter {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin-top: 9px
-    }
-
-    .fc-meter-bar {
-        flex: 1;
-        height: 2px;
-        background: var(--rose-lt);
-        border-radius: 1px;
-        overflow: hidden
-    }
-
-    .fc-meter-fill {
-        height: 100%;
-        border-radius: 1px;
-        background: linear-gradient(90deg, #f0c0d0, var(--rose));
-        transition: width .8s ease
-    }
-
-    .fc-meter-val {
-        font-size: 10px;
-        font-weight: 500;
-        color: #c090a4;
-        min-width: 20px;
-        text-align: right
-    }
-
-    .btn-ghost {
-        width: 100%;
-        padding: 12px;
-        background: transparent;
-        border: 1px solid #e8b0c4;
-        border-radius: 10px;
-        font-family: 'Cormorant Garamond', serif;
+    .fc-summary-text {
+        font-family: var(--font-serif);
         font-size: 15px;
-        font-weight: 400;
-        letter-spacing: 3px;
-        color: var(--rose);
-        cursor: pointer;
-        margin-top: 6px;
-        transition: background .2s
+        font-style: italic;
+        color: var(--rose-mid);
+        line-height: 1.65;
+        margin-bottom: 26px;
     }
 
-    .btn-ghost:active {
-        background: #fdf0f4
+    .fc-days {
+        display: flex;
+        gap: 3px;
+        margin-bottom: 28px;
     }
 
-    .planets-wrap {
-        background: var(--rose-bg);
-        border: 1px solid var(--border);
-        border-radius: 14px;
-        overflow: hidden;
-        margin-bottom: 10px
+    .fc-day {
+        flex: 1;
+        text-align: center;
+        padding: 8px 0;
+        border-radius: 8px;
     }
 
-    .planets-table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 11px
-    }
-
-    .planets-table th {
-        text-align: left;
-        padding: 6px 10px;
-        color: #c090a4;
-        font-weight: 500;
+    .fc-day-name {
+        display: block;
+        font-size: 8px;
         letter-spacing: 1px;
-        font-size: 9px;
+        color: var(--rose-lt);
         text-transform: uppercase;
-        background: var(--rose-bg);
-        border-bottom: 1px solid var(--border)
     }
 
-    .planets-table td {
-        padding: 5px 10px;
-        color: var(--text-muted);
-        border-bottom: 1px solid #faf0f4
+    .fc-day-num {
+        display: block;
+        font-family: var(--font-serif);
+        font-size: 15px;
+        font-weight: 900;
+        color: #9a7080;
+        margin-top: 3px;
     }
 
-    .planets-table tr:last-child td {
-        border-bottom: none
+    .fc-day.active { background: var(--rose-dark); }
+    .fc-day.active .fc-day-name { color: rgba(255,255,255,.35); }
+    .fc-day.active .fc-day-num  { color: #fff; }
+    .fc-day.fav .fc-day-num { color: var(--rose); }
+
+    .fc-section-label {
+        font-size: 8px;
+        letter-spacing: 3px;
+        color: var(--rose-lt);
+        text-transform: uppercase;
+        margin-bottom: 20px;
     }
 
-    .planets-table td:first-child {
-        color: var(--text-soft)
+    .fc-item {
+        margin-bottom: 24px;
+        padding-bottom: 24px;
+        border-bottom: 0.5px solid var(--border);
     }
 
-    .retro {
+    .fc-item:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+        padding-bottom: 0;
+    }
+
+    .fc-item-head {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        margin-bottom: 9px;
+    }
+
+    .fc-item-title {
+        font-family: var(--font-serif);
+        font-size: 22px;
+        font-weight: 900;
+        color: var(--rose-dark);
+        letter-spacing: -0.5px;
+    }
+
+    .fc-score-num {
+        font-family: var(--font-serif);
+        font-size: 30px;
+        font-weight: 900;
         color: var(--rose);
-        font-size: 9px;
-        margin-left: 2px
+        line-height: 1;
     }
 
-    .asc-row td {
-        border-top: 1px solid var(--border) !important;
-        font-weight: 500;
-        color: var(--text-soft) !important
+    .fc-score-max {
+        font-size: 10px;
+        color: var(--rose-lt);
+        font-weight: 300;
+        margin-left: 1px;
     }
+
+    .fc-bar {
+        height: 1.5px;
+        background: var(--border);
+        border-radius: 1px;
+        margin-bottom: 11px;
+        overflow: hidden;
+    }
+
+    .fc-bar-fill {
+        height: 100%;
+        background: var(--rose);
+        border-radius: 1px;
+        width: 0%;
+        transition: width 1s ease;
+    }
+
+    .fc-item-text {
+        font-family: var(--font-serif);
+        font-size: 13px;
+        font-style: italic;
+        color: var(--rose-soft);
+        line-height: 1.7;
+    }
+
+    .fc-refresh {
+        margin-top: 36px;
+        width: 100%;
+        padding: 14px;
+        background: transparent;
+        border: 0.5px solid var(--border);
+        border-radius: 4px;
+        font-family: var(--font-sans);
+        font-size: 9px;
+        letter-spacing: 3px;
+        color: var(--rose-muted);
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: background .2s;
+    }
+
+    .fc-refresh:active { background: var(--border); }
 
     @media (min-width: 500px) {
-        body {
-            background: #f5eef1;
-            display: flex;
-            align-items: center;
-            justify-content: center
-        }
-
-        #app {
-            height: 820px;
-            border-radius: 24px;
-            overflow: hidden
-        }
+        body { display: flex; align-items: center; justify-content: center; }
+        #app { height: 860px; border-radius: 44px; overflow: hidden; box-shadow: 0 40px 120px rgba(0,0,0,.5); }
     }
     </style>
 </head>
 <body>
-    <div class="demo-badge">ASTRO LOCAL</div>
-    <div id="app">
+<div id="app">
 
-        <!-- ЭКРАН 1: ВВОД -->
-        <div id="s-input" class="screen">
-            <div class="hero">
-                <div class="hero-fade"></div>
-                <div class="hero-brand">
-                    <div class="hero-channel">@BLONDY_club</div>
-                    <div class="hero-title">ASTRO WEEK</div>
-                </div>
-            </div>
-            <div class="screen-body">
-                <div class="input-body">
-                    <p class="input-intro">
-                        Введите данные рождения — звёзды расскажут,
-                        <br>
-                        что ждёт вас на этой неделе
-                    </p>
-                    <div class="divider">
-                        <span>данные рождения</span>
-                    </div>
-                    <div class="field">
-                        <label for="f-date">Дата рождения</label>
-                        <input id="f-date" type="text" placeholder="ДД.ММ.ГГГГ" maxlength="10" inputmode="numeric">
-                    </div>
-                    <div class="field-row">
-                        <div class="field">
-                            <label for="f-time">Время рождения</label>
-                            <input id="f-time" type="text" placeholder="ЧЧ:ММ (необяз.)" maxlength="5" inputmode="numeric">
-                        </div>
-                        <div class="field">
-                            <label for="f-city">Город рождения</label>
-                            <input id="f-city" type="text" placeholder="Москва">
-                        </div>
-                    </div>
-                    <p class="hint-text">Город и время необходимы для определения часового пояса и асцендента</p>
-                    <div id="error-msg" class="error-msg"></div>
-                    <button id="btn-submit" class="btn-rose">ПОЛУЧИТЬ ПРОГНОЗ</button>
-                </div>
-            </div>
+    <!-- ЭКРАН 1: ВВОД -->
+    <div id="s-input" class="screen">
+        <div class="input-top">
+            <div class="input-brand-left">@blondy_club<br><span style="color:rgba(255,255,255,.1)">2026</span></div>
+            <div class="input-brand-right">Астро<br>неделя</div>
         </div>
-
-        <!-- ЭКРАН 2: ЗАГРУЗКА -->
-        <div id="s-loading" class="screen hidden">
-            <div class="load-hero">
-                <div class="load-fade"></div>
+        <div class="input-hero">
+            <span class="hero-word">Astro</span>
+            <span class="hero-word accent">Week.</span>
+            <div class="hero-mid">
+                <div class="hero-mid-line"></div>
+                <div class="hero-mid-label">твой гороскоп</div>
+                <div class="hero-mid-line"></div>
             </div>
-            <div class="load-body">
-                <div class="load-title">Читаем звёзды для вас</div>
-                <div class="steps">
-                    <div class="step idle" id="step1">
-                        <div class="step-ico">✦</div>
-                        <span class="step-txt">Определяем часовой пояс и координаты</span>
-                    </div>
-                    <div class="step idle" id="step2">
-                        <div class="step-ico">✦</div>
-                        <span class="step-txt">Вычисляем положения планет</span>
-                    </div>
-                    <div class="step idle" id="step3">
-                        <div class="step-ico">✦</div>
-                        <span class="step-txt">Составляем прогноз</span>
-                    </div>
-                </div>
-                <div class="pulse-dots">
-                    <div class="pdot"></div>
-                    <div class="pdot"></div>
-                    <div class="pdot"></div>
-                </div>
-            </div>
+            <span class="hero-word-sm">на каждую<br>неделю</span>
         </div>
-
-        <!-- ЭКРАН 3: ПРОГНОЗ -->
-        <div id="s-forecast" class="screen hidden">
-            <div class="fc-hero">
-                <div class="hero-back">
-                    <button class="back-btn" id="btn-back">‹</button>
+        <div class="input-fields">
+            <div class="ifield">
+                <label for="f-date">Дата рождения</label>
+                <input id="f-date" type="text" placeholder="ДД · ММ · ГГГГ" maxlength="10" inputmode="numeric">
+            </div>
+            <div class="field-row-split">
+                <div class="ifield">
+                    <label for="f-time">Время</label>
+                    <input id="f-time" type="text" placeholder="ЧЧ:ММ" maxlength="5" inputmode="numeric">
                 </div>
-                <div class="fc-fade"></div>
-                <div class="fc-hero-info">
-                    <div class="fc-sign-name" id="fc-sign">—</div>
-                    <div class="fc-sign-sub" id="fc-sub">—</div>
+                <div class="ifield">
+                    <label for="f-city">Город</label>
+                    <input id="f-city" type="text" placeholder="Москва">
                 </div>
             </div>
-            <div class="screen-body">
-                <div class="fc-body">
-                    <div class="natal-tags" id="natal-tags"></div>
-                    <p class="fc-geo-line" id="fc-geo"></p>
-                    <div class="week-strip" id="week-strip"></div>
-                    <div class="sep">
-                        <span>натальная карта</span>
-                    </div>
-                    <div class="planets-wrap">
-                        <table class="planets-table">
-                            <thead>
-                                <tr>
-                                    <th>Планета</th>
-                                    <th>Знак</th>
-                                    <th>Градус</th>
-                                </tr>
-                            </thead>
-                            <tbody id="planets-tbody"></tbody>
-                        </table>
-                    </div>
-                    <div class="sep">
-                        <span>прогноз на неделю</span>
-                    </div>
-                    <div class="fc-summary" id="fc-summary"></div>
-                    <div class="fc-card">
-                        <div class="fc-card-head">
-                            <div class="fc-ico">
-                                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#c4607c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-                                </svg>
-                            </div>
-                            <div class="fc-card-title">Любовь</div>
-                        </div>
-                        <p id="fc-love-text"></p>
-                        <div class="fc-meter">
-                            <div class="fc-meter-bar">
-                                <div class="fc-meter-fill" id="fc-love-bar" style="width:0%"></div>
-                            </div>
-                            <div class="fc-meter-val" id="fc-love-val"></div>
-                        </div>
-                    </div>
-                    <div class="fc-card">
-                        <div class="fc-card-head">
-                            <div class="fc-ico">
-                                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#c4607c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                    <circle cx="9" cy="7" r="4"/>
-                                    <path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/>
-                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-                                    <path d="M21 21v-2a4 4 0 0 0-3-3.85"/>
-                                </svg>
-                            </div>
-                            <div class="fc-card-title">Дружба</div>
-                        </div>
-                        <p id="fc-friends-text"></p>
-                        <div class="fc-meter">
-                            <div class="fc-meter-bar">
-                                <div class="fc-meter-fill" id="fc-friends-bar" style="width:0%"></div>
-                            </div>
-                            <div class="fc-meter-val" id="fc-friends-val"></div>
-                        </div>
-                    </div>
-                    <div class="fc-card">
-                        <div class="fc-card-head">
-                            <div class="fc-ico">
-                                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#c4607c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                    <rect x="2" y="7" width="20" height="14" rx="2"/>
-                                    <path d="M16 7V5a2 2 0 0 0-4 0v2"/>
-                                </svg>
-                            </div>
-                            <div class="fc-card-title">Карьера</div>
-                        </div>
-                        <p id="fc-career-text"></p>
-                        <div class="fc-meter">
-                            <div class="fc-meter-bar">
-                                <div class="fc-meter-fill" id="fc-career-bar" style="width:0%"></div>
-                            </div>
-                            <div class="fc-meter-val" id="fc-career-val"></div>
-                        </div>
-                    </div>
-                    <div class="fc-card">
-                        <div class="fc-card-head">
-                            <div class="fc-ico">
-                                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#c4607c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                    <line x1="12" y1="1" x2="12" y2="23"/>
-                                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-                                </svg>
-                            </div>
-                            <div class="fc-card-title">Финансы</div>
-                        </div>
-                        <p id="fc-finance-text"></p>
-                        <div class="fc-meter">
-                            <div class="fc-meter-bar">
-                                <div class="fc-meter-fill" id="fc-finance-bar" style="width:0%"></div>
-                            </div>
-                            <div class="fc-meter-val" id="fc-finance-val"></div>
-                        </div>
-                    </div>
-                    <div class="fc-card">
-                        <div class="fc-card-head">
-                            <div class="fc-ico">
-                                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#c4607c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/>
-                                </svg>
-                            </div>
-                            <div class="fc-card-title">Энергия</div>
-                        </div>
-                        <p id="fc-health-text"></p>
-                        <div class="fc-meter">
-                            <div class="fc-meter-bar">
-                                <div class="fc-meter-fill" id="fc-health-bar" style="width:0%"></div>
-                            </div>
-                            <div class="fc-meter-val" id="fc-health-val"></div>
-                        </div>
-                    </div>
-                    <button class="btn-ghost" id="btn-refresh">ОБНОВИТЬ ПРОГНОЗ</button>
-                </div>
+            <div id="error-msg" class="error-msg"></div>
+            <div class="input-cta">
+                <span class="cta-label">читать звёзды</span>
+                <button id="btn-submit" class="cta-btn"><div class="cta-arrow"></div></button>
             </div>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/luxon@3.5.0/build/global/luxon.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/astronomy-engine@2.1.19/astronomy.browser.min.js"></script>
-    <script>
-    // ══════════════════════════════════════════════════════
-    //  CONFIG
-    // ══════════════════════════════════════════════════════
-    const FORECAST_API = 'https://astro-v2.onrender.com';
+    <!-- ЭКРАН 2: ЗАГРУЗКА -->
+    <div id="s-loading" class="screen hidden">
+        <div class="load-title">Читаем звёзды для вас</div>
+        <div class="steps">
+            <div class="step idle" id="step1"><div class="step-ico">I</div><span class="step-txt">Определяем часовой пояс и координаты</span></div>
+            <div class="step idle" id="step2"><div class="step-ico">II</div><span class="step-txt">Вычисляем положения планет</span></div>
+            <div class="step idle" id="step3"><div class="step-ico">III</div><span class="step-txt">Составляем прогноз</span></div>
+        </div>
+        <div class="pulse-dots">
+            <div class="pdot"></div><div class="pdot"></div><div class="pdot"></div>
+        </div>
+    </div>
 
-    const tg = window.Telegram?.WebApp;
-    if (tg) {
-        tg.ready();
-        tg.expand();
-        document.querySelector('.demo-badge')?.remove();
+    <!-- ЭКРАН 3: ПРОГНОЗ -->
+    <div id="s-forecast" class="screen hidden">
+        <div class="fc-scroll">
+            <div class="fc-top">
+                <button class="fc-back" id="btn-back">← назад</button>
+                <span class="fc-week-label" id="fc-week-label">—</span>
+            </div>
+            <div class="fc-sign" id="fc-sign">—</div>
+            <div class="fc-sign-sub" id="fc-sign-sub">—</div>
+            <div class="fc-divider"></div>
+            <div class="fc-summary-text" id="fc-summary"></div>
+            <div class="fc-days" id="fc-days"></div>
+            <div class="fc-section-label">прогноз на неделю</div>
+
+            <div class="fc-item">
+                <div class="fc-item-head">
+                    <span class="fc-item-title">Любовь</span>
+                    <span><span class="fc-score-num" id="sc-love">—</span><span class="fc-score-max">/5</span></span>
+                </div>
+                <div class="fc-bar"><div class="fc-bar-fill" id="bar-love"></div></div>
+                <div class="fc-item-text" id="txt-love"></div>
+            </div>
+
+            <div class="fc-item">
+                <div class="fc-item-head">
+                    <span class="fc-item-title">Дружба</span>
+                    <span><span class="fc-score-num" id="sc-friends">—</span><span class="fc-score-max">/5</span></span>
+                </div>
+                <div class="fc-bar"><div class="fc-bar-fill" id="bar-friends"></div></div>
+                <div class="fc-item-text" id="txt-friends"></div>
+            </div>
+
+            <div class="fc-item">
+                <div class="fc-item-head">
+                    <span class="fc-item-title">Карьера</span>
+                    <span><span class="fc-score-num" id="sc-career">—</span><span class="fc-score-max">/5</span></span>
+                </div>
+                <div class="fc-bar"><div class="fc-bar-fill" id="bar-career"></div></div>
+                <div class="fc-item-text" id="txt-career"></div>
+            </div>
+
+            <div class="fc-item">
+                <div class="fc-item-head">
+                    <span class="fc-item-title">Финансы</span>
+                    <span><span class="fc-score-num" id="sc-finance">—</span><span class="fc-score-max">/5</span></span>
+                </div>
+                <div class="fc-bar"><div class="fc-bar-fill" id="bar-finance"></div></div>
+                <div class="fc-item-text" id="txt-finance"></div>
+            </div>
+
+            <div class="fc-item">
+                <div class="fc-item-head">
+                    <span class="fc-item-title">Энергия</span>
+                    <span><span class="fc-score-num" id="sc-health">—</span><span class="fc-score-max">/5</span></span>
+                </div>
+                <div class="fc-bar"><div class="fc-bar-fill" id="bar-health"></div></div>
+                <div class="fc-item-text" id="txt-health"></div>
+            </div>
+
+            <button class="fc-refresh" id="btn-refresh">Обновить прогноз</button>
+        </div>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/luxon@3.5.0/build/global/luxon.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/astronomy-engine@2.1.19/astronomy.browser.min.js"></script>
+<script>
+const FORECAST_API='https://astro-v2.onrender.com';
+const tg=window.Telegram?.WebApp;
+if(tg){tg.ready();tg.expand();}
+
+const SR=["Овен","Телец","Близнецы","Рак","Лев","Дева","Весы","Скорпион","Стрелец","Козерог","Водолей","Рыбы"];
+const SS=["♈","♉","♊","♋","♌","♍","♎","♏","♐","♑","♒","♓"];
+const signOf=lon=>Math.floor((((lon%360)+360)%360)/30);
+const toR=d=>d*Math.PI/180,toD=r=>r*180/Math.PI;
+
+function JD(yr,mo,dy,hr,mn){if(mo<=2){yr--;mo+=12;}const A=Math.floor(yr/100),B=2-A+Math.floor(A/4);return Math.floor(365.25*(yr+4716))+Math.floor(30.6001*(mo+1))+dy+hr/24+mn/1440+B-1524.5;}
+function sunLon(jd){const n=jd-2451545,L=(280.460+0.9856474*n)%360,g=toR((357.528+0.9856003*n)%360);return((L+1.915*Math.sin(g)+0.020*Math.sin(2*g))%360+360)%360;}
+function moonLon(jd){const d=jd-2451545,L0=(218.316+13.176396*d)%360,M=toR((134.963+13.064993*d)%360),Ms=toR((357.529+0.985600*d)%360),F=toR((93.272+13.229350*d)%360),D=toR((297.850+12.190749*d)%360);const dL=6.289*Math.sin(M)-1.274*Math.sin(2*D-M)+0.658*Math.sin(2*D)-0.186*Math.sin(Ms)-0.059*Math.sin(2*M-2*D)-0.057*Math.sin(M-2*D+Ms)+0.053*Math.sin(M+2*D)+0.046*Math.sin(2*D-Ms)+0.041*Math.sin(M-Ms)-0.035*Math.sin(D)-0.031*Math.sin(M+Ms)-0.015*Math.sin(2*F-2*D)+0.011*Math.sin(M-4*D);return((L0+dL)%360+360)%360;}
+function geoLon(hLon,sunL,a){const pl=toR(hLon),el=toR((sunL+180)%360),gx=a*Math.cos(pl)-Math.cos(el),gy=a*Math.sin(pl)-Math.sin(el);return((toD(Math.atan2(gy,gx))%360)+360)%360;}
+function helio(jd,Lc,Ld,Mc,Md,eq){const T=(jd-2451545)/36525;let L=((Lc+Ld*T)%360+360)%360;const M=toR(((Mc+Md*(jd-2451545))%360+360)%360);eq.forEach((c,i)=>L+=c*Math.sin((i+1)*M));return((L%360)+360)%360;}
+const PC={mercury:[[252.251,149474.072],[174.795,4.09233445],[23.440,2.9818,0.5255,0.1058,0.0241,0.0053],0.387],venus:[[181.980,58519.213],[212.256,1.60213034],[0.7758,0.0033],0.723],mars:[[355.433,19141.696],[19.387,0.52402068],[10.6912,0.6228,0.0503,0.0046],1.524],jupiter:[[34.352,3036.303],[20.900,0.08308529],[5.5549,0.1683,0.0071],5.203],saturn:[[50.077,1223.511],[317.021,0.03344422],[6.3585,0.2204,0.0106],9.537],uranus:[[314.055,429.864],[141.050,0.01172834],[5.3042,0.1534],19.189],neptune:[[304.349,219.883],[256.225,0.00598103],[1.0302,0.0058],30.070]};
+function planetLon(jd,name){if(name==='pluto'){const T=(jd-2451545)/36525;return((238.95+144.96*T)%360+360)%360;}const[L,M,eq,a]=PC[name];return geoLon(helio(jd,L[0],L[1],M[0],M[1],eq),sunLon(jd),a);}
+function retro(jd,name){const f=name==='moon'?moonLon:name==='sun'?sunLon:(j)=>planetLon(j,name);let d=f(jd+1)-f(jd-1);if(d>180)d-=360;if(d<-180)d+=360;return d<0;}
+const ASTRO_BODY={mercury:'Mercury',venus:'Venus',mars:'Mars',jupiter:'Jupiter',saturn:'Saturn',uranus:'Uranus',neptune:'Neptune',pluto:'Pluto'};
+function astroTime(utc){const A=window.Astronomy;return A?A.MakeTime(new Date(Date.UTC(utc.y,utc.mo-1,utc.d,utc.h,utc.mi,0))):null;}
+function geoEcl(A,body,t){return((A.Ecliptic(A.GeoVector(body,t,true)).elon%360)+360)%360;}
+function sunEcl(A,t){return((A.SunPosition(t).elon%360)+360)%360;}
+function retroA(A,t,body){let d=geoEcl(A,body,t.AddDays(1))-geoEcl(A,body,t.AddDays(-1));if(d>180)d-=360;if(d<-180)d+=360;return d<0;}
+function gmst(jd){const T=(jd-2451545)/36525;return((280.46061837+360.98564736629*(jd-2451545)+0.000387933*T*T-T*T*T/38710000)%360+360)%360;}
+function obliquity(jd){const T=(jd-2451545)/36525;return 23.439291111-0.013004167*T-0.0000001639*T*T+0.0000005036*T*T*T;}
+function degNorm(x){x=x%360;return x<0?x+360:x;}
+function asc2(xDeg,lat,sine,cose){const VS=1e-10;let ass=-Math.tan(toR(lat))*sine+cose*Math.cos(toR(xDeg));if(Math.abs(ass)<VS)ass=0;let sinx=Math.sin(toR(xDeg));if(Math.abs(sinx)<VS)sinx=0;if(sinx===0)ass=ass<0?-VS:VS;else if(ass===0)ass=sinx<0?-90:90;else ass=toD(Math.atan2(sinx,ass));if(ass<0)ass+=180;return ass;}
+function asc1(x1,lat,sine,cose){const VS=1e-10,n=Math.trunc(degNorm(x1)/90+1),f=lat;if(Math.abs(90-f)<VS)return 180;if(Math.abs(90+f)<VS)return 0;let ass;if(n===1)ass=asc2(x1,f,sine,cose);else if(n===2)ass=180-asc2(180-x1,-f,sine,cose);else if(n===3)ass=180+asc2(x1-180,-f,sine,cose);else ass=360-asc2(360-x1,f,sine,cose);return degNorm(ass);}
+function ascLon(jd,lat,lon){const armc=degNorm(gmst(jd)+lon),eps=obliquity(jd);return asc1(armc+90,lat,Math.sin(toR(eps)),Math.cos(toR(eps)));}
+
+const CITIES={'москв':[55.75,37.62,3],'moscow':[55.75,37.62,3],'питер':[59.95,30.32,3],'петербург':[59.95,30.32,3],'спб':[59.95,30.32,3],'новосибирск':[54.99,82.90,7],'екатеринбург':[56.84,60.60,5],'краснодар':[45.04,38.98,3],'сочи':[43.60,39.73,3],'казань':[55.79,49.12,3],'нижний новгород':[56.33,44.00,3],'нижний':[56.33,44.00,3],'самара':[53.20,50.15,4],'уфа':[54.74,55.97,5],'омск':[54.99,73.37,6],'красноярск':[56.01,92.87,7],'иркутск':[52.29,104.30,8],'владивосток':[43.11,131.88,10],'хабаровск':[48.48,135.08,10],'калининград':[54.71,20.51,2],'воронеж':[51.67,39.18,3],'ростов':[47.22,39.72,3],'волгоград':[48.71,44.52,3],'пермь':[58.01,56.23,5],'челябинск':[55.15,61.43,5],'тюмень':[57.15,68.99,5],'барнаул':[53.36,83.74,7],'томск':[56.50,84.97,7],'киев':[50.45,30.52,2],'київ':[50.45,30.52,2],'kyiv':[50.45,30.52,2],'харьков':[49.99,36.23,2],'одесса':[46.48,30.73,2],'львов':[49.84,24.03,2],'минск':[53.90,27.57,3],'minsk':[53.90,27.57,3],'алматы':[43.24,76.89,6],'ташкент':[41.30,69.27,5],'london':[51.51,-0.13,0],'лондон':[51.51,-0.13,0],'paris':[48.85,2.35,1],'париж':[48.85,2.35,1],'berlin':[52.52,13.41,1],'берлин':[52.52,13.41,1],'rome':[41.90,12.48,1],'рим':[41.90,12.48,1],'madrid':[40.42,-3.70,1],'мадрид':[40.42,-3.70,1],'istanbul':[41.01,28.96,3],'стамбул':[41.01,28.96,3],'amsterdam':[52.37,4.90,1],'варшава':[52.23,21.01,1],'warsaw':[52.23,21.01,1],'vienna':[48.21,16.37,1],'вена':[48.21,16.37,1],'helsinki':[60.17,24.94,2],'хельсинки':[60.17,24.94,2],'stockholm':[59.33,18.06,1],'стокгольм':[59.33,18.06,1],'tallinn':[59.44,24.75,2],'таллин':[59.44,24.75,2],'riga':[56.95,24.11,2],'рига':[56.95,24.11,2],'vilnius':[54.69,25.28,2],'вильнюс':[54.69,25.28,2],'athens':[37.98,23.73,2],'афины':[37.98,23.73,2],'new york':[40.71,-74.01,-5],'нью-йорк':[40.71,-74.01,-5],'los angeles':[34.05,-118.24,-8],'чикаго':[41.88,-87.63,-6],'chicago':[41.88,-87.63,-6],'miami':[25.77,-80.19,-5],'beijing':[39.91,116.39,8],'пекин':[39.91,116.39,8],'tokyo':[35.68,139.69,9],'токио':[35.68,139.69,9],'seoul':[37.57,126.98,9],'сеул':[37.57,126.98,9],'dubai':[25.20,55.27,4],'дубай':[25.20,55.27,4],'delhi':[28.63,77.22,5.5],'mumbai':[19.08,72.88,5.5],'bangkok':[13.75,100.52,7],'бангкок':[13.75,100.52,7],'singapore':[1.35,103.82,8],'сингапур':[1.35,103.82,8],'sydney':[-33.87,151.21,10],'сидней':[-33.87,151.21,10],'cairo':[30.04,31.24,2],'каир':[30.04,31.24,2]};
+function findCityFallback(name){const lo=name.toLowerCase().trim();for(const[k,v]of Object.entries(CITIES))if(lo.includes(k)||k.includes(lo))return{lat:v[0],lon:v[1],tzHours:v[2]};for(const[k,v]of Object.entries(CITIES))if(lo.length>=4&&k.startsWith(lo.slice(0,4)))return{lat:v[0],lon:v[1],tzHours:v[2]};return null;}
+function luxonOffset(h){const s=h>=0?'+':'-',a=Math.abs(Number(h)),w=Math.floor(a+1e-9),m=Math.round((a-w)*60);return m===0?`UTC${s}${w}`:`UTC${s}${w}:${String(m).padStart(2,'0')}`;}
+const _geoCache=Object.create(null);
+const COUNTRY_ISO={'россия':'RU','рф':'RU','russia':'RU','украина':'UA','ukraine':'UA','україна':'UA','беларусь':'BY','belarus':'BY','казахстан':'KZ','kazakhstan':'KZ','сша':'US','usa':'US','америка':'US','united states':'US','германия':'DE','germany':'DE','франция':'FR','france':'FR','великобритания':'GB','uk':'GB','england':'GB','англия':'GB','италия':'IT','italy':'IT','испания':'ES','spain':'ES','польша':'PL','poland':'PL','китай':'CN','china':'CN','япония':'JP','japan':'JP','индия':'IN','india':'IN','турция':'TR','turkey':'TR','австралия':'AU','australia':'AU','канада':'CA','canada':'CA','финляндия':'FI','finland':'FI','швеция':'SE','sweden':'SE','норвегия':'NO','norway':'NO','греция':'GR','greece':'GR','австрия':'AT','austria':'AT','нидерланды':'NL','netherlands':'NL','бельгия':'BE','belgium':'BE','швейцария':'CH','switzerland':'CH'};
+const US_STATES=new Set(['AL','AK','AZ','AR','CA','CO','CT','DE','DC','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY']);
+function isoHint(t){t=String(t).trim().toLowerCase();if(COUNTRY_ISO[t])return COUNTRY_ISO[t];if(/^[a-z]{2}$/i.test(t)){const u=t.toUpperCase();if(US_STATES.has(u))return null;return u;}return null;}
+function pickGeoRow(results,raw){if(!results||!results.length)return null;let list=results;const i=raw.indexOf(',');if(i!==-1){const hint=raw.slice(i+1).trim(),iso=isoHint(hint);if(iso){const f=list.filter(r=>(r.country_code||'').toUpperCase()===iso);if(f.length)list=f;}else if(hint.length>=2){const hl=hint.toLowerCase();const f=list.filter(r=>(r.country||'').toLowerCase().includes(hl)||(r.admin1||'').toLowerCase().includes(hl));if(f.length)list=f;}}return[...list].sort((a,b)=>(b.population||0)-(a.population||0))[0];}
+async function resolvePlace(q){const ck=q.toLowerCase().trim();if(_geoCache[ck])return _geoCache[ck];try{const name=q.includes(',')?q.slice(0,q.indexOf(',')).trim():q;const r=await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(name)}&count=12&language=ru`,{signal:AbortSignal.timeout(5000)});if(!r.ok)throw new Error('geo');const j=await r.json();const row=j.results&&j.results.length?pickGeoRow(j.results,q):null;if(row){const p={lat:row.latitude,lon:row.longitude,timezone:row.timezone||luxonOffset(Math.round(row.longitude/15)),name:row.name||q,label:[row.name,row.admin1,row.country].filter(Boolean).join(' · '),source:'open_meteo'};_geoCache[ck]=p;return p;}}catch(e){}const fb=findCityFallback(q);if(!fb)throw new Error(`Город не найден: ${q}`);const p={lat:fb.lat,lon:fb.lon,timezone:luxonOffset(fb.tzHours),name:q,label:q,source:'local'};_geoCache[ck]=p;return p;}
+function wallToUtc(y,mo,d,h,mi,zone){const DateTime=window.luxon?.DateTime;if(!DateTime)throw new Error('Luxon не загружен');const dt=DateTime.fromObject({year:y,month:mo,day:d,hour:h,minute:mi,second:0},{zone});if(!dt.isValid)throw new Error('Некорректная дата');const u=dt.toUTC();return{y:u.year,mo:u.month,d:u.day,h:u.hour,mi:u.minute};}
+
+async function calcChart(dateStr,timeStr,cityName){
+    const[d,m,y]=dateStr.split('.').map(Number);
+    const hasTime=timeStr&&/^\d{2}:\d{2}$/.test(timeStr);
+    let hr=12,mn=0;if(hasTime)[hr,mn]=timeStr.split(':').map(Number);
+    const place=await resolvePlace(cityName);
+    const lat=Number(place.lat),lon=Number(place.lon);
+    const utc=wallToUtc(y,m,d,hr,mn,place.timezone);
+    const jd=JD(utc.y,utc.mo,utc.d,utc.h,utc.mi);
+    const A=window.Astronomy,at=A?astroTime(utc):null;
+    function plLon(k){if(at&&A){if(k==='sun')return sunEcl(A,at);if(k==='moon')return geoEcl(A,A.Body.Moon,at);return geoEcl(A,A.Body[ASTRO_BODY[k]],at);}if(k==='sun')return sunLon(jd);if(k==='moon')return moonLon(jd);return planetLon(jd,k);}
+    function plRetro(k){if(at&&A&&ASTRO_BODY[k])return retroA(A,at,A.Body[ASTRO_BODY[k]]);return retro(jd,k);}
+    const PLANETS=[{n:'Солнце',lon:plLon('sun'),retro:false},{n:'Луна',lon:plLon('moon'),retro:false},{n:'Меркурий',lon:plLon('mercury'),retro:plRetro('mercury')},{n:'Венера',lon:plLon('venus'),retro:plRetro('venus')},{n:'Марс',lon:plLon('mars'),retro:plRetro('mars')},{n:'Юпитер',lon:plLon('jupiter'),retro:plRetro('jupiter')},{n:'Сатурн',lon:plLon('saturn'),retro:plRetro('saturn')},{n:'Уран',lon:plLon('uranus'),retro:plRetro('uranus')},{n:'Нептун',lon:plLon('neptune'),retro:plRetro('neptune')},{n:'Плутон',lon:plLon('pluto'),retro:plRetro('pluto')}];
+    const asc=hasTime?ascLon(jd,lat,lon):null;
+    return{jd,lat,lon,timezone:place.timezone,placeName:place.label||place.name,hasTime,planets:PLANETS,ascendant:asc};
+}
+
+const FIRE=new Set([0,4,8]),EARTH=new Set([1,5,9]),AIR=new Set([2,6,10]);
+function elem(si){if(FIRE.has(si))return'fire';if(EARTH.has(si))return'earth';if(AIR.has(si))return'air';return'water';}
+
+const TEXTS={
+    summary:{fire:["Марс активизирует твою карту — неделя насыщена. Не торопись с решениями в среду, когда напряжение достигнет пика.","Солнце дарит уверенность и ясность цели. Неделя подходит для старта нового — звёзды благосклонны.","Энергия высока, но рассеянность опасна. Сфокусируйся на главном и не распыляйся."],earth:["Сатурн напоминает о важных делах, которые откладывались. Неделя требует дисциплины — но награда весомая.","Планеты указывают на период сбора плодов. Терпение и методичность принесут результат.","Стабильная неделя с акцентом на завершение начатого. Фундамент, который ты закладываешь, держит годами."],air:["Меркурий активен — слова, идеи и встречи определяют неделю. Используй коммуникативный талант.","Интеллектуальная неделя: решения приходят через диалог. Не стесняйся советоваться.","Информационный поток высок. Фильтруй главное и не позволяй мелочам украсть фокус."],water:["Нептун усиливает интуицию — доверяй внутреннему голосу в ключевых решениях.","Эмоциональная неделя: чувства говорят громче логики. Позволь себе прислушаться.","Луна подчёркивает чувствительность. Неделя для глубоких разговоров и личных открытий."]},
+    love:{fire:["Страстная неделя — Венера активизирует твою карту. Смело делай первый шаг, звёзды на твоей стороне.","Искра в воздухе ощущается. Существующие отношения обретут новую глубину, одиноким — шанс на яркую встречу.","Марс добавляет смелости сердцу. Не сдерживай чувства — искренность сейчас ценится выше осторожности."],earth:["Спокойная, уютная неделя в отношениях. Небольшие знаки внимания скажут больше громких слов.","Венера советует больше времени проводить вместе. Совместный ужин или прогулка создадут нужное настроение.","Стабильность — твой главный козырь. Близкие ценят надёжность, и это заметно."],air:["Общение — ключ ко всему на этой неделе. Разговор по душам с любимым человеком расставит всё по местам.","Лёгкость и искры в диалоге. Совместная идея или план на будущее сблизит вас больше, чем ты ожидаешь.","Флирт и остроумие — твоё оружие. Партнёр в восхищении, а если ты свободна — флирт может стать чем-то большим."],water:["Интуиция подскажет, что именно нужно сказать любимому человеку. Доверяй своим ощущениям.","Эмоциональная глубина привлекает — на этой неделе особенно. Откройся, и тебя поймут.","Луна усиливает чувствительность. Не избегай разговора о чувствах — он давно необходим."]},
+    friends:{fire:["Социальная неделя: тебя тянет к людям, и это взаимно. Давняя идея провести время вместе — реализуй наконец.","Харизма на пике. Друзья рады твоей компании, а новые знакомства могут оказаться очень полезными.","Совместный проект с другом принесёт неожиданный результат. Действуй, не откладывая."],earth:["Неделя для надёжных, проверенных связей. Старый друг напомнит о себе — ответь.","Небольшой круг близких людей важнее широкого социального выхода. Качество — твой приоритет.","Помощь другу сейчас вернётся сторицей. Не отказывай, если просят о поддержке."],air:["Оживлённые встречи и интересные беседы — твоя стихия на этой неделе. Прими приглашение.","Новое знакомство может перерасти в крепкую дружбу. Будь открыта.","Групповая динамика работает на тебя. Инициируй встречу — все давно этого ждали."],water:["Чуткость к настроению друзей сделает тебя незаменимым собеседником. Один разговор может изменить многое.","Кто-то из близких нуждается в твоей поддержке, но не решается попросить. Протяни руку первой.","Интуиция подскажет, кому позвонить. Не игнорируй это ощущение."]},
+    career:{fire:["Марс даёт импульс — время для смелых шагов. Презентуй идею, о которой думала.","Инициатива вознаграждается. Руководство замечает тех, кто берёт на себя ответственность.","Энергия высокая — используй её для сложных задач в начале недели, пока запал не угас."],earth:["Методичность окупается. Завершай начатое — незаконченные дела начинают давить.","Детальная проработка проекта сейчас важнее скорости. Ошибки обойдутся дороже промедления.","Коллеги оценят основательность. Тихая работа в этот период говорит сама за себя."],air:["Переговоры и коммуникации — в твою пользу. Идеальное время для встреч и договорённостей.","Свежий взгляд на старую проблему даст неожиданное решение. Доверяй своей гибкости.","Нетворкинг сейчас важнее рутины. Полезный контакт может прийти из неожиданного источника."],water:["Интуиция в рабочих вопросах особенно сильна. Доверяй первому ощущению при принятии решений.","Творческий подход к задаче удивит коллег. Не бойся предложить нестандартный путь.","Атмосфера в команде важна — ты чувствуешь её тонкости. Сгладь напряжение, и это заметят."]},
+    finance:{fire:["Импульсивные траты под угрозой. Посчитай дважды перед большой покупкой.","Возможность дохода есть, но она требует действия, а не ожидания. Сделай первый шаг.","Инвестиция в себя — обучение, здоровье, инструменты — окупится быстрее, чем кажется."],earth:["Спокойная, стабильная неделя для финансов. Плановые расходы — без сюрпризов.","Момент для пересмотра бюджета и небольших накоплений. Маленький шаг сейчас — большой результат потом.","Отложи крупные покупки до следующей недели — сначала пойми, что действительно необходимо."],air:["Неожиданный финансовый разговор может открыть новые возможности. Будь внимательна к деталям.","Информация — твой главный актив на этой неделе. Изучи вопрос перед принятием решения.","Небольшая гибкость в расходах поможет использовать выгодный момент. Главное — не перегибать."],water:["Финансовая интуиция обострена. Если что-то кажется подозрительным — так и есть, не торопись.","Забытый долг или возврат может проявиться неожиданно. Неделя для финансовых сюрпризов.","Эмоциональные траты — главный риск. Не шопись на эмоциях, подожди сутки."]},
+    health:{fire:["Энергия высокая, но не расходуй её бездумно. Чередуй активность с отдыхом.","Физическая нагрузка принесёт удовольствие и разрядит напряжение. Лучшее время — утро.","Следи за темпом: азарт хорош, но перегрев опасен. Пей больше воды."],earth:["Тело просит режима. Сон, еда по расписанию, прогулки — всё это даёт эффект именно сейчас.","Накопившееся напряжение даёт о себе знать. Массаж или тёплая ванна вечером — лучшее лекарство.","Умеренная нагрузка и свежий воздух восстанавливают лучше любого стимулятора."],air:["Нервная система требует внимания. Меньше экрана перед сном, больше спокойных вечеров.","Голова работает быстро, но нуждается в паузах. Практика осознанного дыхания творит чудеса.","Лёгкая физическая активность — йога, прогулки — поможет сбросить умственное напряжение."],water:["Чувствительность к окружению высокая — избегай токсичных ситуаций и людей.","Сон и водный баланс — твои главные союзники на этой неделе. Не пренебрегай.","Эмоциональное состояние напрямую влияет на физическое. Позволь себе отдых без чувства вины."]}
+};
+
+const FAV_DAYS={fire:['Вторник','Пятница'],earth:['Понедельник','Четверг'],air:['Среда','Суббота'],water:['Понедельник','Пятница']};
+const ELEM_SCORE={fire:4,earth:3,air:4,water:3};
+function pick(arr,seed){return arr[Math.abs(Math.floor(seed))%arr.length];}
+
+function generateForecast(chart){
+    const P=chart.planets,sunEl=elem(signOf(P[0].lon)),moonEl=elem(signOf(P[1].lon)),ascEl=chart.ascendant!=null?elem(signOf(chart.ascendant)):sunEl;
+    const seed=Math.floor(chart.jd)%97,base=ELEM_SCORE[sunEl],mb=moonEl===sunEl?1:0;
+    const ratings={love:Math.min(5,Math.max(1,base+mb+(seed%3)-1)),friends:Math.min(5,Math.max(1,base+(seed%2))),career:Math.min(5,Math.max(1,ELEM_SCORE[ascEl]+((seed+1)%3)-1)),finance:Math.min(5,Math.max(1,ELEM_SCORE[ascEl]+((seed+2)%2))),health:Math.min(5,Math.max(1,base+((seed+3)%3)-1))};
+    return{summary:pick(TEXTS.summary[sunEl],seed),favorable_days:FAV_DAYS[sunEl],love:{rating:ratings.love,text:pick(TEXTS.love[moonEl],seed+1)},friends:{rating:ratings.friends,text:pick(TEXTS.friends[sunEl],seed+2)},career:{rating:ratings.career,text:pick(TEXTS.career[ascEl],seed+3)},finance:{rating:ratings.finance,text:pick(TEXTS.finance[ascEl],seed+4)},health:{rating:ratings.health,text:pick(TEXTS.health[moonEl],seed+5)}};
+}
+
+async function buildLocalResponse(dateStr,timeStr,cityName){
+    const chart=await calcChart(dateStr,timeStr,cityName),fc=generateForecast(chart);
+    const today=new Date(),mon=new Date(today);mon.setDate(today.getDate()-((today.getDay()||7)-1));
+    const sun=new Date(mon);sun.setDate(mon.getDate()+6);
+    const fmt=dt=>`${String(dt.getDate()).padStart(2,'0')}.${String(dt.getMonth()+1).padStart(2,'0')}.${dt.getFullYear()}`;
+    const P=chart.planets;
+    return{_raw:chart,_meta:{city:chart.placeName,timezone:chart.timezone},natal:{sun:{sign:SR[signOf(P[0].lon)],symbol:SS[signOf(P[0].lon)]},moon:{sign:SR[signOf(P[1].lon)],symbol:SS[signOf(P[1].lon)]},ascendant:chart.ascendant!=null?{sign:SR[signOf(chart.ascendant)]}:{sign:null}},forecast:fc,week_start:fmt(mon),week_end:fmt(sun)};
+}
+
+function showScreen(id,dir='right'){document.querySelectorAll('.screen').forEach(s=>{s.classList.toggle('hidden',s.id!==id);s.classList.toggle('slide-left',s.id!==id&&dir==='left');});}
+function setStep(id,st){const el=document.getElementById(id);el.className=`step ${st}`;el.querySelector('.step-ico').textContent=st==='done'?'✓':st==='active'?id.replace('step',''):'·';}
+const delay=ms=>new Promise(r=>setTimeout(r,ms));
+function showError(m){const e=document.getElementById('error-msg');e.textContent=m;e.classList.add('visible');}
+function clearError(){document.getElementById('error-msg').classList.remove('visible');}
+
+function validate(date,time,city){
+    if(!/^\d{2}\.\d{2}\.\d{4}$/.test(date))return'Введи дату в формате ДД.ММ.ГГГГ';
+    const[d,m,y]=date.split('.').map(Number);
+    if(y<1900||y>new Date().getFullYear())return'Некорректный год рождения';
+    const t=new Date(y,m-1,d);if(t.getFullYear()!==y||t.getMonth()!==m-1||t.getDate()!==d)return'Некорректная дата рождения';
+    if(time){if(!/^\d{2}:\d{2}$/.test(time))return'Время: формат ЧЧ:ММ';const[hh,mm]=time.split(':').map(Number);if(hh>23||mm>59)return'Некорректное время';}
+    if(!city.trim()||city.trim().length<2)return'Введи город рождения';
+    return null;
+}
+
+document.getElementById('f-date').addEventListener('input',e=>{let v=e.target.value.replace(/\D/g,'');if(v.length>2)v=v.slice(0,2)+'.'+v.slice(2);if(v.length>5)v=v.slice(0,5)+'.'+v.slice(5);e.target.value=v.slice(0,10);});
+document.getElementById('f-time').addEventListener('input',e=>{let v=e.target.value.replace(/\D/g,'');if(v.length>2)v=v.slice(0,2)+':'+v.slice(2);e.target.value=v.slice(0,5);});
+
+const DAY=['пн','вт','ср','чт','пт','сб','вс'];
+const DMAP={'понедельник':'пн','вторник':'вт','среда':'ср','четверг':'чт','пятница':'пт','суббота':'сб','воскресенье':'вс'};
+
+function buildDays(ws,favDays){
+    const strip=document.getElementById('fc-days');strip.innerHTML='';
+    const[d,m,y]=ws.split('.').map(Number),mon=new Date(y,m-1,d),tod=new Date();
+    const fav=new Set((favDays||[]).map(s=>DMAP[s.toLowerCase()]||s.toLowerCase().slice(0,2)));
+    for(let i=0;i<7;i++){
+        const dt=new Date(mon);dt.setDate(mon.getDate()+i);
+        const isT=dt.getFullYear()===tod.getFullYear()&&dt.getMonth()===tod.getMonth()&&dt.getDate()===tod.getDate();
+        const el=document.createElement('div');el.className='fc-day'+(isT?' active':fav.has(DAY[i])?' fav':'');
+        el.innerHTML=`<span class="fc-day-name">${DAY[i]}</span><span class="fc-day-num">${dt.getDate()}</span>`;
+        strip.appendChild(el);
     }
+}
 
-    // ══════════════════════════════════════════════════════
-    //  ЗНАКИ ЗОДИАКА
-    // ══════════════════════════════════════════════════════
-    const SR = ["Овен", "Телец", "Близнецы", "Рак", "Лев", "Дева", "Весы", "Скорпион", "Стрелец", "Козерог", "Водолей", "Рыбы"];
-    const SS = ["♈", "♉", "♊", "♋", "♌", "♍", "♎", "♏", "♐", "♑", "♒", "♓"];
-    const signOf = lon => Math.floor((((lon % 360) + 360) % 360) / 30);
-    const degOf = lon => (((lon % 360) + 360) % 360) % 30;
+function fitSignSize(name){
+    const l=name.length;
+    if(l<=4)return'clamp(64px,18vw,80px)';
+    if(l<=6)return'clamp(50px,14vw,64px)';
+    if(l<=8)return'clamp(40px,11vw,52px)';
+    return'clamp(34px,9vw,44px)';
+}
 
-    function lonToDegMinInSign(lon) {
-        let x = (((lon % 360) + 360) % 360) % 30;
-        let d = Math.floor(x + 1e-9),
-            m = Math.floor((x - d) * 60 + 0.5);
-        if (m >= 60) {
-            d++;
-            m = 0;
-        }
-        if (d >= 30)
-            d = 0;
-        return `${d}°${String(m).padStart(2, '0')}′`;
-    }
-    const toR = d => d * Math.PI / 180,
-        toD = r => r * 180 / Math.PI;
-
-    // ══════════════════════════════════════════════════════
-    //  ЮЛИАНСКАЯ ДАТА
-    // ══════════════════════════════════════════════════════
-    function JD(yr, mo, dy, hr, mn) {
-        if (mo <= 2) {
-            yr--;
-            mo += 12;
-        }
-        const A = Math.floor(yr / 100),
-            B = 2 - A + Math.floor(A / 4);
-        return Math.floor(365.25 * (yr + 4716)) + Math.floor(30.6001 * (mo + 1)) + dy + hr / 24 + mn / 1440 + B - 1524.5;
-    }
-
-    // ══════════════════════════════════════════════════════
-    //  СОЛНЦЕ
-    // ══════════════════════════════════════════════════════
-    function sunLon(jd) {
-        const n = jd - 2451545,
-            L = (280.460 + 0.9856474 * n) % 360,
-            g = toR((357.528 + 0.9856003 * n) % 360);
-        return ((L + 1.915 * Math.sin(g) + 0.020 * Math.sin(2 * g)) % 360 + 360) % 360;
-    }
-
-    // ══════════════════════════════════════════════════════
-    //  ЛУНА
-    // ══════════════════════════════════════════════════════
-    function moonLon(jd) {
-        const d = jd - 2451545,
-            L0 = (218.316 + 13.176396 * d) % 360;
-        const M = toR((134.963 + 13.064993 * d) % 360),
-            Ms = toR((357.529 + 0.985600 * d) % 360);
-        const F = toR((93.272 + 13.229350 * d) % 360),
-            D = toR((297.850 + 12.190749 * d) % 360);
-        const dL = 6.289 * Math.sin(M) - 1.274 * Math.sin(2 * D - M) + 0.658 * Math.sin(2 * D)
-        - 0.186 * Math.sin(Ms) - 0.059 * Math.sin(2 * M - 2 * D) - 0.057 * Math.sin(M - 2 * D + Ms)
-        + 0.053 * Math.sin(M + 2 * D) + 0.046 * Math.sin(2 * D - Ms) + 0.041 * Math.sin(M - Ms)
-        - 0.035 * Math.sin(D) - 0.031 * Math.sin(M + Ms) - 0.015 * Math.sin(2 * F - 2 * D)
-        + 0.011 * Math.sin(M - 4 * D);
-        return ((L0 + dL) % 360 + 360) % 360;
-    }
-
-    // ══════════════════════════════════════════════════════
-    //  ПЛАНЕТЫ
-    // ══════════════════════════════════════════════════════
-    function geoLon(hLon, sunL, a) {
-        const pl = toR(hLon),
-            el = toR((sunL + 180) % 360);
-        const gx = a * Math.cos(pl) - Math.cos(el),
-            gy = a * Math.sin(pl) - Math.sin(el);
-        return ((toD(Math.atan2(gy, gx)) % 360) + 360) % 360;
-    }
-    function helio(jd, Lc, Ld, Mc, Md, eq) {
-        const T = (jd - 2451545) / 36525,
-            d = jd - 2451545;
-        let L = ((Lc + Ld * T) % 360 + 360) % 360;
-        const M = toR(((Mc + Md * d) % 360 + 360) % 360);
-        eq.forEach((c, i) => L += c * Math.sin((i + 1) * M));
-        return ((L % 360) + 360) % 360;
-    }
-    const PC = {
-        mercury: [[252.251, 149474.072], [174.795, 4.09233445], [23.440, 2.9818, 0.5255, 0.1058, 0.0241, 0.0053], 0.387],
-        venus: [[181.980, 58519.213], [212.256, 1.60213034], [0.7758, 0.0033], 0.723],
-        mars: [[355.433, 19141.696], [19.387, 0.52402068], [10.6912, 0.6228, 0.0503, 0.0046], 1.524],
-        jupiter: [[34.352, 3036.303], [20.900, 0.08308529], [5.5549, 0.1683, 0.0071], 5.203],
-        saturn: [[50.077, 1223.511], [317.021, 0.03344422], [6.3585, 0.2204, 0.0106], 9.537],
-        uranus: [[314.055, 429.864], [141.050, 0.01172834], [5.3042, 0.1534], 19.189],
-        neptune: [[304.349, 219.883], [256.225, 0.00598103], [1.0302, 0.0058], 30.070],
-    };
-    function planetLon(jd, name) {
-        if (name === 'pluto') {
-            const T = (jd - 2451545) / 36525;
-            return ((238.95 + 144.96 * T) % 360 + 360) % 360;
-        }
-        const [L, M, eq, a] = PC[name];
-        const hl = helio(jd, L[0], L[1], M[0], M[1], eq);
-        return geoLon(hl, sunLon(jd), a);
-    }
-    function retro(jd, name) {
-        const f = name === 'moon' ? moonLon : name === 'sun' ? sunLon : (j) => planetLon(j, name);
-        let d = (f(jd + 1) - f(jd - 1));
-        if (d > 180)
-            d -= 360;
-        if (d < -180)
-            d += 360;
-        return d < 0;
-    }
-
-    const ASTRO_BODY = {
-        mercury: 'Mercury',
-        venus: 'Venus',
-        mars: 'Mars',
-        jupiter: 'Jupiter',
-        saturn: 'Saturn',
-        uranus: 'Uranus',
-        neptune: 'Neptune',
-        pluto: 'Pluto'
-    };
-    function astronomyTimeFromUtc(utc) {
-        const A = window.Astronomy;
-        if (!A)
-            return null;
-        return A.MakeTime(new Date(Date.UTC(utc.y, utc.mo - 1, utc.d, utc.h, utc.mi, 0)));
-    }
-    function geoEclipticLongitude(A, body, t) {
-        const e = A.Ecliptic(A.GeoVector(body, t, true));
-        return ((e.elon % 360) + 360) % 360;
-    }
-    function sunLongitudeAstronomy(A, t) {
-        const e = A.SunPosition(t);
-        return ((e.elon % 360) + 360) % 360;
-    }
-    function retroBodyAstronomy(A, t, body) {
-        const l0 = geoEclipticLongitude(A, body, t.AddDays(-1)),
-            l2 = geoEclipticLongitude(A, body, t.AddDays(1));
-        let d = l2 - l0;
-        if (d > 180)
-            d -= 360;
-        if (d < -180)
-            d += 360;
-        return d < 0;
-    }
-
-    // ══════════════════════════════════════════════════════
-    //  АСЦЕНДЕНТ
-    // ══════════════════════════════════════════════════════
-    function gmst(jd) {
-        const T = (jd - 2451545) / 36525;
-        return ((280.46061837 + 360.98564736629 * (jd - 2451545) + 0.000387933 * T * T - T * T * T / 38710000) % 360 + 360) % 360;
-    }
-    function obliquity(jd) {
-        const T = (jd - 2451545) / 36525;
-        return 23.439291111 - 0.013004167 * T - 0.0000001639 * T * T + 0.0000005036 * T * T * T;
-    }
-    function degNorm(x) {
-        x = x % 360;
-        return x < 0 ? x + 360 : x;
-    }
-    function asc2(xDeg, latDeg, sine, cose) {
-        const VS = 1e-10;
-        let ass = -Math.tan(toR(latDeg)) * sine + cose * Math.cos(toR(xDeg));
-        if (Math.abs(ass) < VS)
-            ass = 0;
-        let sinx = Math.sin(toR(xDeg));
-        if (Math.abs(sinx) < VS)
-            sinx = 0;
-        if (sinx === 0)
-            ass = ass < 0 ? -VS : VS;
-        else if (ass === 0)
-            ass = sinx < 0 ? -90 : 90;
-        else
-            ass = toD(Math.atan2(sinx, ass));
-        if (ass < 0)
-            ass += 180;
-        return ass;
-    }
-    function asc1(x1Deg, latDeg, sine, cose) {
-        const VS = 1e-10;
-        let x1 = degNorm(x1Deg);
-        const n = Math.trunc(x1 / 90 + 1),
-            f = latDeg;
-        if (Math.abs(90 - f) < VS)
-            return 180;
-        if (Math.abs(90 + f) < VS)
-            return 0;
-        let ass;
-        if (n === 1)
-            ass = asc2(x1, f, sine, cose);
-        else if (n === 2)
-            ass = 180 - asc2(180 - x1, -f, sine, cose);
-        else if (n === 3)
-            ass = 180 + asc2(x1 - 180, -f, sine, cose);
-        else
-            ass = 360 - asc2(360 - x1, f, sine, cose);
-        ass = degNorm(ass);
-        if (Math.abs(ass - 90) < VS)
-            ass = 90;
-        if (Math.abs(ass - 180) < VS)
-            ass = 180;
-        if (Math.abs(ass - 270) < VS)
-            ass = 270;
-        if (Math.abs(ass - 360) < VS)
-            ass = 0;
-        return ass;
-    }
-    function ascLon(jd, lat, lon) {
-        const armc = degNorm(gmst(jd) + lon),
-            eps = obliquity(jd);
-        const sine = Math.sin(toR(eps)),
-            cose = Math.cos(toR(eps));
-        return asc1(armc + 90, lat, sine, cose);
-    }
-
-    // ══════════════════════════════════════════════════════
-    //  БАЗА ГОРОДОВ
-    // ══════════════════════════════════════════════════════
-    const CITIES = {
-        'москв': [55.75, 37.62, 3],
-        'moscow': [55.75, 37.62, 3],
-        'питер': [59.95, 30.32, 3],
-        'петербург': [59.95, 30.32, 3],
-        'спб': [59.95, 30.32, 3],
-        'новосибирск': [54.99, 82.90, 7],
-        'екатеринбург': [56.84, 60.60, 5],
-        'краснодар': [45.04, 38.98, 3],
-        'сочи': [43.60, 39.73, 3],
-        'казань': [55.79, 49.12, 3],
-        'нижний новгород': [56.33, 44.00, 3],
-        'нижний': [56.33, 44.00, 3],
-        'самара': [53.20, 50.15, 4],
-        'уфа': [54.74, 55.97, 5],
-        'омск': [54.99, 73.37, 6],
-        'красноярск': [56.01, 92.87, 7],
-        'иркутск': [52.29, 104.30, 8],
-        'владивосток': [43.11, 131.88, 10],
-        'хабаровск': [48.48, 135.08, 10],
-        'калининград': [54.71, 20.51, 2],
-        'воронеж': [51.67, 39.18, 3],
-        'ростов': [47.22, 39.72, 3],
-        'волгоград': [48.71, 44.52, 3],
-        'пермь': [58.01, 56.23, 5],
-        'челябинск': [55.15, 61.43, 5],
-        'тюмень': [57.15, 68.99, 5],
-        'барнаул': [53.36, 83.74, 7],
-        'томск': [56.50, 84.97, 7],
-        'киев': [50.45, 30.52, 2],
-        'київ': [50.45, 30.52, 2],
-        'kyiv': [50.45, 30.52, 2],
-        'харьков': [49.99, 36.23, 2],
-        'одесса': [46.48, 30.73, 2],
-        'львов': [49.84, 24.03, 2],
-        'минск': [53.90, 27.57, 3],
-        'minsk': [53.90, 27.57, 3],
-        'алматы': [43.24, 76.89, 6],
-        'ташкент': [41.30, 69.27, 5],
-        'london': [51.51, -0.13, 0],
-        'лондон': [51.51, -0.13, 0],
-        'paris': [48.85, 2.35, 1],
-        'париж': [48.85, 2.35, 1],
-        'berlin': [52.52, 13.41, 1],
-        'берлин': [52.52, 13.41, 1],
-        'rome': [41.90, 12.48, 1],
-        'рим': [41.90, 12.48, 1],
-        'madrid': [40.42, -3.70, 1],
-        'мадрид': [40.42, -3.70, 1],
-        'istanbul': [41.01, 28.96, 3],
-        'стамбул': [41.01, 28.96, 3],
-        'amsterdam': [52.37, 4.90, 1],
-        'варшава': [52.23, 21.01, 1],
-        'warsaw': [52.23, 21.01, 1],
-        'vienna': [48.21, 16.37, 1],
-        'вена': [48.21, 16.37, 1],
-        'helsinki': [60.17, 24.94, 2],
-        'хельсинки': [60.17, 24.94, 2],
-        'stockholm': [59.33, 18.06, 1],
-        'стокгольм': [59.33, 18.06, 1],
-        'tallinn': [59.44, 24.75, 2],
-        'таллин': [59.44, 24.75, 2],
-        'riga': [56.95, 24.11, 2],
-        'рига': [56.95, 24.11, 2],
-        'vilnius': [54.69, 25.28, 2],
-        'вильнюс': [54.69, 25.28, 2],
-        'athens': [37.98, 23.73, 2],
-        'афины': [37.98, 23.73, 2],
-        'new york': [40.71, -74.01, -5],
-        'нью-йорк': [40.71, -74.01, -5],
-        'los angeles': [34.05, -118.24, -8],
-        'чикаго': [41.88, -87.63, -6],
-        'chicago': [41.88, -87.63, -6],
-        'miami': [25.77, -80.19, -5],
-        'beijing': [39.91, 116.39, 8],
-        'пекин': [39.91, 116.39, 8],
-        'tokyo': [35.68, 139.69, 9],
-        'токио': [35.68, 139.69, 9],
-        'seoul': [37.57, 126.98, 9],
-        'сеул': [37.57, 126.98, 9],
-        'dubai': [25.20, 55.27, 4],
-        'дубай': [25.20, 55.27, 4],
-        'delhi': [28.63, 77.22, 5.5],
-        'mumbai': [19.08, 72.88, 5.5],
-        'bangkok': [13.75, 100.52, 7],
-        'бангкок': [13.75, 100.52, 7],
-        'singapore': [1.35, 103.82, 8],
-        'сингапур': [1.35, 103.82, 8],
-        'sydney': [-33.87, 151.21, 10],
-        'сидней': [-33.87, 151.21, 10],
-        'cairo': [30.04, 31.24, 2],
-        'каир': [30.04, 31.24, 2],
-    };
-    function findCityFallback(name) {
-        const lo = name.toLowerCase().trim();
-        for (const [k, v] of Object.entries(CITIES))
-            if (lo.includes(k) || k.includes(lo))
-                return {
-                    lat: v[0],
-                    lon: v[1],
-                    tzHours: v[2]
-                };
-        for (const [k, v] of Object.entries(CITIES))
-            if (lo.length >= 4 && k.startsWith(lo.slice(0, 4)))
-                return {
-                    lat: v[0],
-                    lon: v[1],
-                    tzHours: v[2]
-                };
-        return null;
-    }
-
-    const _geoCache = Object.create(null);
-
-    const COUNTRY_HINT_ISO = {
-        'россия': 'RU',
-        'рф': 'RU',
-        'russia': 'RU',
-        'украина': 'UA',
-        'ukraine': 'UA',
-        'україна': 'UA',
-        'беларусь': 'BY',
-        'belarus': 'BY',
-        'белоруссия': 'BY',
-        'казахстан': 'KZ',
-        'kazakhstan': 'KZ',
-        'сша': 'US',
-        'usa': 'US',
-        'америка': 'US',
-        'united states': 'US',
-        'германия': 'DE',
-        'germany': 'DE',
-        'deutschland': 'DE',
-        'франция': 'FR',
-        'france': 'FR',
-        'великобритания': 'GB',
-        'uk': 'GB',
-        'england': 'GB',
-        'англия': 'GB',
-        'шотландия': 'GB',
-        'италия': 'IT',
-        'italy': 'IT',
-        'испания': 'ES',
-        'spain': 'ES',
-        'польша': 'PL',
-        'poland': 'PL',
-        'китай': 'CN',
-        'china': 'CN',
-        'япония': 'JP',
-        'japan': 'JP',
-        'индия': 'IN',
-        'india': 'IN',
-        'турция': 'TR',
-        'turkey': 'TR',
-        'египет': 'EG',
-        'egypt': 'EG',
-        'израиль': 'IL',
-        'israel': 'IL',
-        'австралия': 'AU',
-        'australia': 'AU',
-        'канада': 'CA',
-        'canada': 'CA',
-        'мексика': 'MX',
-        'mexico': 'MX',
-        'бразилия': 'BR',
-        'brazil': 'BR',
-        'финляндия': 'FI',
-        'finland': 'FI',
-        'швеция': 'SE',
-        'sweden': 'SE',
-        'норвегия': 'NO',
-        'norway': 'NO',
-        'греция': 'GR',
-        'greece': 'GR',
-        'австрия': 'AT',
-        'austria': 'AT',
-        'чехия': 'CZ',
-        'czechia': 'CZ',
-        'czech republic': 'CZ',
-        'венгрия': 'HU',
-        'hungary': 'HU',
-        'румыния': 'RO',
-        'romania': 'RO',
-        'болгария': 'BG',
-        'bulgaria': 'BG',
-        'сербия': 'RS',
-        'serbia': 'RS',
-        'нидерланды': 'NL',
-        'netherlands': 'NL',
-        'голландия': 'NL',
-        'бельгия': 'BE',
-        'belgium': 'BE',
-        'швейцария': 'CH',
-        'switzerland': 'CH',
-        'португалия': 'PT',
-        'portugal': 'PT',
-        'ирландия': 'IE',
-        'ireland': 'IE'
-    };
-    const US_STATE_ABBR = new Set(['AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY', 'PR', 'VI', 'GU', 'AS', 'MP']);
-    const US_STATE_ADMIN = {
-        al: 'alabama',
-        ak: 'alaska',
-        az: 'arizona',
-        ar: 'arkansas',
-        ca: 'california',
-        co: 'colorado',
-        ct: 'connecticut',
-        de: 'delaware',
-        dc: 'district of columbia',
-        fl: 'florida',
-        ga: 'georgia',
-        hi: 'hawaii',
-        id: 'idaho',
-        il: 'illinois',
-        in: 'indiana',
-        ia: 'iowa',
-        ks: 'kansas',
-        ky: 'kentucky',
-        la: 'louisiana',
-        me: 'maine',
-        md: 'maryland',
-        ma: 'massachusetts',
-        mi: 'michigan',
-        mn: 'minnesota',
-        ms: 'mississippi',
-        mo: 'missouri',
-        mt: 'montana',
-        ne: 'nebraska',
-        nv: 'nevada',
-        nh: 'new hampshire',
-        nj: 'new jersey',
-        nm: 'new mexico',
-        ny: 'new york',
-        nc: 'north carolina',
-        nd: 'north dakota',
-        oh: 'ohio',
-        ok: 'oklahoma',
-        or: 'oregon',
-        pa: 'pennsylvania',
-        ri: 'rhode island',
-        sc: 'south carolina',
-        sd: 'south dakota',
-        tn: 'tennessee',
-        tx: 'texas',
-        ut: 'utah',
-        vt: 'vermont',
-        va: 'virginia',
-        wa: 'washington',
-        wv: 'west virginia',
-        wi: 'wisconsin',
-        wy: 'wyoming'
-    };
-
-    function isoFromCountryHint(token) {
-        const t = String(token).trim().toLowerCase();
-        if (COUNTRY_HINT_ISO[t])
-            return COUNTRY_HINT_ISO[t];
-        if (/^[a-z]{2}$/i.test(t)) {
-            const u = t.toUpperCase();
-            if (US_STATE_ABBR.has(u))
-                return null;
-            return u;
-        }
-        return null;
-    }
-    function pickBestGeoRow(results, rawQuery) {
-        if (!results || !results.length)
-            return null;
-        let list = results;
-        const q = rawQuery.trim(),
-            i = q.indexOf(',');
-        if (i !== -1) {
-            const hint = q.slice(i + 1).trim(),
-                iso = isoFromCountryHint(hint);
-            if (iso) {
-                const f = list.filter(r => (r.country_code || '').toUpperCase() === iso);
-                if (f.length)
-                    list = f;
-            }
-            else if (hint.length >= 2) {
-                const hl = hint.toLowerCase(),
-                    st = /^[a-z]{2}$/.test(hl) ? US_STATE_ADMIN[hl] : null;
-                const f = list.filter(r => {
-                    if (st && (r.country_code || '').toUpperCase() === 'US')
-                        return (r.admin1 || '').toLowerCase().includes(st);
-                    return (r.country || '').toLowerCase().includes(hl) || (r.admin1 || '').toLowerCase().includes(hl);
-                });
-                if (f.length)
-                    list = f;
-            }
-        }
-        return [...list].sort((a, b) => (b.population || 0) - (a.population || 0))[0];
-    }
-
-    function luxonFixedOffsetZone(tzHours) {
-        const sign = tzHours >= 0 ? '+' : '-',
-            abs = Math.abs(Number(tzHours));
-        const whole = Math.floor(abs + 1e-9),
-            min = Math.round((abs - whole) * 60);
-        if (min === 0)
-            return `UTC${sign}${whole}`;
-        return `UTC${sign}${whole}:${String(min).padStart(2, '0')}`;
-    }
-
-    async function resolvePlace(cityQuery) {
-        const q = cityQuery.trim(),
-            ck = q.toLowerCase();
-        if (_geoCache[ck])
-            return _geoCache[ck];
-        try {
-            const searchName = q.includes(',') ? q.slice(0, q.indexOf(',')).trim() : q;
-            const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(searchName)}&count=12&language=ru`;
-            const r = await fetch(url, {
-                signal: AbortSignal.timeout(5000)
-            });
-            if (!r.ok)
-                throw new Error('geo fail');
-            const j = await r.json();
-            let row = j.results && j.results.length ? pickBestGeoRow(j.results, q) : null;
-            if (row) {
-                const place = {
-                    lat: row.latitude,
-                    lon: row.longitude,
-                    timezone: row.timezone || luxonFixedOffsetZone(Math.round(row.longitude / 15)),
-                    name: row.name || q,
-                    label: [row.name, row.admin1, row.country].filter(Boolean).join(' · '),
-                    country: row.country,
-                    admin1: row.admin1,
-                    source: 'open_meteo',
-                    fixedOffsetOnly: false
-                };
-                _geoCache[ck] = place;
-                return place;
-            }
-        } catch (e) {}
-        const fb = findCityFallback(q);
-        if (!fb)
-            throw new Error(`Город не найден: ${q}`);
-        const place = {
-            lat: fb.lat,
-            lon: fb.lon,
-            timezone: luxonFixedOffsetZone(fb.tzHours),
-            name: q,
-            label: q,
-            source: 'local_table',
-            fixedOffsetOnly: true
-        };
-        _geoCache[ck] = place;
-        return place;
-    }
-
-    function localWallTimeToUtcParts(y, mo, d, h, mi, ianaZone) {
-        const DateTime = window.luxon?.DateTime;
-        if (!DateTime)
-            throw new Error('Не загружена библиотека Luxon');
-        const dt = DateTime.fromObject({
-            year: y,
-            month: mo,
-            day: d,
-            hour: h,
-            minute: mi,
-            second: 0,
-            millisecond: 0
-        }, {
-            zone: ianaZone
-        });
-        if (!dt.isValid)
-            throw new Error('Некорректная дата или время для часового пояса');
-        const u = dt.toUTC();
-        return {
-            y: u.year,
-            mo: u.month,
-            d: u.day,
-            h: u.hour,
-            mi: u.minute
-        };
-    }
-
-    // ══════════════════════════════════════════════════════
-    //  ГЛАВНЫЙ РАСЧЁТ
-    // ══════════════════════════════════════════════════════
-    async function calcChart(dateStr, timeStr, cityName) {
-        const [d, m, y] = dateStr.split('.').map(Number);
-        const hasTime = timeStr && /^\d{2}:\d{2}$/.test(timeStr);
-        let hr = 12,
-            mn = 0;
-        if (hasTime)
-            [hr, mn] = timeStr.split(':').map(Number);
-        const place = await resolvePlace(cityName);
-        const lat = Number(place.lat),
-            lon = Number(place.lon);
-        const utc = localWallTimeToUtcParts(y, m, d, hr, mn, place.timezone);
-        const jd = JD(utc.y, utc.mo, utc.d, utc.h, utc.mi);
-        const A = window.Astronomy,
-            at = A ? astronomyTimeFromUtc(utc) : null;
-        function plLon(key) {
-            if (at && A) {
-                if (key === 'sun')
-                    return sunLongitudeAstronomy(A, at);
-                if (key === 'moon')
-                    return geoEclipticLongitude(A, A.Body.Moon, at);
-                return geoEclipticLongitude(A, A.Body[ASTRO_BODY[key]], at);
-            }
-            if (key === 'sun')
-                return sunLon(jd);
-            if (key === 'moon')
-                return moonLon(jd);
-            return planetLon(jd, key);
-        }
-        function plRetro(key) {
-            if (at && A && ASTRO_BODY[key])
-                return retroBodyAstronomy(A, at, A.Body[ASTRO_BODY[key]]);
-            return retro(jd, key);
-        }
-        const PLANETS = [
-        {
-            n: 'Солнце',
-            s: '☉',
-            sym: '☉',
-            lon: plLon('sun'),
-            retro: false
-        },
-        {
-            n: 'Луна',
-            s: '☽',
-            sym: '☽',
-            lon: plLon('moon'),
-            retro: false
-        },
-        {
-            n: 'Меркурий',
-            s: '☿',
-            sym: '☿',
-            lon: plLon('mercury'),
-            retro: plRetro('mercury')
-        },
-        {
-            n: 'Венера',
-            s: '♀',
-            sym: '♀',
-            lon: plLon('venus'),
-            retro: plRetro('venus')
-        },
-        {
-            n: 'Марс',
-            s: '♂',
-            sym: '♂',
-            lon: plLon('mars'),
-            retro: plRetro('mars')
-        },
-        {
-            n: 'Юпитер',
-            s: '♃',
-            sym: '♃',
-            lon: plLon('jupiter'),
-            retro: plRetro('jupiter')
-        },
-        {
-            n: 'Сатурн',
-            s: '♄',
-            sym: '♄',
-            lon: plLon('saturn'),
-            retro: plRetro('saturn')
-        },
-        {
-            n: 'Уран',
-            s: '♅',
-            sym: '♅',
-            lon: plLon('uranus'),
-            retro: plRetro('uranus')
-        },
-        {
-            n: 'Нептун',
-            s: '♆',
-            sym: '♆',
-            lon: plLon('neptune'),
-            retro: plRetro('neptune')
-        },
-        {
-            n: 'Плутон',
-            s: '♇',
-            sym: '♇',
-            lon: plLon('pluto'),
-            retro: plRetro('pluto')
-        },
-        ];
-        const asc = hasTime ? ascLon(jd, lat, lon) : null;
-        return {
-            jd,
-            lat,
-            lon,
-            timezone: place.timezone,
-            placeName: place.label || place.name,
-            placeSource: place.source,
-            fixedOffsetOnly: place.fixedOffsetOnly,
-            hasTime,
-            geocodedOnline: place.source === 'open_meteo',
-            planets: PLANETS,
-            ascendant: asc
-        };
-    }
-
-    // ══════════════════════════════════════════════════════
-    //  ПРОГНОЗ: генерация на основе натальных данных
-    // ══════════════════════════════════════════════════════
-
-    // Пулы текстов по планетам/знакам для вариативности
-    const LOVE_TEXTS = {
-        fire: ["Страстная неделя — Венера активизирует вашу карту. Смело делайте первый шаг, звёзды на вашей стороне.", "Искра в воздухе ощущается. Существующие отношения обретут новую глубину, одиноким — шанс на яркую встречу.", "Марс добавляет смелости сердцу. Не сдерживайте чувства — искренность сейчас ценится выше осторожности."],
-        earth: ["Спокойная, уютная неделя в отношениях. Небольшие знаки внимания скажут больше громких слов.", "Венера советует больше времени проводить вместе. Совместный ужин или прогулка создадут нужное настроение.", "Стабильность — ваш главный козырь. Близкие ценят вашу надёжность, и это заметно."],
-        air: ["Общение — ключ ко всему на этой неделе. Разговор по душам с любимым человеком расставит всё по местам.", "Лёгкость и искры в диалоге. Совместная идея или план на будущее сблизит вас больше, чем вы ожидаете.", "Флирт и остроумие — ваше оружие. Партнёр в восхищении, а если вы свободны — флирт может стать чем-то большим."],
-        water: ["Интуиция подскажет, что именно нужно сказать любимому человеку. Доверяйте своим ощущениям.", "Эмоциональная глубина привлекает — на этой неделе особенно. Откройтесь, и вас поймут.", "Луна усиливает чувствительность. Не избегайте разговора о чувствах — он давно необходим."],
-    };
-    const FRIENDS_TEXTS = {
-        fire: ["Социальная неделя: вас тянет к людям, и это взаимно. Давняя идея провести время вместе — реализуйте.", "Харизма на пике. Друзья рады вашей компании, а новые знакомства могут оказаться очень полезными.", "Совместный проект с другом принесёт неожиданный результат. Действуйте, не откладывая."],
-        earth: ["Неделя для надёжных, проверенных связей. Старый друг напомнит о себе — ответьте.", "Небольшой круг близких людей важнее широкого социального выхода. Качество — ваш приоритет.", "Помощь другу сейчас вернётся сторицей. Не отказывайте, если просят о поддержке."],
-        air: ["Оживлённые встречи и интересные беседы — ваша стихия на этой неделе. Примите приглашение.", "Новое знакомство может перерасти в крепкую дружбу. Будьте открыты.", "Групповая динамика работает на вас. Инициируйте встречу — все давно этого ждали."],
-        water: ["Чуткость к настроению друзей сделает вас незаменимым собеседником. Один разговор может изменить многое.", "Кто-то из близких нуждается в вашей поддержке, но не решается попросить. Протяните руку первым.", "Интуиция подскажет, кому позвонить. Не игнорируйте это ощущение."],
-    };
-    const CAREER_TEXTS = {
-        fire: ["Марс даёт импульс — время для смелых шагов. Презентуйте идею, о которой думали.", "Инициатива вознаграждается. Руководство замечает тех, кто берёт на себя ответственность.", "Энергия высокая — используйте её для сложных задач в начале недели, пока запал не угас."],
-        earth: ["Методичность окупается. Завершите начатое — незаконченные дела начинают давить.", "Детальная проработка проекта сейчас важнее скорости. Ошибки обойдутся дороже промедления.", "Коллеги оценят вашу основательность. Тихая работа в этот период говорит сама за себя."],
-        air: ["Переговоры и коммуникации — в вашу пользу. Идеальное время для встреч и договорённостей.", "Свежий взгляд на старую проблему даст неожиданное решение. Доверяйте своей гибкости.", "Нетворкинг сейчас важнее рутины. Полезный контакт может прийти из неожиданного источника."],
-        water: ["Интуиция в рабочих вопросах особенно сильна. Доверяйте первому ощущению при принятии решений.", "Творческий подход к задаче удивит коллег. Не бойтесь предложить нестандартный путь.", "Атмосфера в команде важна — вы чувствуете её тонкости. Сгладьте напряжение, и это заметят."],
-    };
-    const FINANCE_TEXTS = {
-        fire: ["Импульсивные траты под угрозой — Юпитер предупреждает о переоценке возможностей. Посчитайте дважды.", "Возможность дохода есть, но она требует действия, а не ожидания. Сделайте первый шаг.", "Инвестиция в себя — обучение, здоровье, инструменты — окупится быстрее, чем кажется."],
-        earth: ["Спокойная, стабильная неделя для финансов. Плановые расходы — без сюрпризов.", "Момент для пересмотра бюджета и небольших накоплений. Маленький шаг сейчас — большой результат потом.", "Отложите крупные покупки до следующей недели — сейчас лучше понять, что действительно необходимо."],
-        air: ["Неожиданный финансовый разговор может открыть новые возможности. Будьте внимательны к деталям.", "Информация — ваш главный актив на этой неделе. Изучите вопрос перед принятием решения.", "Небольшая гибкость в расходах поможет использовать выгодный момент. Главное — не перегибать."],
-        water: ["Финансовая интуиция обострена. Если что-то кажется подозрительным — так и есть, не торопитесь.", "Забытый долг или возврат может проявиться неожиданно. Неделя для финансовых сюрпризов.", "Эмоциональные траты — главный риск. Не шопьтесь на эмоциях, подождите сутки."],
-    };
-    const HEALTH_TEXTS = {
-        fire: ["Энергия высокая, но не расходуйте её бездумно. Чередуйте активность с отдыхом.", "Физическая нагрузка принесёт удовольствие и разрядит напряжение. Лучшее время — утро.", "Следите за темпом: азарт хорош, но перегрев опасен. Пейте больше воды."],
-        earth: ["Тело просит режима. Сон, еда по расписанию, прогулки — всё это даёт эффект именно сейчас.", "Накопившееся напряжение даёт о себе знать. Массаж или тёплая ванна вечером — лучшее лекарство.", "Умеренная нагрузка и свежий воздух восстанавливают лучше любого стимулятора."],
-        air: ["Нервная система требует внимания. Меньше экрана перед сном, больше спокойных вечеров.", "Голова работает быстро, но нуждается в паузах. Практика осознанного дыхания творит чудеса.", "Лёгкая физическая активность — йога, прогулки — помогут сбросить умственное напряжение."],
-        water: ["Чувствительность к окружению высокая — избегайте токсичных ситуаций и людей.", "Сон и водный баланс — ваши главные союзники на этой неделе. Не пренебрегайте.", "Эмоциональное состояние напрямую влияет на физическое. Позвольте себе отдых без чувства вины."],
-    };
-
-    const SUMMARIES = {
-        fire: ["Марс активизирует вашу карту — неделя насыщена. Не торопитесь с решениями в среду, когда напряжение достигнет пика.", "Солнце дарит уверенность и ясность цели. Неделя подходит для старта нового — звёзды благосклонны.", "Энергия высока, но рассеянность опасна. Сфокусируйтесь на главном и не распыляйтесь."],
-        earth: ["Сатурн напоминает о важных делах, которые откладывались. Неделя требует дисциплины — но награда весомая.", "Планеты указывают на период сбора плодов. Терпение и методичность принесут результат.", "Стабильная неделя с акцентом на завершение начатого. Фундамент, который вы закладываете, держит годами."],
-        air: ["Меркурий активен — слова, идеи и встречи определяют неделю. Используйте коммуникативный талант.", "Интеллектуальная неделя: решения приходят через диалог. Не стесняйтесь советоваться.", "Информационный поток высок. Фильтруйте главное и не позволяйте мелочам украсть фокус."],
-        water: ["Нептун усиливает интуицию — доверяйте внутреннему голосу в ключевых решениях.", "Эмоциональная неделя: чувства говорят громче логики. Позвольте себе прислушаться.", "Луна подчёркивает чувствительность. Неделя для глубоких разговоров и личных открытий."],
-    };
-
-    const WATER_SIGNS = new Set([3, 7, 11]); // Рак, Скорпион, Рыбы
-    const FIRE_SIGNS = new Set([0, 4, 8]); // Овен, Лев, Стрелец
-    const EARTH_SIGNS = new Set([1, 5, 9]); // Телец, Дева, Козерог
-    const AIR_SIGNS = new Set([2, 6, 10]); // Близнецы, Весы, Водолей
-
-    function getElement(signIdx) {
-        if (FIRE_SIGNS.has(signIdx))
-            return 'fire';
-        if (EARTH_SIGNS.has(signIdx))
-            return 'earth';
-        if (AIR_SIGNS.has(signIdx))
-            return 'air';
-        return 'water';
-    }
-
-    function pickText(pool, seed) {
-        const arr = pool;
-        return arr[Math.abs(seed) % arr.length];
-    }
-
-    function generateForecast(chart) {
-        const P = chart.planets;
-        const sunSign = signOf(P[0].lon);
-        const moonSign = signOf(P[1].lon);
-        const ascSign = chart.ascendant != null ? signOf(chart.ascendant) : sunSign;
-
-        const sunEl = getElement(sunSign);
-        const moonEl = getElement(moonSign);
-        const ascEl = getElement(ascSign);
-
-        // Seed для стабильной вариативности (меняется с датой рождения, не со временем запроса)
-        const seed = Math.floor(chart.jd) % 97;
-
-        // Рейтинги: базируем на элементах + seed
-        const elementScore = {
-            fire: 4,
-            earth: 3,
-            air: 4,
-            water: 3
-        };
-        const base = elementScore[sunEl];
-        const moonBonus = moonEl === sunEl ? 1 : 0;
-
-        const ratings = {
-            love: Math.min(5, Math.max(1, base + moonBonus + (seed % 3) - 1)),
-            friends: Math.min(5, Math.max(1, base + (seed % 2))),
-            career: Math.min(5, Math.max(1, elementScore[ascEl] + ((seed + 1) % 3) - 1)),
-            finance: Math.min(5, Math.max(1, elementScore[ascEl] + ((seed + 2) % 2))),
-            health: Math.min(5, Math.max(1, base + ((seed + 3) % 3) - 1)),
-        };
-
-        // Благоприятные дни по элементу
-        const favMap = {
-            fire: ['Вторник', 'Пятница'],
-            earth: ['Понедельник', 'Четверг'],
-            air: ['Среда', 'Суббота'],
-            water: ['Понедельник', 'Пятница'],
-        };
-        const cautionMap = {
-            fire: 'Среда',
-            earth: 'Воскресенье',
-            air: 'Пятница',
-            water: 'Четверг'
-        };
-
-        return {
-            summary: pickText(SUMMARIES[sunEl], seed),
-            favorable_days: favMap[sunEl],
-            caution_days: [cautionMap[ascEl]],
-            love: {
-                rating: ratings.love,
-                text: pickText(LOVE_TEXTS[moonEl], seed + 1)
-            },
-            friends: {
-                rating: ratings.friends,
-                text: pickText(FRIENDS_TEXTS[sunEl], seed + 2)
-            },
-            career: {
-                rating: ratings.career,
-                text: pickText(CAREER_TEXTS[ascEl], seed + 3)
-            },
-            finance: {
-                rating: ratings.finance,
-                text: pickText(FINANCE_TEXTS[ascEl], seed + 4)
-            },
-            health: {
-                rating: ratings.health,
-                text: pickText(HEALTH_TEXTS[moonEl], seed + 5)
-            },
-        };
-    }
-
-    // ══════════════════════════════════════════════════════
-    //  СБОРКА ОТВЕТА
-    // ══════════════════════════════════════════════════════
-    async function buildLocalResponse(dateStr, timeStr, cityName) {
-        const chart = await calcChart(dateStr, timeStr, cityName);
-        const fc = generateForecast(chart);
-
-        const today = new Date(),
-            mon = new Date(today);
-        mon.setDate(today.getDate() - ((today.getDay() || 7) - 1));
-        const sun = new Date(mon);
-        sun.setDate(mon.getDate() + 6);
-        const fmt = dt => `${String(dt.getDate()).padStart(2, '0')}.${String(dt.getMonth() + 1).padStart(2, '0')}.${dt.getFullYear()}`;
-
-        const P = chart.planets;
-        return {
-            _raw: chart,
-            _meta: {
-                city: chart.placeName,
-                timezone: chart.timezone
-            },
-            natal: {
-                sun: {
-                    sign: SR[signOf(P[0].lon)],
-                    symbol: SS[signOf(P[0].lon)],
-                    degree: degOf(P[0].lon).toFixed(1)
-                },
-                moon: {
-                    sign: SR[signOf(P[1].lon)],
-                    symbol: SS[signOf(P[1].lon)],
-                    degree: degOf(P[1].lon).toFixed(1)
-                },
-                ascendant: chart.ascendant != null
-                ? {
-                    sign: SR[signOf(chart.ascendant)],
-                    symbol: SS[signOf(chart.ascendant)]
-                }
-                : {
-                    sign: 'неизвестен',
-                    symbol: '?'
-                },
-                planets: P.slice(2).map(p => ({
-                    name: p.n,
-                    symbol: p.sym || p.s,
-                    sign: SR[signOf(p.lon)],
-                    degree: lonToDegMinInSign(p.lon),
-                    retrograde: p.retro
-                })),
-            },
-            forecast: fc,
-            week_start: fmt(mon),
-            week_end: fmt(sun),
-        };
-    }
-
-    // ══════════════════════════════════════════════════════
-    //  UI
-    // ══════════════════════════════════════════════════════
-    function showScreen(id, dir='right') {
-        document.querySelectorAll('.screen').forEach(s => {
-            s.classList.toggle('hidden', s.id !== id);
-            s.classList.toggle('slide-left', s.id !== id && dir === 'left');
-        });
-    }
-    function setStep(id, st) {
-        const el = document.getElementById(id);
-        el.className = `step ${st}`;
-        const ic = el.querySelector('.step-ico');
-        ic.textContent = st === 'done' ? '✓' : st === 'active' ? '✦' : '·';
-    }
-    const delay = ms => new Promise(r => setTimeout(r, ms));
-    function showError(m) {
-        const e = document.getElementById('error-msg');
-        e.textContent = m;
-        e.classList.add('visible');
-    }
-    function clearError() {
-        document.getElementById('error-msg').classList.remove('visible');
-    }
-
-    function validate(date, time, city) {
-        if (!/^\d{2}\.\d{2}\.\d{4}$/.test(date))
-            return 'Введите дату в формате ДД.ММ.ГГГГ';
-        const [d, m, y] = date.split('.').map(Number);
-        const yMax = new Date().getFullYear();
-        if (y < 1900 || y > yMax)
-            return 'Некорректный год рождения';
-        const test = new Date(y, m - 1, d);
-        if (test.getFullYear() !== y || test.getMonth() !== m - 1 || test.getDate() !== d)
-            return 'Некорректная дата рождения';
-        if (time) {
-            if (!/^\d{2}:\d{2}$/.test(time))
-                return 'Время: формат ЧЧ:ММ';
-            const [hh, mm] = time.split(':').map(Number);
-            if (hh < 0 || hh > 23 || mm < 0 || mm > 59)
-                return 'Некорректное время';
-        }
-        if (!city.trim() || city.trim().length < 2)
-            return 'Введите город рождения';
-        return null;
-    }
-
-    document.getElementById('f-date').addEventListener('input', e => {
-        let v = e.target.value.replace(/\D/g, '');
-        if (v.length > 2)
-            v = v.slice(0, 2) + '.' + v.slice(2);
-        if (v.length > 5)
-            v = v.slice(0, 5) + '.' + v.slice(5);
-        e.target.value = v.slice(0, 10);
+function renderForecast(data){
+    const{natal,forecast,week_start,week_end}=data;
+    document.getElementById('fc-week-label').textContent=`${week_start} — ${week_end}`;
+    const signEl=document.getElementById('fc-sign');
+    signEl.textContent=natal.sun.sign.toUpperCase();
+    signEl.style.fontSize=fitSignSize(natal.sun.sign);
+    const sub=[];
+    if(natal.ascendant&&natal.ascendant.sign)sub.push(`Асц. ${natal.ascendant.sign}`);
+    sub.push(`Луна в ${natal.moon.sign}`);
+    document.getElementById('fc-sign-sub').textContent=sub.join(' · ');
+    document.getElementById('fc-summary').textContent=forecast.summary;
+    buildDays(week_start,forecast.favorable_days);
+    [['love','sc-love','bar-love','txt-love'],['friends','sc-friends','bar-friends','txt-friends'],['career','sc-career','bar-career','txt-career'],['finance','sc-finance','bar-finance','txt-finance'],['health','sc-health','bar-health','txt-health']].forEach(([k,sid,bid,tid],i)=>{
+        const s=forecast[k]||{rating:3,text:''};
+        document.getElementById(sid).textContent=s.rating;
+        document.getElementById(tid).textContent=s.text;
+        setTimeout(()=>{document.getElementById(bid).style.width=`${s.rating*20}%`;},200+i*120);
     });
-    document.getElementById('f-time').addEventListener('input', e => {
-        let v = e.target.value.replace(/\D/g, '');
-        if (v.length > 2)
-            v = v.slice(0, 2) + ':' + v.slice(2);
-        e.target.value = v.slice(0, 5);
-    });
+    document.querySelector('.fc-scroll').scrollTop=0;
+}
 
-    const DAY = ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'];
-    const DMAP = {
-        'понедельник': 'пн',
-        'вторник': 'вт',
-        'среда': 'ср',
-        'четверг': 'чт',
-        'пятница': 'пт',
-        'суббота': 'сб',
-        'воскресенье': 'вс'
-    };
-    function buildWeek(ws, favDays) {
-        const strip = document.getElementById('week-strip');
-        strip.innerHTML = '';
-        const [d, m, y] = ws.split('.').map(Number),
-            mon = new Date(y, m - 1, d),
-            tod = new Date();
-        const ty = tod.getFullYear(),
-            tm = tod.getMonth(),
-            td = tod.getDate();
-        const fav = new Set((favDays || []).map(s => DMAP[s.toLowerCase()] || s.toLowerCase().slice(0, 2)));
-        for (let i = 0; i < 7; i++) {
-            const dt = new Date(mon);
-            dt.setDate(mon.getDate() + i);
-            const isT = dt.getFullYear() === ty && dt.getMonth() === tm && dt.getDate() === td;
-            const wd = document.createElement('div');
-            wd.className = 'wd' + (isT ? ' active' : fav.has(DAY[i]) ? ' fav' : '');
-            wd.innerHTML = `<div class="dn">${DAY[i]}</div><div class="dd">${dt.getDate()}</div>`;
-            strip.appendChild(wd);
-        }
+async function handleSubmit(){
+    const date=document.getElementById('f-date').value.trim(),time=document.getElementById('f-time').value.trim(),city=document.getElementById('f-city').value.trim();
+    const err=validate(date,time,city);if(err){showError(err);return;}clearError();
+    showScreen('s-loading');setStep('step1','active');setStep('step2','idle');setStep('step3','idle');
+    let place;
+    try{place=await resolvePlace(city);}catch(e){showScreen('s-input');showError(e.message||'Город не найден.');return;}
+    setStep('step1','done');setStep('step2','active');
+    let data;
+    try{
+        const resp=await fetch(`${FORECAST_API}/api/chart`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({birth_date:date,birth_time:time||'',lat:place.lat,lon:place.lon,timezone:place.timezone,city_name:place.label||place.name||city}),signal:AbortSignal.timeout(8000)});
+        if(!resp.ok)throw new Error(`${resp.status}`);
+        data=await resp.json();
+    }catch(e){
+        console.warn('Backend недоступен, локальный расчёт:',e.message);
+        try{data=await buildLocalResponse(date,time,city);}catch(e2){showScreen('s-input');showError(e2.message||'Произошла ошибка.');return;}
     }
+    setStep('step2','done');setStep('step3','active');
+    await delay(400);setStep('step3','done');await delay(300);
+    renderForecast(data);showScreen('s-forecast');
+}
 
-    function renderForecast(data) {
-        const {natal, forecast, week_start} = data;
-        const geoEl = document.getElementById('fc-geo');
-        if (geoEl) {
-            const m = data._meta || {};
-            geoEl.textContent = m.city ? `${m.city} · ${m.timezone || ''} · локальный расчёт` : 'локальный расчёт';
-        }
-        document.getElementById('fc-sign').textContent = natal.sun.sign.toUpperCase();
-        document.getElementById('fc-sub').textContent = natal.ascendant.sign !== 'неизвестен'
-        ? `Асц. ${natal.ascendant.sign} · Луна в ${natal.moon.sign}`
-        : `Луна в ${natal.moon.sign}`;
-        const tags = document.getElementById('natal-tags');
-        tags.innerHTML = '';
-        [`☉ ${natal.sun.sign}`, `☽ ${natal.moon.sign}`,
-        ...(natal.ascendant.sign !== 'неизвестен' ? [`↑ ${natal.ascendant.sign}`] : [])
-        ].forEach(t => {
-            const e = document.createElement('div');
-            e.className = 'ntag';
-            e.textContent = t;
-            tags.appendChild(e);
-        });
-        const tb = document.getElementById('planets-tbody');
-        tb.innerHTML = '';
-        if (natal && natal.planets) {
-            natal.planets.forEach(p => {
-                const si = SR.indexOf(p.sign),
-                    sym = si >= 0 ? SS[si] : '';
-                const deg = p.degree || '';
-                const tr = document.createElement('tr');
-                tr.innerHTML = `<td>${p.symbol || ''} ${p.name || ''}</td><td>${sym} ${p.sign}</td><td>${deg}${p.retrograde ? '<span class="retro">℞</span>' : ''}</td>`;
-                tb.appendChild(tr);
-            });
-            if (natal.ascendant && natal.ascendant.sign && natal.ascendant.sign !== 'неизвестен') {
-                const asc = natal.ascendant,
-                    si = SR.indexOf(asc.sign),
-                    sym = si >= 0 ? SS[si] : '';
-                const tr = document.createElement('tr');
-                tr.className = 'asc-row';
-                tr.innerHTML = `<td>↑ Асцендент</td><td>${sym} ${asc.sign}</td><td></td>`;
-                tb.appendChild(tr);
-            }
-        }
-        buildWeek(week_start, forecast.favorable_days);
-        document.getElementById('fc-summary').textContent = forecast.summary;
-        [
-        ['love', 'fc-love-text', 'fc-love-bar', 'fc-love-val'],
-        ['friends', 'fc-friends-text', 'fc-friends-bar', 'fc-friends-val'],
-        ['career', 'fc-career-text', 'fc-career-bar', 'fc-career-val'],
-        ['finance', 'fc-finance-text', 'fc-finance-bar', 'fc-finance-val'],
-        ['health', 'fc-health-text', 'fc-health-bar', 'fc-health-val'],
-        ].forEach(([k, t, b, v], i) => {
-            const s = forecast[k] || {
-                rating: 3,
-                text: ''
-            };
-            const el = document.getElementById(t);
-            if (el)
-                el.textContent = s.text || '';
-            const ev = document.getElementById(v);
-            if (ev)
-                ev.textContent = `${s.rating}/5`;
-            setTimeout(() => {
-                const eb = document.getElementById(b);
-                if (eb)
-                    eb.style.width = `${s.rating * 20}%`;
-            }, 200 + i * 150);
-        });
-    }
-
-    // ══════════════════════════════════════════════════════
-    //  SUBMIT — сначала бэкенд, при любой ошибке — локально
-    // ══════════════════════════════════════════════════════
-    async function handleSubmit() {
-        const date = document.getElementById('f-date').value.trim();
-        const time = document.getElementById('f-time').value.trim();
-        const city = document.getElementById('f-city').value.trim();
-        const err = validate(date, time, city);
-        if (err) {
-            showError(err);
-            return;
-        }
-        clearError();
-
-        showScreen('s-loading');
-        setStep('step1', 'active');
-        setStep('step2', 'idle');
-        setStep('step3', 'idle');
-
-        let place;
-        try {
-            place = await resolvePlace(city);
-        } catch (e) {
-            showScreen('s-input');
-            showError(e.message || 'Город не найден.');
-            return;
-        }
-        setStep('step1', 'done');
-        setStep('step2', 'active');
-
-        let data;
-
-        // Пробуем бэкенд (таймаут 8 сек)
-        try {
-            const resp = await fetch(`${FORECAST_API}/api/chart`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    birth_date: date,
-                    birth_time: time || '',
-                    lat: place.lat,
-                    lon: place.lon,
-                    timezone: place.timezone,
-                    city_name: place.label || place.name || city
-                }),
-                signal: AbortSignal.timeout(8000),
-            });
-            if (!resp.ok) {
-                const e = await resp.json().catch(() => ({}));
-                throw new Error(e.detail || `Ошибка ${resp.status}`);
-            }
-            data = await resp.json();
-            console.log('Прогноз получен с бэкенда');
-        } catch (e) {
-            // Фолбэк: полностью локальный расчёт
-            console.warn('Бэкенд недоступен, локальный расчёт:', e.message);
-            try {
-                data = await buildLocalResponse(date, time, city);
-            } catch (e2) {
-                showScreen('s-input');
-                showError(e2.message || 'Произошла ошибка. Попробуйте ещё раз.');
-                return;
-            }
-        }
-
-        setStep('step2', 'done');
-        setStep('step3', 'active');
-        await delay(300);
-        setStep('step3', 'done');
-        await delay(300);
-        renderForecast(data);
-        showScreen('s-forecast');
-    }
-
-    document.getElementById('btn-submit').addEventListener('click', handleSubmit);
-    document.getElementById('btn-back').addEventListener('click', () => showScreen('s-input', 'left'));
-    document.getElementById('btn-refresh').addEventListener('click', () => showScreen('s-input', 'left'));
-    document.getElementById('f-city').addEventListener('keydown', e => {
-        if (e.key === 'Enter')
-            handleSubmit();
-    });
-    </script>
+document.getElementById('btn-submit').addEventListener('click',handleSubmit);
+document.getElementById('btn-back').addEventListener('click',()=>showScreen('s-input','left'));
+document.getElementById('btn-refresh').addEventListener('click',()=>showScreen('s-input','left'));
+document.getElementById('f-city').addEventListener('keydown',e=>{if(e.key==='Enter')handleSubmit();});
+</script>
 </body>
 </html>
