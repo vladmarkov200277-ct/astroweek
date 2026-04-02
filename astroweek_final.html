@@ -263,7 +263,7 @@
 // ══════════════════════════════════════════════════════════════
 const USE_MOCK_AI = true;      // натальный расчёт всегда на фронте (JS)
 // Замените на URL вашего Render-сервиса после деплоя:
-const FORECAST_API = 'https://astro-v2.onrender.com';
+const FORECAST_API = 'https://YOUR-APP.onrender.com';
 
 const tg = window.Telegram?.WebApp;
 if (tg) { tg.ready(); tg.expand(); document.querySelector('.demo-badge')?.remove(); }
@@ -1118,13 +1118,15 @@ function buildWeek(ws,favDays){
 }
 
 function renderForecast(data){
-  const{natal,forecast,week_start,_raw}=data;
+  const{natal,forecast,week_start}=data;
+  const _raw=data._raw||null;
 
   const geoEl = document.getElementById('fc-geo');
   if (geoEl) {
-    if (_raw && Number.isFinite(_raw.lat) && Number.isFinite(_raw.lon)) {
-      const tzNote = _raw.fixedOffsetOnly ? ' · пояс: фикс. фолбэк (без истории DST)' : '';
-      geoEl.textContent = `Место: ${_raw.placeName} · ${formatLatLon(_raw.lat, _raw.lon)} · ${_raw.timezone || ''}${tzNote}`;
+    const meta = data._meta || {};
+    if (meta.city) {
+      const engine = meta.engine === 'kerykeion+swisseph' ? ' · Swiss Ephemeris' : '';
+      geoEl.textContent = `${meta.city} · ${meta.timezone || ''}${engine}`;
     } else geoEl.textContent = '';
   }
 
@@ -1141,17 +1143,23 @@ function renderForecast(data){
 
   // Таблица планет (с реальными координатами)
   const tb=document.getElementById('planets-tbody'); tb.innerHTML='';
-  if(_raw){
-    _raw.planets.forEach(p=>{
-      const si=signOf(p.lon);
+  // Используем natal.planets из backend (Kerykeion)
+  if(natal && natal.planets){
+    natal.planets.forEach(p=>{
       const tr=document.createElement('tr');
-      tr.innerHTML=`<td>${p.s} ${p.n}</td><td>${SS[si]} ${SR[si]}</td><td>${lonToDegMinInSign(p.lon)}${p.retro?'<span class="retro">℞</span>':''}</td>`;
+      const signIdx = SR.indexOf(p.sign);
+      const signSymbol = signIdx>=0 ? SS[signIdx] : '';
+      const deg = p.position !== undefined ? Math.floor(p.position)+'°'+String(Math.floor((p.position%1)*60)).padStart(2,'0')+'′' : '';
+      tr.innerHTML=`<td>${p.symbol||''} ${p.name}</td><td>${signSymbol} ${p.sign}</td><td>${deg}${p.retrograde?'<span class="retro">℞</span>':''}</td>`;
       tb.appendChild(tr);
     });
-    if(_raw.ascendant!=null){
-      const si=signOf(_raw.ascendant);
+    if(natal.ascendant && natal.ascendant.sign && natal.ascendant.sign!=='неизвестен'){
+      const asc=natal.ascendant;
+      const signIdx=SR.indexOf(asc.sign);
+      const signSymbol=signIdx>=0?SS[signIdx]:'';
+      const deg=asc.position!==undefined?Math.floor(asc.position)+'°'+String(Math.floor((asc.position%1)*60)).padStart(2,'0')+'′':'';
       const tr=document.createElement('tr');tr.className='asc-row';
-      tr.innerHTML=`<td>↑ Асцендент</td><td>${SS[si]} ${SR[si]}</td><td>${lonToDegMinInSign(_raw.ascendant)}</td>`;
+      tr.innerHTML=`<td>↑ Асцендент</td><td>${signSymbol} ${asc.sign}</td><td>${deg}</td>`;
       tb.appendChild(tr);
     }
   }
@@ -1209,26 +1217,46 @@ async function handleSubmit(){
   setStep('step1','active');setStep('step2','idle');setStep('step3','idle');
 
   let data;
-  if(USE_MOCK_AI){
-    try{
-      setStep('step1','active');
-      data=await buildResponse(date,time,city);
-      if(data._raw.fixedOffsetOnly){
-        console.warn(`Город "${city}": нет онлайн-геокодинга или нет IANA-зоны; использован фиксированный сдвиг (без истории DST).`);
-      }
-    }catch(e){
+  try {
+    // Шаг 1: геокодинг города (Open-Meteo, фронтенд)
+    setStep('step1','active');
+    let place;
+    try {
+      place = await resolvePlace(city);
+    } catch(e) {
       showScreen('s-input');
-      showError(e.message||'Ошибка геокодинга или часового пояса.');
-      console.error(e);
+      showError(e.message || 'Город не найден. Попробуйте уточнить название.');
       return;
     }
-    setStep('step1','done');setStep('step2','active');
-    await delay(600);
-    setStep('step2','done');setStep('step3','active');
-    // step3 остаётся активным пока Claude API генерирует прогноз
+    setStep('step1','done'); setStep('step2','active');
+
+    // Шаг 2: расчёт натальной карты + транзитов (backend, Swiss Ephemeris)
+    const resp = await fetch(`${FORECAST_API}/api/chart`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        birth_date: date,
+        birth_time: time || '',
+        lat: place.lat,
+        lon: place.lon,
+        timezone: place.timezone,
+        city_name: place.label || place.name || city,
+      })
+    });
+    if (!resp.ok) {
+      const e = await resp.json().catch(() => ({}));
+      throw new Error(e.detail || `Сервер вернул ${resp.status}`);
+    }
+    data = await resp.json();
+    setStep('step2','done'); setStep('step3','active');
+    await delay(400);
+
+  } catch(e) {
+    showScreen('s-input');
+    showError(e.message || 'Произошла ошибка. Попробуйте ещё раз.');
+    console.error(e);
+    return;
   }
-  // USE_MOCK_AI=false режим (Python backend) не используется —
-  // расчёт натальной карты всегда на фронте, прогноз через FORECAST_API
 
   setStep('step3','done');
   await delay(300);
