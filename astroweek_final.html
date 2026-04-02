@@ -119,13 +119,6 @@
     .planets-table td:first-child{color:var(--text-soft)}
     .retro{color:var(--rose);font-size:9px;margin-left:2px}
     .asc-row td{border-top:1px solid var(--border)!important;font-weight:500;color:var(--text-soft)!important}
-    .aspect-good td{color:#5a8a5a!important;background:#f5fbf5}
-    .aspect-tense td{color:#a04060!important;background:#fff5f7}
-    .aspect-neutral td{color:var(--text-muted)}
-    .aspect-good td{color:#5a8a5a}
-    .aspect-tense td{color:#a85050}
-    .aspect-neutral td{color:var(--text-muted)}
-    #aspects-tbody td:nth-child(3){text-align:center;font-size:14px}
 
     @media(min-width:500px){body{background:#f5eef1;display:flex;align-items:center;justify-content:center}#app{height:820px;border-radius:24px;overflow:hidden}}
   </style>
@@ -178,7 +171,7 @@
       <div class="steps">
         <div class="step idle" id="step1"><div class="step-ico">✦</div><span class="step-txt">Определяем часовой пояс и координаты</span></div>
         <div class="step idle" id="step2"><div class="step-ico">✦</div><span class="step-txt">Вычисляем положения планет</span></div>
-        <div class="step idle" id="step3"><div class="step-ico">✦</div><span class="step-txt">Составляем прогноз с помощью ИИ</span></div>
+        <div class="step idle" id="step3"><div class="step-ico">✦</div><span class="step-txt">Составляем прогноз</span></div>
       </div>
       <div class="pulse-dots"><div class="pdot"></div><div class="pdot"></div><div class="pdot"></div></div>
     </div>
@@ -204,20 +197,6 @@
           <table class="planets-table">
             <thead><tr><th>Планета</th><th>Знак</th><th>Градус</th></tr></thead>
             <tbody id="planets-tbody"></tbody>
-          </table>
-        </div>
-        <div class="sep"><span>транзиты недели</span></div>
-        <div class="planets-wrap">
-          <table class="planets-table">
-            <thead><tr><th>Планета</th><th>Позиция</th></tr></thead>
-            <tbody id="transits-tbody"></tbody>
-          </table>
-        </div>
-        <div class="sep"><span>аспекты к натальной карте</span></div>
-        <div class="planets-wrap">
-          <table class="planets-table">
-            <thead><tr><th>Транзит</th><th>Асп.</th><th>Натал</th><th>Орб</th></tr></thead>
-            <tbody id="aspects-tbody"></tbody>
           </table>
         </div>
         <div class="sep"><span>прогноз на неделю</span></div>
@@ -277,8 +256,6 @@
 // ══════════════════════════════════════════════════════════════
 //  CONFIG
 // ══════════════════════════════════════════════════════════════
-const USE_MOCK_AI = true;      // натальный расчёт всегда на фронте (JS)
-// Замените на URL вашего Render-сервиса после деплоя:
 const FORECAST_API = 'https://astro-v2.onrender.com';
 
 const tg = window.Telegram?.WebApp;
@@ -397,9 +374,7 @@ function astronomyTimeFromUtc(utc){
   return A.MakeTime(new Date(Date.UTC(utc.y,utc.mo-1,utc.d,utc.h,utc.mi,0)));
 }
 function geoEclipticLongitude(A,body,t){
-  // Для Луны аберрация не применима — передаём false
-  const aberration = (body !== A.Body.Moon);
-  const e=A.Ecliptic(A.GeoVector(body,t,aberration));
+  const e=A.Ecliptic(A.GeoVector(body,t,true));
   return((e.elon%360)+360)%360;
 }
 function sunLongitudeAstronomy(A,t){
@@ -414,9 +389,8 @@ function retroBodyAstronomy(A,t,body){
 }
 
 // ══════════════════════════════════════════════════════════════
-//  АСЦЕНДЕНТ — итерационный метод (пересечение эклиптики с горизонтом)
-//  Классическая формула tan(ASC) ненадёжна вблизи RAMC=90°/270° —
-//  даёт неверный квадрант. Итерация через высоту всегда корректна.
+//  АСЦЕНДЕНТ — как Swiss Ephemeris (swehouse.c: Asc1/Asc2 + ARMC = GMST + λ)
+//  Упрощённая «учебниковая» atan2-формула даёт другой знак; совпадает с Placidus ASC ~0.003°.
 // ══════════════════════════════════════════════════════════════
 function gmst(jd){
   const T=(jd-2451545)/36525;
@@ -426,110 +400,103 @@ function obliquity(jd){
   const T=(jd-2451545)/36525;
   return 23.439291111-0.013004167*T-0.0000001639*T*T+0.0000005036*T*T*T;
 }
-function degNorm(x){x=x%360;return x<0?x+360:x;}
-
-/**
- * Тропический асцендент — эклиптическая долгота точки восхода.
- * Итерационный метод: бинарный поиск λ, при котором altitude(λ)=0
- * и тело восходит (часовой угол H в диапазоне 180°–360°).
- */
-function ascLon(jd, latDeg, lonDeg){
-  const RAMC   = degNorm(gmst(jd) + lonDeg);
-  const eps    = obliquity(jd);
-  const sinE   = Math.sin(toR(eps)), cosE = Math.cos(toR(eps));
-  const sinLat = Math.sin(toR(latDeg)), cosLat = Math.cos(toR(latDeg));
-
-  function eclToRA(lam){
-    return degNorm(toD(Math.atan2(Math.sin(toR(lam)) * cosE, Math.cos(toR(lam)))));
-  }
-  function eclToDec(lam){
-    return toD(Math.asin(Math.sin(toR(lam)) * sinE));
-  }
-  function altitude(lam){
-    const ra = eclToRA(lam), dec = eclToDec(lam);
-    const H  = toR(RAMC - ra);
-    return toD(Math.asin(sinLat * Math.sin(toR(dec)) + cosLat * Math.cos(toR(dec)) * Math.cos(H)));
-  }
-
-  // Грубый перебор 1° — найти отрезок, где altitude меняет знак и H>180° (восход)
-  let lo = 0, hi = 1, found = false;
-  for(let i = 0; i < 360; i++){
-    const mid = i + 0.5;
-    if(degNorm(RAMC - eclToRA(mid)) > 180 && altitude(i) * altitude(i + 1) < 0){
-      lo = i; hi = i + 1; found = true; break;
-    }
-  }
-  if(!found){
-    // Запасной вариант: старая формула (может ошибаться вблизи 90°/270°)
-    const sinR = Math.sin(toR(RAMC)), cosR = Math.cos(toR(RAMC));
-    const den = sinE * Math.tan(toR(latDeg)) + cosE * sinR;
-    let asc = degNorm(toD(Math.atan2(-cosR, den)));
-    if(den < 0) asc = degNorm(asc + 180);
-    return asc;
-  }
-
-  // Бинарный поиск — 50 итераций дают точность < 0.00003°
-  for(let i = 0; i < 50; i++){
-    const mid = (lo + hi) / 2;
-    if(altitude(mid) > 0) lo = mid; else hi = mid;
-  }
-  return degNorm((lo + hi) / 2);
+function degNorm(x){
+  x=x%360;
+  return x<0?x+360:x;
 }
+function asc2(xDeg,latDeg,sine,cose){
+  const VS=1e-10;
+  let ass=-Math.tan(toR(latDeg))*sine+cose*Math.cos(toR(xDeg));
+  if(Math.abs(ass)<VS)ass=0;
+  let sinx=Math.sin(toR(xDeg));
+  if(Math.abs(sinx)<VS)sinx=0;
+  if(sinx===0)ass=ass<0?-VS:VS;
+  else if(ass===0)ass=sinx<0?-90:90;
+  else ass=toD(Math.atan2(sinx,ass));
+  if(ass<0)ass+=180;
+  return ass;
+}
+function asc1(x1Deg,latDeg,sine,cose){
+  const VS=1e-10;
+  let x1=degNorm(x1Deg);
+  const n=Math.trunc(x1/90+1);
+  const f=latDeg;
+  if(Math.abs(90-f)<VS)return 180;
+  if(Math.abs(90+f)<VS)return 0;
+  let ass;
+  if(n===1)ass=asc2(x1,f,sine,cose);
+  else if(n===2)ass=180-asc2(180-x1,-f,sine,cose);
+  else if(n===3)ass=180+asc2(x1-180,-f,sine,cose);
+  else ass=360-asc2(360-x1,f,sine,cose);
+  ass=degNorm(ass);
+  if(Math.abs(ass-90)<VS)ass=90;
+  if(Math.abs(ass-180)<VS)ass=180;
+  if(Math.abs(ass-270)<VS)ass=270;
+  if(Math.abs(ass-360)<VS)ass=0;
+  return ass;
+}
+/** Тропический асцендент (долгота эклиптики), согласован с Swiss Ephemeris Placidus. */
+function ascLon(jd,lat,lon){
+  const armc=degNorm(gmst(jd)+lon);
+  const eps=obliquity(jd);
+  const sine=Math.sin(toR(eps)), cose=Math.cos(toR(eps));
+  return asc1(armc+90,lat,sine,cose);
+}
+
 // ══════════════════════════════════════════════════════════════
 //  БАЗА ГОРОДОВ (lat, lon, utcOffset) — только офлайн-фолбэк без истории DST
 // ══════════════════════════════════════════════════════════════
 const CITIES = {
-  // [lat, lon, IANA-зона] — Luxon учтёт исторические DST автоматически
-  'москв':[55.75,37.62,'Europe/Moscow'],'moscow':[55.75,37.62,'Europe/Moscow'],
-  'питер':[59.95,30.32,'Europe/Moscow'],'петербург':[59.95,30.32,'Europe/Moscow'],'спб':[59.95,30.32,'Europe/Moscow'],
-  'новосибирск':[54.99,82.90,'Asia/Novosibirsk'],'екатеринбург':[56.84,60.60,'Asia/Yekaterinburg'],
-  'краснодар':[45.04,38.98,'Europe/Moscow'],'сочи':[43.60,39.73,'Europe/Moscow'],
-  'казань':[55.79,49.12,'Europe/Moscow'],'нижний новгород':[56.33,44.00,'Europe/Moscow'],'нижний':[56.33,44.00,'Europe/Moscow'],
-  'самара':[53.20,50.15,'Europe/Samara'],'уфа':[54.74,55.97,'Asia/Yekaterinburg'],
-  'омск':[54.99,73.37,'Asia/Omsk'],'красноярск':[56.01,92.87,'Asia/Krasnoyarsk'],
-  'иркутск':[52.29,104.30,'Asia/Irkutsk'],'владивосток':[43.11,131.88,'Asia/Vladivostok'],
-  'хабаровск':[48.48,135.08,'Asia/Vladivostok'],'калининград':[54.71,20.51,'Europe/Kaliningrad'],
-  'воронеж':[51.67,39.18,'Europe/Moscow'],'ростов':[47.22,39.72,'Europe/Moscow'],
-  'волгоград':[48.71,44.52,'Europe/Volgograd'],'пермь':[58.01,56.23,'Asia/Yekaterinburg'],
-  'челябинск':[55.15,61.43,'Asia/Yekaterinburg'],'тюмень':[57.15,68.99,'Asia/Yekaterinburg'],
-  'барнаул':[53.36,83.74,'Asia/Barnaul'],'томск':[56.50,84.97,'Asia/Tomsk'],
-  'киев':[50.45,30.52,'Europe/Kyiv'],'київ':[50.45,30.52,'Europe/Kyiv'],'kyiv':[50.45,30.52,'Europe/Kyiv'],
-  'харьков':[49.99,36.23,'Europe/Kyiv'],'одесса':[46.48,30.73,'Europe/Kyiv'],'львов':[49.84,24.03,'Europe/Kyiv'],
-  'минск':[53.90,27.57,'Europe/Minsk'],'minsk':[53.90,27.57,'Europe/Minsk'],
-  'алматы':[43.24,76.89,'Asia/Almaty'],'ташкент':[41.30,69.27,'Asia/Tashkent'],
-  'london':[51.51,-0.13,'Europe/London'],'лондон':[51.51,-0.13,'Europe/London'],
-  'paris':[48.85,2.35,'Europe/Paris'],'париж':[48.85,2.35,'Europe/Paris'],
-  'berlin':[52.52,13.41,'Europe/Berlin'],'берлин':[52.52,13.41,'Europe/Berlin'],
-  'rome':[41.90,12.48,'Europe/Rome'],'рим':[41.90,12.48,'Europe/Rome'],
-  'madrid':[40.42,-3.70,'Europe/Madrid'],'мадрид':[40.42,-3.70,'Europe/Madrid'],
-  'istanbul':[41.01,28.96,'Europe/Istanbul'],'стамбул':[41.01,28.96,'Europe/Istanbul'],
-  'amsterdam':[52.37,4.90,'Europe/Amsterdam'],'варшава':[52.23,21.01,'Europe/Warsaw'],'warsaw':[52.23,21.01,'Europe/Warsaw'],
-  'vienna':[48.21,16.37,'Europe/Vienna'],'вена':[48.21,16.37,'Europe/Vienna'],
-  'helsinki':[60.17,24.94,'Europe/Helsinki'],'хельсинки':[60.17,24.94,'Europe/Helsinki'],
-  'stockholm':[59.33,18.06,'Europe/Stockholm'],'стокгольм':[59.33,18.06,'Europe/Stockholm'],
-  'tallinn':[59.44,24.75,'Europe/Tallinn'],'таллин':[59.44,24.75,'Europe/Tallinn'],
-  'riga':[56.95,24.11,'Europe/Riga'],'рига':[56.95,24.11,'Europe/Riga'],
-  'vilnius':[54.69,25.28,'Europe/Vilnius'],'вильнюс':[54.69,25.28,'Europe/Vilnius'],
-  'athens':[37.98,23.73,'Europe/Athens'],'афины':[37.98,23.73,'Europe/Athens'],
-  'new york':[40.71,-74.01,'America/New_York'],'нью-йорк':[40.71,-74.01,'America/New_York'],
-  'los angeles':[34.05,-118.24,'America/Los_Angeles'],'чикаго':[41.88,-87.63,'America/Chicago'],'chicago':[41.88,-87.63,'America/Chicago'],
-  'miami':[25.77,-80.19,'America/New_York'],
-  'beijing':[39.91,116.39,'Asia/Shanghai'],'пекин':[39.91,116.39,'Asia/Shanghai'],
-  'tokyo':[35.68,139.69,'Asia/Tokyo'],'токио':[35.68,139.69,'Asia/Tokyo'],
-  'seoul':[37.57,126.98,'Asia/Seoul'],'сеул':[37.57,126.98,'Asia/Seoul'],
-  'dubai':[25.20,55.27,'Asia/Dubai'],'дубай':[25.20,55.27,'Asia/Dubai'],
-  'delhi':[28.63,77.22,'Asia/Kolkata'],'mumbai':[19.08,72.88,'Asia/Kolkata'],
-  'bangkok':[13.75,100.52,'Asia/Bangkok'],'бангкок':[13.75,100.52,'Asia/Bangkok'],
-  'singapore':[1.35,103.82,'Asia/Singapore'],'сингапур':[1.35,103.82,'Asia/Singapore'],
-  'sydney':[-33.87,151.21,'Australia/Sydney'],'сидней':[-33.87,151.21,'Australia/Sydney'],
-  'cairo':[30.04,31.24,'Africa/Cairo'],'каир':[30.04,31.24,'Africa/Cairo'],
+  'москв':[55.75,37.62,3],'moscow':[55.75,37.62,3],
+  'питер':[59.95,30.32,3],'петербург':[59.95,30.32,3],'спб':[59.95,30.32,3],
+  'новосибирск':[54.99,82.90,7],'екатеринбург':[56.84,60.60,5],
+  'краснодар':[45.04,38.98,3],'сочи':[43.60,39.73,3],
+  'казань':[55.79,49.12,3],'нижний новгород':[56.33,44.00,3],'нижний':[56.33,44.00,3],
+  'самара':[53.20,50.15,4],'уфа':[54.74,55.97,5],
+  'омск':[54.99,73.37,6],'красноярск':[56.01,92.87,7],
+  'иркутск':[52.29,104.30,8],'владивосток':[43.11,131.88,10],
+  'хабаровск':[48.48,135.08,10],'калининград':[54.71,20.51,2],
+  'воронеж':[51.67,39.18,3],'ростов':[47.22,39.72,3],
+  'волгоград':[48.71,44.52,3],'пермь':[58.01,56.23,5],
+  'челябинск':[55.15,61.43,5],'тюмень':[57.15,68.99,5],
+  'барнаул':[53.36,83.74,7],'томск':[56.50,84.97,7],
+  'киев':[50.45,30.52,2],'київ':[50.45,30.52,2],'kyiv':[50.45,30.52,2],
+  'харьков':[49.99,36.23,2],'одесса':[46.48,30.73,2],'львов':[49.84,24.03,2],
+  'минск':[53.90,27.57,3],'minsk':[53.90,27.57,3],
+  'алматы':[43.24,76.89,6],'ташкент':[41.30,69.27,5],
+  'london':[51.51,-0.13,0],'лондон':[51.51,-0.13,0],
+  'paris':[48.85,2.35,1],'париж':[48.85,2.35,1],
+  'berlin':[52.52,13.41,1],'берлин':[52.52,13.41,1],
+  'rome':[41.90,12.48,1],'рим':[41.90,12.48,1],
+  'madrid':[40.42,-3.70,1],'мадрид':[40.42,-3.70,1],
+  'istanbul':[41.01,28.96,3],'стамбул':[41.01,28.96,3],
+  'amsterdam':[52.37,4.90,1],'варшава':[52.23,21.01,1],'warsaw':[52.23,21.01,1],
+  'vienna':[48.21,16.37,1],'вена':[48.21,16.37,1],
+  'helsinki':[60.17,24.94,2],'хельсинки':[60.17,24.94,2],
+  'stockholm':[59.33,18.06,1],'стокгольм':[59.33,18.06,1],
+  'tallinn':[59.44,24.75,2],'таллин':[59.44,24.75,2],
+  'riga':[56.95,24.11,2],'рига':[56.95,24.11,2],
+  'vilnius':[54.69,25.28,2],'вильнюс':[54.69,25.28,2],
+  'athens':[37.98,23.73,2],'афины':[37.98,23.73,2],
+  'new york':[40.71,-74.01,-5],'нью-йорк':[40.71,-74.01,-5],
+  'los angeles':[34.05,-118.24,-8],'чикаго':[41.88,-87.63,-6],'chicago':[41.88,-87.63,-6],
+  'miami':[25.77,-80.19,-5],
+  'beijing':[39.91,116.39,8],'пекин':[39.91,116.39,8],
+  'tokyo':[35.68,139.69,9],'токио':[35.68,139.69,9],
+  'seoul':[37.57,126.98,9],'сеул':[37.57,126.98,9],
+  'dubai':[25.20,55.27,4],'дубай':[25.20,55.27,4],
+  'delhi':[28.63,77.22,5.5],'mumbai':[19.08,72.88,5.5],
+  'bangkok':[13.75,100.52,7],'бангкок':[13.75,100.52,7],
+  'singapore':[1.35,103.82,8],'сингапур':[1.35,103.82,8],
+  'sydney':[-33.87,151.21,10],'сидней':[-33.87,151.21,10],
+  'cairo':[30.04,31.24,2],'каир':[30.04,31.24,2],
 };
 
 function findCityFallback(name){
   const lo=name.toLowerCase().trim();
-  for(const[k,v]of Object.entries(CITIES)) if(lo.includes(k)||k.includes(lo)) return {lat:v[0],lon:v[1],tz:v[2]};
+  for(const[k,v]of Object.entries(CITIES)) if(lo.includes(k)||k.includes(lo)) return {lat:v[0],lon:v[1],tzHours:v[2]};
   for(const[k,v]of Object.entries(CITIES))
-    if(lo.length>=4&&k.startsWith(lo.slice(0,4))) return {lat:v[0],lon:v[1],tz:v[2]};
+    if(lo.length>=4&&k.startsWith(lo.slice(0,4))) return {lat:v[0],lon:v[1],tzHours:v[2]};
   return null;
 }
 
@@ -626,11 +593,11 @@ async function resolvePlace(cityQuery){
     const place = {
       lat: fb.lat,
       lon: fb.lon,
-      timezone: fb.tz,  // IANA-зона из таблицы — Luxon учтёт исторические DST
+      timezone: luxonFixedOffsetZone(fb.tzHours),
       name: q,
       label: q,
       source: 'local_table',
-      fixedOffsetOnly: false,  // IANA-зона: исторические DST учтены
+      fixedOffsetOnly: true,
     };
     _geoCache[ck] = place;
     return place;
@@ -741,330 +708,36 @@ async function calcChart(dateStr,timeStr,cityName){
 }
 
 // ══════════════════════════════════════════════════════════════
-//  ТРАНЗИТЫ — текущие позиции планет (на середину текущей недели)
+//  MOCK ТЕКСТЫ ПРОГНОЗА
 // ══════════════════════════════════════════════════════════════
-function calcTransits(){
-  const A = window.Astronomy;
-  const now = new Date();
-  // Середина текущей недели (среда) для стабильного прогноза
-  const wed = new Date(now);
-  wed.setDate(now.getDate() - ((now.getDay()||7)-1) + 2);
-  wed.setHours(12,0,0,0);
-
-  const t = A ? A.MakeTime(wed) : null;
-  const jdNow = JD(wed.getUTCFullYear(), wed.getUTCMonth()+1, wed.getUTCDate(), 12, 0);
-
-  const TBODY = [
-    {n:'Солнце',   s:'☉', key:'sun'},
-    {n:'Луна',     s:'☽', key:'moon'},
-    {n:'Меркурий', s:'☿', key:'mercury'},
-    {n:'Венера',   s:'♀', key:'venus'},
-    {n:'Марс',     s:'♂', key:'mars'},
-    {n:'Юпитер',   s:'♃', key:'jupiter'},
-    {n:'Сатурн',   s:'♄', key:'saturn'},
-    {n:'Уран',     s:'♅', key:'uranus'},
-    {n:'Нептун',   s:'♆', key:'neptune'},
-  ];
-
-  return TBODY.map(b => {
-    let lon;
-    if(t && A) {
-      if(b.key==='sun')  lon = sunLongitudeAstronomy(A, t);
-      else if(b.key==='moon') lon = geoEclipticLongitude(A, A.Body.Moon, t);
-      else lon = geoEclipticLongitude(A, A.Body[ASTRO_BODY[b.key]], t);
-    } else {
-      if(b.key==='sun')  lon = sunLon(jdNow);
-      else if(b.key==='moon') lon = moonLon(jdNow);
-      else lon = planetLon(jdNow, b.key);
-    }
-    return { n:b.n, s:b.s, lon, sign:SR[signOf(lon)], symbol:SS[signOf(lon)] };
-  });
-}
-
-// ══════════════════════════════════════════════════════════════
-//  АСПЕКТЫ между транзитными и натальными планетами
-// ══════════════════════════════════════════════════════════════
-const ASPECTS_DEF = [
-  {name:'конъюнкция', symbol:'☌', angle:0,   orb:8},
-  {name:'оппозиция',  symbol:'☍', angle:180, orb:8},
-  {name:'трин',       symbol:'△', angle:120, orb:7},
-  {name:'квадрат',    symbol:'□', angle:90,  orb:7},
-  {name:'секстиль',   symbol:'⚹', angle:60,  orb:5},
+const MOCKS=[
+  {summary:"Марс активизирует вашу карту — неделя насыщена. Не торопитесь с решениями в среду, когда напряжение достигнет пика.",favorable_days:["Вторник","Пятница"],caution_days:["Среда"],career:{rating:4,text:"Момент для смелых инициатив. Руководство заметит вашу активность — используйте вторник для ключевых переговоров."},relationships:{rating:3,text:"Близкие чувствуют вашу занятость. Уделите им пятничный вечер — важнее любого рабочего плана."},health:{rating:4,text:"Высокий энергетический фон до четверга. Физическая нагрузка пойдёт на пользу — особенно на свежем воздухе."}},
+  {summary:"Венера освещает ваш путь — неделя тёплая. Отличное время сказать то, что давно хотелось.",favorable_days:["Среда","Суббота"],caution_days:["Пятница"],career:{rating:3,text:"Рутинная неделя, но в ней прячется важная деталь. Будьте внимательны к мелочам — они складываются в картину."},relationships:{rating:5,text:"Лучшая неделя для романтики. Планируйте что-то особенное на выходные — атмосфера этому способствует."},health:{rating:4,text:"Хороший сон и аппетит. Прислушайтесь к телу — оно сейчас особенно чутко реагирует на качество еды."}},
+  {summary:"Сатурн напоминает о важных делах, которые откладывались слишком долго. Неделя требует дисциплины — но награда весомая.",favorable_days:["Понедельник","Четверг"],caution_days:["Воскресенье"],career:{rating:5,text:"Пик продуктивности — понедельник и вторник. Закройте старые задачи прежде чем браться за новые."},relationships:{rating:3,text:"Небольшое напряжение в общении — скорее всего усталость, а не реальный конфликт. Дайте себе и близким пространство."},health:{rating:3,text:"Следите за режимом сна — именно он сейчас определяет качество всего остального."}},
 ];
-
-function calcAspects(transitPlanets, natalPlanets){
-  const aspects = [];
-  for(const tr of transitPlanets){
-    for(const na of natalPlanets){
-      let diff = Math.abs(tr.lon - na.lon) % 360;
-      if(diff > 180) diff = 360 - diff;
-      for(const asp of ASPECTS_DEF){
-        const orb = Math.abs(diff - asp.angle);
-        if(orb <= asp.orb){
-          aspects.push({
-            transit: tr.n,
-            transitSign: tr.sign,
-            natal: na.n,
-            natalSign: na.sign,
-            aspect: asp.name,
-            symbol: asp.symbol,
-            orb: orb.toFixed(1),
-            angle: asp.angle,
-          });
-        }
-      }
-    }
-  }
-  // Сортируем по силе (меньший орб = сильнее)
-  return aspects.sort((a,b) => parseFloat(a.orb)-parseFloat(b.orb)).slice(0,12);
-}
-
-// ══════════════════════════════════════════════════════════════
-//  АСТРОЛОГИЧЕСКИЙ ДВИЖОК ПРОГНОЗА
-//  Реальные транзиты → аспекты к натальной карте → текстовый прогноз
-// ══════════════════════════════════════════════════════════════
-
-// ── Интерпретации аспектов по парам планет ──────────────────
-const ASP_INTERP = {
-  // Формат: 'ТранзитнаяПланета:НатальнаяПланета': { conj, trine, square, opp, sext }
-  // Сферы: career(к), rel(о), health(з), общий(s), rating модификаторы
-
-  'Солнце:Солнце':   {trine:'Ваша жизненная энергия на подъёме — отличная неделя для самовыражения и новых инициатив.',square:'Внутреннее напряжение требует осознанности. Избегайте конфликтов с авторитетами.',opp:'Неделя проверяет вашу идентичность. Важно сохранять баланс между своими желаниями и чужими ожиданиями.',conj:'Солнечный период! Вы в центре событий, энергия высокая.',sext:'Хороший момент для небольших достижений и позитивных контактов.'},
-  'Солнце:Луна':     {trine:'Гармония между разумом и чувствами — внутренний покой помогает принимать верные решения.',square:'Эмоциональные и рациональные импульсы конфликтуют. Дайте себе время перед важными решениями.',opp:'Отношения в фокусе: между личным и общественным нужен компромисс.',conj:'Интуиция и воля действуют заодно — доверяйте первому импульсу.',sext:'Лёгкие и приятные контакты с окружением.'},
-  'Солнце:Меркурий': {trine:'Мысли ясны, коммуникация точна — идеальное время для переговоров и обучения.',square:'Слова могут быть поняты неверно. Дважды проверяйте информацию перед подписанием.',conj:'Интеллект обострён, идеи приходят легко.',sext:'Хороший день для деловой переписки и переговоров.',opp:'Мнения расходятся — слушайте собеседника внимательнее.'},
-  'Солнце:Венера':   {trine:'Венера освещает вашу карту — время для удовольствий, творчества и гармоничных отношений.',square:'Финансовые или романтические решения требуют осторожности. Не поддавайтесь импульсу.',conj:'Магнетизм и привлекательность максимальны. Отличное время для знакомств.',sext:'Тёплая и дружелюбная атмосфера вокруг.',opp:'В отношениях нужен компромисс. Цените то, что уже есть.'},
-  'Солнце:Марс':     {trine:'Марс добавляет энергию и решимость. Время действовать смело.',square:'Вспышки раздражения возможны — выпускайте энергию через спорт, не через конфликты.',conj:'Период высокой активности. Главное — не переусердствовать.',sext:'Хорошая неделя для спорта и физических задач.',opp:'Конкуренция обостряется. Держите эмоции под контролем.'},
-  'Солнце:Юпитер':  {trine:'Юпитер благославляет неделю — расширение, удача и оптимизм сопровождают ваши планы.',square:'Склонность к переоценке своих сил. Реализм помогает больше, чем энтузиазм.',conj:'Период роста и возможностей. Думайте масштабно.',sext:'Небольшие удачи и позитивные встречи.',opp:'Баланс между ожиданиями и реальностью — ключ недели.'},
-  'Солнце:Сатурн':  {trine:'Дисциплина и структура работают в вашу пользу. Время для серьёзных долгосрочных дел.',square:'Препятствия и задержки — часть урока. Терпение вознаграждается.',conj:'Период ответственности и проверки на прочность. Справитесь.',sext:'Плодотворная неделя для систематической работы.',opp:'Внешние ограничения давят, но они временны. Держитесь.'},
-  'Луна:Солнце':     {trine:'Интуиция обострена, эмоциональный фон стабилен.',square:'Перепады настроения требуют мягкого обращения с собой.',conj:'Новолуние в натале — время обновления и новых начинаний.',opp:'Полнолуние в натале — эмоции на поверхности, нужна разрядка.',sext:'Лёгкий и приятный эмоциональный фон.'},
-  'Луна:Луна':       {trine:'Эмоциональная гармония — вы чувствуете себя «дома» в этой неделе.',square:'Тревожность повышена. Больше отдыха, меньше внешних стимулов.',conj:'Лунный возврат: время подвести итоги месяца.',opp:'Противоречивые чувства — дайте им пространство.',sext:'Тёплая и уютная эмоциональная атмосфера.'},
-  'Марс:Солнце':     {trine:'Марс даёт силы — продуктивная, активная неделя.',square:'Риск импульсивных действий высок. Остановитесь перед важным шагом.',conj:'Огромный заряд энергии. Направьте его в дело, а не в конфликт.',opp:'Напряжение с окружающими. Дипломатия выигрывает.',sext:'Хорошая неделя для физической активности.'},
-  'Марс:Марс':       {trine:'Активность и воля усилены. Время для смелых шагов.',square:'Раздражительность растёт — спорт и прогулки помогут.',conj:'Пик активности. Главное — не разрушить, а создать.',opp:'Конфронтации возможны. Выбирайте битвы мудро.',sext:'Хороший тонус и мотивация.'},
-  'Марс:Венера':     {trine:'Страсть и притяжение в отношениях усилены. Романтическая неделя.',square:'Желания сталкиваются с реальностью. Терпение важно.',conj:'Сильное влечение и творческий подъём.',opp:'Натяжение между личными желаниями и потребностями партнёра.',sext:'Тёплые и чувственные моменты в отношениях.'},
-  'Венера:Солнце':   {trine:'Неделя наполнена красотой, удовольствиями и гармонией.',square:'Финансовые импульсы требуют сдержанности.',conj:'Магнетизм максимален. Отличное время для творчества и любви.',opp:'В отношениях — время слышать партнёра.',sext:'Приятные события и встречи.'},
-  'Венера:Луна':     {trine:'Эмоциональный комфорт и нежность — время для заботы о себе и близких.',square:'Чувственные желания могут конфликтовать с обязанностями.',conj:'Период душевного тепла. Отличное время для близости.',opp:'Нужен баланс между собственными нуждами и нуждами других.',sext:'Тёплые взаимоотношения с близкими.'},
-  'Венера:Марс':     {trine:'Страсть и нежность в равновесии — романтика расцветает.',square:'Желания сильные, но импульсивные. Не торопитесь.',conj:'Сильное влечение и творческий огонь.',opp:'Баланс между давать и брать в отношениях.',sext:'Приятная и чувственная атмосфера.'},
-  'Юпитер:Солнце':  {trine:'Юпитер трин Солнцу — одно из лучших транзитных благословений. Возможности открываются сами.',square:'Излишняя самоуверенность. Проверяйте факты перед расширением.',conj:'Период роста, оптимизма и везения. Думайте масштабно.',opp:'Баланс между ростом и стабильностью — важен сейчас.',sext:'Небольшие удачи сопровождают неделю.'},
-  'Юпитер:Луна':    {trine:'Эмоциональное изобилие — вы щедры, оптимистичны, окружены теплом.',square:'Эмоциональные крайности. Умеренность помогает.',conj:'Период эмоционального роста и сочувствия.',opp:'Слишком много чего-то хорошего — найдите меру.',sext:'Хорошее настроение и душевная щедрость.'},
-  'Юпитер:Меркурий':{trine:'Ум расширяется, общение богатеет. Идеальное время для учёбы и переговоров.',square:'Много слов, мало дела. Фокусируйтесь.',conj:'Блестящие идеи и успешные переговоры.',opp:'Обещаний больше, чем возможностей — будьте реалистичны.',sext:'Хороший период для обучения и общения.'},
-  'Сатурн:Солнце':  {trine:'Дисциплина помогает достичь долгосрочных целей. Время серьёзной работы.',square:'Препятствия закаляют. Настойчивость победит.',conj:'Сатурнов транзит — период ответственности и роста через трудности.',opp:'Внешние ограничения временны. Держите курс.',sext:'Продуктивная, структурированная неделя.'},
-  'Сатурн:Луна':    {trine:'Эмоциональная зрелость и стабильность — вы надёжная опора для других.',square:'Депрессивный фон возможен. Больше отдыха и заботы о себе.',conj:'Период эмоциональной работы. Важно выражать чувства, не подавлять.',opp:'Одиночество или изоляция — временное состояние, которое пройдёт.',sext:'Спокойная и устойчивая неделя.'},
-  'Уран:Солнце':    {trine:'Уран приносит неожиданные позитивные перемены. Будьте открыты новому.',square:'Непредсказуемые события требуют гибкости. Не цепляйтесь за старое.',conj:'Резкие перемены в жизни. Они ведут к освобождению.',opp:'Встряска извне — шанс для обновления.',sext:'Приятные сюрпризы и новые знакомства.'},
-  'Нептун:Солнце':  {trine:'Вдохновение, творчество и духовная чувствительность усилены.',square:'Иллюзии могут мешать ясному видению. Проверяйте факты.',conj:'Период мистицизма и глубокой чувствительности.',opp:'Граница реального и иллюзорного размыта. Будьте внимательны.',sext:'Творческий и интуитивный период.'},
-};
-
-// ── Общий пул интерпретаций по типу аспекта ────────────────
-const ASP_GENERIC = {
-  trine: [
-    'Гармоничные трины этой недели создают благоприятный фон для роста и развития.',
-    'Планеты образуют поддерживающие аспекты — используйте этот попутный ветер.',
-    'Трины в вашей карте говорят о том, что усилия этой недели будут вознаграждены.',
-  ],
-  sext: [
-    'Секстили открывают небольшие, но реальные возможности — замечайте их.',
-    'Позитивные аспекты дают лёгкость в делах, которые раньше требовали усилий.',
-  ],
-  conj: [
-    'Конъюнкции усиливают качества задействованных планет — концентрация энергии.',
-    'Слияние планетарных сил даёт мощный импульс в указанных сферах.',
-  ],
-  square: [
-    'Квадраты создают напряжение, которое при правильном подходе становится топливом для роста.',
-    'Трудные аспекты недели — это не препятствия, а развилки. Выбирайте осознанно.',
-  ],
-  opp: [
-    'Оппозиции ставят вас перед выбором. Интеграция противоположностей — ключ недели.',
-    'Напряжение оппозиций лучше всего разряжается через диалог и компромисс.',
-  ],
-};
-
-// ── Планетарные темы (сферы жизни) ─────────────────────────
-const PLANET_THEMES = {
-  'Солнце':   {career:1, rel:0.5, health:0.5},
-  'Луна':     {career:0, rel:1,   health:1},
-  'Меркурий': {career:1, rel:0.5, health:0},
-  'Венера':   {career:0, rel:1,   health:0.5},
-  'Марс':     {career:1, rel:0.5, health:1},
-  'Юпитер':  {career:1, rel:0.5, health:0.5},
-  'Сатурн':  {career:1, rel:0,   health:0.5},
-  'Уран':    {career:0.5, rel:0.5, health:0},
-  'Нептун':  {career:0, rel:0.5, health:0.5},
-};
-
-// ── Качество аспекта: +1 хороший, -1 плохой ────────────────
-function aspQuality(angle){
-  if(angle===120||angle===60) return 1;
-  if(angle===0) return 0.5;
-  if(angle===90||angle===180) return -1;
-  return 0;
-}
-
-// ── Найти интерпретацию для пары планет ─────────────────────
-function findInterp(transitName, natalName, angle){
-  const key = `${transitName}:${natalName}`;
-  const rev = `${natalName}:${transitName}`;
-  const aspKey = angle===0?'conj':angle===120?'trine':angle===60?'sext':angle===90?'square':'opp';
-  const entry = ASP_INTERP[key] || ASP_INTERP[rev];
-  if(entry && entry[aspKey]) return entry[aspKey];
-  // Запасной: общий по типу аспекта
-  const pool = ASP_GENERIC[aspKey]||ASP_GENERIC.conj;
-  return pool[Math.floor(Math.random()*pool.length)];
-}
-
-// ── Дни недели, влияние планет ──────────────────────────────
-const PLANET_DAYS = {
-  'Солнце':'Воскресенье','Луна':'Понедельник','Марс':'Вторник',
-  'Меркурий':'Среда','Юпитер':'Четверг','Венера':'Пятница','Сатурн':'Суббота',
-};
-
-// ══════════════════════════════════════════════════════════════
-//  ГЕНЕРАЦИЯ ПРОГНОЗА НА ОСНОВЕ АСПЕКТОВ
-// ══════════════════════════════════════════════════════════════
-function generateForecastLocal(natalData, transits, aspects, weekStart, weekEnd){
-  // 1. Считаем баллы по сферам
-  let scores = {career:0, rel:0, health:0, total:0};
-  let careerTexts=[], relTexts=[], healthTexts=[], summaryTexts=[];
-  const usedInterps = new Set();
-
-  for(const asp of aspects.slice(0,10)){
-    const q = aspQuality(asp.angle);
-    const theme = PLANET_THEMES[asp.transit] || {career:0.3,rel:0.3,health:0.3};
-    scores.career += q * theme.career;
-    scores.rel    += q * theme.rel;
-    scores.health += q * theme.health;
-    scores.total  += q;
-
-    const interp = findInterp(asp.transit, asp.natal, asp.angle);
-    if(!usedInterps.has(interp)){
-      usedInterps.add(interp);
-      // Распределяем по сфере
-      const t = PLANET_THEMES[asp.transit]||{};
-      if(t.career>=1) careerTexts.push(interp);
-      else if(t.rel>=1) relTexts.push(interp);
-      else if(t.health>=1) healthTexts.push(interp);
-      else summaryTexts.push(interp);
-    }
-  }
-
-  // Если аспектов нет — спокойная неделя
-  if(aspects.length===0){
-    return {
-      summary:`Планеты этой недели (${weekStart}–${weekEnd}) не создают острых напряжений с вашей натальной картой. Спокойное время для текущих дел и отдыха.`,
-      favorable_days:['Среда','Пятница'],
-      career:{rating:3,text:'Ровная рабочая неделя без особых стрессов. Хорошее время для рутинных задач.'},
-      relationships:{rating:3,text:'Отношения стабильны. Уделите внимание близким — они оценят.'},
-      health:{rating:4,text:'Хороший энергетический фон. Поддерживайте режим сна и питания.'},
-    };
-  }
-
-  // 2. Рейтинги (нормируем: диапазон -10..+10 → 1..5)
-  function toRating(score, n){ 
-    if(n===0) return 3;
-    const avg = score/n;
-    return Math.min(5, Math.max(1, Math.round(3 + avg*1.5)));
-  }
-  const nAsp = Math.max(1, aspects.length);
-  const rCareer = toRating(scores.career, nAsp);
-  const rRel    = toRating(scores.rel,    nAsp);
-  const rHealth = toRating(scores.health, nAsp);
-
-  // 3. Главный аспект недели
-  const top = aspects[0];
-  const topQ = aspQuality(top.angle);
-  const topWord = topQ>0?'благоприятный':'напряжённый';
-
-  // 4. Сборка текстов
-  // Summary: основной аспект + общий тон
-  const sunTransit = transits.find(t=>t.n==='Солнце');
-  const sunSign = sunTransit ? `Солнце в ${sunTransit.sign}` : '';
-  const retroList = transits.filter(t=>t.retro).map(t=>t.n);
-  const retroNote = retroList.length ? ` ${retroList.join(' и ')} ретроградны — перепроверяйте решения.` : '';
-
-  const summary = [
-    `Неделя ${weekStart}–${weekEnd}: ${sunSign ? sunSign+' задаёт тон. ' : ''}${top.transit} формирует ${topWord} ${top.aspect} с вашим натальным ${top.natal}.`,
-    summaryTexts[0] || (topQ>=0 ? 'Благоприятное время для развития и новых инициатив.' : 'Требуется осознанность и терпение.'),
-    retroNote,
-  ].filter(Boolean).join(' ');
-
-  const careerText = [
-    careerTexts[0] || (rCareer>=4 ? 'Рабочая неделя складывается удачно — инициативы поддержаны.' : rCareer<=2 ? 'Сложный период для карьеры. Избегайте конфронтаций с коллегами.' : 'Стабильная неделя для рабочих дел.'),
-    careerTexts[1]||'',
-  ].filter(Boolean).join(' ');
-
-  const relText = [
-    relTexts[0] || (rRel>=4 ? 'Отношения наполнены теплом. Время для важных разговоров.' : rRel<=2 ? 'Напряжение в отношениях — слушайте больше, говорите меньше.' : 'Ровные и стабильные отношения на этой неделе.'),
-    relTexts[1]||'',
-  ].filter(Boolean).join(' ');
-
-  const healthText = [
-    healthTexts[0] || (rHealth>=4 ? 'Энергетический фон высокий — используйте его для физической активности.' : rHealth<=2 ? 'Берегите силы. Больше отдыха, меньше нагрузки.' : 'Следите за режимом сна и питания — это основа самочувствия.'),
-    healthTexts[1]||'',
-  ].filter(Boolean).join(' ');
-
-  // 5. Благоприятные дни: планеты с позитивными аспектами
-  const favPlanets = aspects.filter(a=>aspQuality(a.angle)>0).map(a=>a.transit);
-  const favDays = [...new Set(favPlanets.map(p=>PLANET_DAYS[p]).filter(Boolean))];
-  const finalFavDays = favDays.length ? favDays.slice(0,2) : ['Среда'];
-
-  return {
-    summary,
-    favorable_days: finalFavDays,
-    career:        {rating:rCareer, text:careerText.trim()},
-    relationships: {rating:rRel,    text:relText.trim()},
-    health:        {rating:rHealth, text:healthText.trim()},
-  };
-}
 
 // ══════════════════════════════════════════════════════════════
 //  СБОРКА ОТВЕТА
 // ══════════════════════════════════════════════════════════════
 async function buildResponse(dateStr,timeStr,cityName){
-  const chart = await calcChart(dateStr, timeStr, cityName);
+  const chart=await calcChart(dateStr,timeStr,cityName);
+  const fc=MOCKS[new Date().getDay()%MOCKS.length];
 
-  const today = new Date();
-  const mon = new Date(today); mon.setDate(today.getDate()-((today.getDay()||7)-1));
-  const sun2 = new Date(mon); sun2.setDate(mon.getDate()+6);
-  const fmt = dt => `${String(dt.getDate()).padStart(2,'0')}.${String(dt.getMonth()+1).padStart(2,'0')}.${dt.getFullYear()}`;
-  const weekStart = fmt(mon), weekEnd = fmt(sun2);
+  const today=new Date();
+  const mon=new Date(today); mon.setDate(today.getDate()-((today.getDay()||7)-1));
+  const sun=new Date(mon); sun.setDate(mon.getDate()+6);
+  const fmt=dt=>`${String(dt.getDate()).padStart(2,'0')}.${String(dt.getMonth()+1).padStart(2,'0')}.${dt.getFullYear()}`;
 
-  const P = chart.planets;
-  const natalData = {
-    sun:       {sign:SR[signOf(P[0].lon)], symbol:SS[signOf(P[0].lon)], degree:degOf(P[0].lon).toFixed(1)},
-    moon:      {sign:SR[signOf(P[1].lon)], symbol:SS[signOf(P[1].lon)], degree:degOf(P[1].lon).toFixed(1)},
-    ascendant: chart.ascendant!=null ? {sign:SR[signOf(chart.ascendant)], symbol:SS[signOf(chart.ascendant)]} : {sign:'неизвестен',symbol:'?'},
-    planets:   P.slice(2).map(p=>({name:p.n, s:p.s, sign:SR[signOf(p.lon)], symbol:SS[signOf(p.lon)], retrograde:p.retro})),
-  };
-
-  // Транзиты текущей недели
-  const transits = calcTransits();
-  // Натальные планеты для аспектов
-  const allNatal = P.map(p=>({n:p.n, lon:p.lon, sign:SR[signOf(p.lon)]}));
-  // Аспекты транзит → натал
-  const aspects = calcAspects(transits, allNatal);
-
-  // Прогноз: пробуем Claude API через backend, при ошибке — локальный расчёт по аспектам
-  let fc;
-  try {
-    const apiResp = await fetch(`${FORECAST_API}/api/forecast`, {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({ natal: natalData, transits, aspects, week_start: weekStart, week_end: weekEnd })
-    });
-    if (!apiResp.ok) throw new Error(`HTTP ${apiResp.status}`);
-    fc = await apiResp.json();
-  } catch(e) {
-    console.warn('Backend недоступен, используем локальный прогноз:', e.message);
-    fc = generateForecastLocal(natalData, transits, aspects, weekStart, weekEnd);
-  }
-
+  const P=chart.planets;
   return {
-    _raw: chart,
-    natal: natalData,
-    transits,
-    aspects,
-    forecast: fc,
-    week_start: weekStart,
-    week_end: weekEnd,
+    _raw:chart,
+    natal:{
+      sun:{sign:SR[signOf(P[0].lon)],symbol:SS[signOf(P[0].lon)],degree:degOf(P[0].lon).toFixed(1)},
+      moon:{sign:SR[signOf(P[1].lon)],symbol:SS[signOf(P[1].lon)],degree:degOf(P[1].lon).toFixed(1)},
+      ascendant:chart.ascendant!=null?{sign:SR[signOf(chart.ascendant)],symbol:SS[signOf(chart.ascendant)]}:{sign:'неизвестен',symbol:'?'},
+      planets:P.slice(2).map(p=>({name:p.n,sign:SR[signOf(p.lon)],symbol:SS[signOf(p.lon)],retrograde:p.retro})),
+    },
+    forecast:fc,week_start:fmt(mon),week_end:fmt(sun),
   };
 }
 
@@ -1135,15 +808,11 @@ function buildWeek(ws,favDays){
 
 function renderForecast(data){
   const{natal,forecast,week_start}=data;
-  const _raw=data._raw||null;
 
   const geoEl = document.getElementById('fc-geo');
-  if (geoEl) {
-    const meta = data._meta || {};
-    if (meta.city) {
-      const engine = meta.engine === 'kerykeion+swisseph' ? ' · Swiss Ephemeris' : '';
-      geoEl.textContent = `${meta.city} · ${meta.timezone || ''}${engine}`;
-    } else geoEl.textContent = '';
+  if(geoEl){
+    const m=data._meta||{};
+    geoEl.textContent = m.city ? `${m.city} · ${m.timezone||''} · Swiss Ephemeris` : '';
   }
 
   document.getElementById('fc-sign').textContent=natal.sun.sign.toUpperCase();
@@ -1159,53 +828,20 @@ function renderForecast(data){
 
   // Таблица планет (с реальными координатами)
   const tb=document.getElementById('planets-tbody'); tb.innerHTML='';
-  // Используем natal.planets из backend (Kerykeion)
   if(natal && natal.planets){
     natal.planets.forEach(p=>{
+      const si=SR.indexOf(p.sign); const sym=si>=0?SS[si]:'';
+      const deg=p.position!=null?Math.floor(p.position)+'°'+String(Math.floor((p.position%1)*60)).padStart(2,'0')+'′':'';
       const tr=document.createElement('tr');
-      const signIdx = SR.indexOf(p.sign);
-      const signSymbol = signIdx>=0 ? SS[signIdx] : '';
-      const deg = p.position !== undefined ? Math.floor(p.position)+'°'+String(Math.floor((p.position%1)*60)).padStart(2,'0')+'′' : '';
-      tr.innerHTML=`<td>${p.symbol||''} ${p.name}</td><td>${signSymbol} ${p.sign}</td><td>${deg}${p.retrograde?'<span class="retro">℞</span>':''}</td>`;
+      tr.innerHTML=`<td>${p.symbol||p.s||''} ${p.name||p.n}</td><td>${sym} ${p.sign}</td><td>${deg}${p.retrograde?'<span class="retro">℞</span>':''}</td>`;
       tb.appendChild(tr);
     });
-    if(natal.ascendant && natal.ascendant.sign && natal.ascendant.sign!=='неизвестен'){
-      const asc=natal.ascendant;
-      const signIdx=SR.indexOf(asc.sign);
-      const signSymbol=signIdx>=0?SS[signIdx]:'';
-      const deg=asc.position!==undefined?Math.floor(asc.position)+'°'+String(Math.floor((asc.position%1)*60)).padStart(2,'0')+'′':'';
+    if(natal.ascendant&&natal.ascendant.sign&&natal.ascendant.sign!=='неизвестен'){
+      const asc=natal.ascendant; const si=SR.indexOf(asc.sign); const sym=si>=0?SS[si]:'';
+      const deg=asc.position!=null?Math.floor(asc.position)+'°'+String(Math.floor((asc.position%1)*60)).padStart(2,'0')+'′':'';
       const tr=document.createElement('tr');tr.className='asc-row';
-      tr.innerHTML=`<td>↑ Асцендент</td><td>${signSymbol} ${asc.sign}</td><td>${deg}</td>`;
+      tr.innerHTML=`<td>↑ Асцендент</td><td>${sym} ${asc.sign}</td><td>${deg}</td>`;
       tb.appendChild(tr);
-    }
-  }
-
-  // Таблица транзитов текущей недели
-  const transTb = document.getElementById('transits-tbody');
-  if(transTb && data.transits){
-    transTb.innerHTML='';
-    data.transits.forEach(t=>{
-      const tr=document.createElement('tr');
-      tr.innerHTML=`<td>${t.s} ${t.n}</td><td>${t.symbol||''} ${t.sign}</td>`;
-      transTb.appendChild(tr);
-    });
-  }
-
-  // Таблица аспектов транзит → натал
-  const aspTb = document.getElementById('aspects-tbody');
-  if(aspTb){
-    aspTb.innerHTML='';
-    if(data.aspects && data.aspects.length){
-      data.aspects.forEach(a=>{
-        const isGood = a.angle===120||a.angle===60;
-        const isTense = a.angle===90||a.angle===180;
-        const tr=document.createElement('tr');
-        tr.className = isGood?'aspect-good':isTense?'aspect-tense':'aspect-neutral';
-        tr.innerHTML=`<td>${a.transit}</td><td>${a.symbol}</td><td>${a.natal}</td><td style="color:var(--text-soft)">${a.orb}°</td>`;
-        aspTb.appendChild(tr);
-      });
-    } else {
-      aspTb.innerHTML='<tr><td colspan="4" style="text-align:center;color:var(--text-soft)">значимых аспектов нет</td></tr>';
     }
   }
 
@@ -1213,16 +849,16 @@ function renderForecast(data){
   document.getElementById('fc-summary').textContent=forecast.summary;
 
   [
-    ['love',     'fc-love-text',    'fc-love-bar',    'fc-love-val'],
-    ['friends',  'fc-friends-text', 'fc-friends-bar', 'fc-friends-val'],
-    ['career',   'fc-career-text',  'fc-career-bar',  'fc-career-val'],
-    ['finance',  'fc-finance-text', 'fc-finance-bar', 'fc-finance-val'],
-    ['health',   'fc-health-text',  'fc-health-bar',  'fc-health-val'],
+    ['love',    'fc-love-text',    'fc-love-bar',    'fc-love-val'],
+    ['friends', 'fc-friends-text', 'fc-friends-bar', 'fc-friends-val'],
+    ['career',  'fc-career-text',  'fc-career-bar',  'fc-career-val'],
+    ['finance', 'fc-finance-text', 'fc-finance-bar', 'fc-finance-val'],
+    ['health',  'fc-health-text',  'fc-health-bar',  'fc-health-val'],
   ].forEach(([k,t,b,v],i)=>{
-    const section = forecast[k] || forecast['relationships'] || {rating:3, text:''};
-    document.getElementById(t).textContent = section.text || '';
-    document.getElementById(v).textContent = `${section.rating}/5`;
-    setTimeout(()=>{document.getElementById(b).style.width=`${section.rating*20}%`;},200+i*150);
+    const s=forecast[k]||{rating:3,text:''};
+    const el=document.getElementById(t); if(el) el.textContent=s.text||'';
+    const ev=document.getElementById(v); if(ev) ev.textContent=`${s.rating}/5`;
+    setTimeout(()=>{const eb=document.getElementById(b);if(eb)eb.style.width=`${s.rating*20}%`;},200+i*150);
   });
 }
 
@@ -1238,42 +874,33 @@ async function handleSubmit(){
 
   let data;
   try {
-    // Шаг 1: геокодинг города (Open-Meteo, фронтенд)
-    setStep('step1','active');
+    // Шаг 1: геокодинг города
     let place;
-    try {
-      place = await resolvePlace(city);
-    } catch(e) {
-      showScreen('s-input');
-      showError(e.message || 'Город не найден. Попробуйте уточнить название.');
-      return;
-    }
+    try { place = await resolvePlace(city); }
+    catch(e){ showScreen('s-input'); showError(e.message||'Город не найден.'); return; }
     setStep('step1','done'); setStep('step2','active');
 
-    // Шаг 2: расчёт натальной карты + транзитов (backend, Swiss Ephemeris)
+    // Шаг 2: натальная карта + транзиты + прогноз (backend)
     const resp = await fetch(`${FORECAST_API}/api/chart`, {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
         birth_date: date,
-        birth_time: time || '',
+        birth_time: time||'',
         lat: place.lat,
         lon: place.lon,
         timezone: place.timezone,
-        city_name: place.label || place.name || city,
+        city_name: place.label||place.name||city,
       })
     });
-    if (!resp.ok) {
-      const e = await resp.json().catch(() => ({}));
-      throw new Error(e.detail || `Сервер вернул ${resp.status}`);
-    }
+    if(!resp.ok){ const e=await resp.json().catch(()=>({})); throw new Error(e.detail||`Ошибка ${resp.status}`); }
     data = await resp.json();
     setStep('step2','done'); setStep('step3','active');
-    await delay(400);
+    await delay(300);
 
-  } catch(e) {
+  } catch(e){
     showScreen('s-input');
-    showError(e.message || 'Произошла ошибка. Попробуйте ещё раз.');
+    showError(e.message||'Произошла ошибка. Попробуйте ещё раз.');
     console.error(e);
     return;
   }
