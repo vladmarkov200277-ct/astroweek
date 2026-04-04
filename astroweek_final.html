@@ -6,29 +6,36 @@
     <title>AstroWeek · BLONDY club</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,900;1,400;1,900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,900;1,400;1,900&family=Dancing+Script:wght@700&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    *, *::before, *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box
+    }
 
     :root {
+        --dark: #1c0a14;
         --rose: #c4607c;
-        --rose-dark: #2a0a18;
-        --rose-mid: #6a3048;
-        --rose-soft: #907080;
-        --rose-muted: #c090a4;
-        --rose-lt: #d4b5c4;
-        --rose-bg: #fdf8f9;
-        --border: #edd8e2;
-        --font-serif: 'Playfair Display', Georgia, serif;
-        --font-sans: 'DM Sans', sans-serif;
+        --rose-lt: #f4a7c0;
+        --rose-bg: #f9f0f4;
+        --border: #edd8e4;
+        --text: #2a0a18;
+        --text-soft: #907080;
+        --text-muted: #c090a4;
+        --text-lt: #d4b5c4;
+        --white: #fff;
+        --font-serif: "Playfair Display", Georgia, serif;
+        --font-script: "Dancing Script", cursive;
+        --font-sans: "DM Sans", sans-serif;
     }
 
     html, body {
         height: 100%;
         font-family: var(--font-sans);
-        background: #0e0008;
-        color: var(--rose-dark);
-        overflow: hidden;
+        background: var(--dark);
+        color: var(--text);
+        overflow: hidden
     }
 
     #app {
@@ -37,7 +44,7 @@
         max-width: 430px;
         margin: 0 auto;
         overflow: hidden;
-        position: relative;
+        position: relative
     }
 
     .screen {
@@ -46,50 +53,44 @@
         display: flex;
         flex-direction: column;
         transition: opacity .4s ease, transform .4s ease;
-        overflow: hidden;
+        overflow: hidden
     }
 
     .screen.hidden {
         opacity: 0;
         pointer-events: none;
-        transform: translateX(32px);
+        transform: translateX(32px)
     }
 
     .screen.slide-left.hidden {
-        transform: translateX(-32px);
-    }
+        transform: translateX(-32px)
+    }/* ── ЭКРАН 1: ВВОД ── */
 
-    /* ══════════════════════════════
-       ЭКРАН 1: ВВОД
-    ══════════════════════════════ */
     #s-input {
-        background: #0e0008;
+        background: var(--dark);
         justify-content: space-between;
-        padding: 52px 32px 44px;
+        padding: 52px 30px 32px
     }
 
     .input-top {
         display: flex;
         justify-content: space-between;
-        align-items: flex-start;
+        align-items: flex-start
     }
 
-    .input-brand-left {
-        font-size: 9px;
-        font-weight: 300;
+    .input-brand {
+        font-size: 8px;
+        font-weight: 400;
         letter-spacing: 3px;
-        color: rgba(255,255,255,.3);
+        color: rgba(255, 255, 255, .28);
         text-transform: uppercase;
-        line-height: 1.8;
+        line-height: 1.8
     }
 
-    .input-brand-right {
-        font-size: 9px;
-        font-weight: 300;
-        letter-spacing: 2px;
-        color: rgba(255,255,255,.2);
-        text-transform: uppercase;
-        text-align: right;
+    .input-brand-r {
+        font-family: var(--font-script);
+        font-size: 13px;
+        color: rgba(244, 167, 192, .4)
     }
 
     .input-hero {
@@ -97,85 +98,82 @@
         display: flex;
         flex-direction: column;
         justify-content: center;
-        padding: 24px 0 20px;
+        padding: 20px 0 16px
     }
 
-    .hero-word {
+    .hero-w {
         font-family: var(--font-serif);
         font-weight: 900;
         color: #fff;
-        line-height: 0.88;
+        line-height: .88;
         letter-spacing: -2px;
         display: block;
-        font-size: clamp(72px, 22vw, 96px);
+        font-size: clamp(68px, 20vw, 90px)
     }
 
-    .hero-word.accent {
+    .hero-w.acc {
         font-style: italic;
-        color: var(--rose);
+        color: var(--rose-lt)
     }
 
     .hero-mid {
         display: flex;
         align-items: center;
-        gap: 12px;
-        margin: 14px 0;
+        gap: 10px;
+        margin: 12px 0
     }
 
     .hero-mid-line {
         flex: 1;
-        height: 0.5px;
-        background: rgba(255,255,255,.12);
+        height: .5px;
+        background: rgba(255, 255, 255, .1)
     }
 
-    .hero-mid-label {
-        font-size: 9px;
+    .hero-mid-txt {
+        font-size: 8px;
         letter-spacing: 3px;
-        color: rgba(255,255,255,.25);
-        text-transform: uppercase;
+        color: rgba(255, 255, 255, .2);
+        text-transform: uppercase
     }
 
-    .hero-word-sm {
-        font-family: var(--font-serif);
-        font-size: clamp(28px, 9vw, 40px);
-        font-weight: 400;
-        font-style: italic;
-        color: rgba(255,255,255,.35);
-        line-height: 1.1;
-        letter-spacing: -1px;
+    .hero-sm {
+        font-family: var(--font-script);
+        font-size: clamp(26px, 8vw, 36px);
+        color: rgba(255, 255, 255, .28);
+        line-height: 1.1
     }
 
     .input-fields {
         display: flex;
-        flex-direction: column;
-        gap: 0;
+        flex-direction: column
     }
 
-    .field-row-split {
+    .field-split {
         display: flex;
-        gap: 20px;
+        gap: 20px
     }
 
-    .field-row-split .ifield { flex: 1; }
+    .field-split .ifield {
+        flex: 1
+    }
 
     .ifield {
-        border-bottom: 0.5px solid rgba(255,255,255,.15);
-        padding: 14px 0 12px;
-        transition: border-color .2s;
+        border-bottom: .5px solid rgba(255, 255, 255, .12);
+        padding: 12px 0;
+        transition: border-color .2s
     }
 
     .ifield:focus-within {
-        border-color: var(--rose);
+        border-color: var(--rose-lt)
     }
 
     .ifield label {
         display: block;
-        font-size: 8px;
-        font-weight: 400;
+        font-size: 7px;
         letter-spacing: 2.5px;
-        color: rgba(255,255,255,.25);
+        color: rgba(255, 255, 255, .22);
         text-transform: uppercase;
-        margin-bottom: 7px;
+        margin-bottom: 6px
     }
 
     .ifield input {
@@ -183,658 +181,2150 @@
         background: transparent;
         border: none;
         outline: none;
-        font-family: var(--font-serif);
+        font-family: var(--font-script);
         font-size: 16px;
-        font-style: italic;
-        color: rgba(255,255,255,.7);
-        caret-color: var(--rose);
-        -webkit-appearance: none;
+        color: rgba(255, 255, 255, .7);
+        caret-color: var(--rose-lt);
+        -webkit-appearance: none
     }
 
     .ifield input::placeholder {
-        color: rgba(255,255,255,.18);
-        font-style: normal;
         font-family: var(--font-sans);
-        font-size: 13px;
-        letter-spacing: 0.5px;
+        font-size: 12px;
+        color: rgba(255, 255, 255, .15);
+        font-style: normal
     }
 
     .error-msg {
         font-size: 11px;
         color: #f87090;
-        margin-top: 12px;
-        letter-spacing: 0.3px;
+        margin-top: 10px;
         display: none;
-        font-style: italic;
         font-family: var(--font-serif);
+        font-style: italic
     }
 
-    .error-msg.visible { display: block; }
+    .error-msg.visible {
+        display: block
+    }
 
     .input-cta {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding-top: 22px;
+        padding-top: 20px
     }
 
     .cta-label {
         font-family: var(--font-serif);
-        font-size: 14px;
+        font-size: 13px;
         font-style: italic;
-        color: rgba(255,255,255,.4);
+        color: rgba(255, 255, 255, .35)
     }
 
     .cta-btn {
-        width: 52px;
-        height: 52px;
+        width: 50px;
+        height: 50px;
         border-radius: 50%;
-        background: var(--rose);
+        background: var(--rose-lt);
         border: none;
         cursor: pointer;
         display: flex;
         align-items: center;
         justify-content: center;
         transition: transform .15s, opacity .15s;
-        flex-shrink: 0;
+        flex-shrink: 0
     }
 
-    .cta-btn:active { transform: scale(.93); opacity: .85; }
+    .cta-btn:active {
+        transform: scale(.92);
+        opacity: .85
+    }
 
     .cta-arrow {
-        width: 18px;
-        height: 18px;
-        border-top: 2px solid white;
-        border-right: 2px solid white;
-        transform: rotate(45deg) translate(-2px, 2px);
+        width: 16px;
+        height: 16px;
+        border-top: 2px solid var(--dark);
+        border-right: 2px solid var(--dark);
+        transform: rotate(45deg) translate(-2px, 2px)
+    }/* канал-кнопка */
+
+    .ch-btn {
+        display: flex;
+        align-items: center;
+        gap: 0;
+        background: var(--dark);
+        border: none;
+        border-radius: 40px;
+        overflow: hidden;
+        cursor: pointer;
+        width: 100%;
+        margin-top: 14px;
+        box-shadow: 0 0 0 1px rgba(255, 255, 255, .08);
+        transition: transform .15s;
+        text-decoration: none
     }
 
-    /* ══════════════════════════════
-       ЭКРАН 2: ЗАГРУЗКА
-    ══════════════════════════════ */
-    #s-loading {
-        background: #0e0008;
+    .ch-btn:active {
+        transform: scale(.97)
+    }
+
+    .ch-sticker {
+        width: 56px;
+        height: 56px;
+        flex-shrink: 0;
+        background: #2a1020;
+        display: flex;
         align-items: center;
         justify-content: center;
-        gap: 32px;
-        padding: 40px 32px;
+        border-radius: 40px 0 0 40px
+    }
+
+    .ch-sticker img {
+        width: 52px;
+        height: 52px;
+        object-fit: cover;
+        display: block
+    }
+
+    .ch-sep {
+        width: 1px;
+        height: 32px;
+        background: rgba(255, 255, 255, .07);
+        flex-shrink: 0
+    }
+
+    .ch-content {
+        flex: 1;
+        padding: 0 14px;
+        text-align: left
+    }
+
+    .ch-handle {
+        font-family: var(--font-sans);
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        color: #fff;
+        text-transform: uppercase
+    }
+
+    .ch-sub {
+        font-family: var(--font-serif);
+        font-size: 10px;
+        font-style: italic;
+        color: rgba(244, 167, 192, .6);
+        margin-top: 2px
+    }/* ── ЭКРАН 2: ЗАГРУЗКА ── */
+
+    #s-loading {
+        background: var(--dark);
+        align-items: center;
+        justify-content: center;
+        gap: 28px;
+        padding: 40px 32px
     }
 
     .load-title {
         font-family: var(--font-serif);
-        font-size: 22px;
+        font-size: 20px;
         font-weight: 400;
         font-style: italic;
-        color: rgba(255,255,255,.6);
-        text-align: center;
+        color: rgba(255, 255, 255, .55);
+        text-align: center
     }
 
     .steps {
         display: flex;
         flex-direction: column;
-        gap: 18px;
-        width: 100%;
+        gap: 16px;
+        width: 100%
     }
 
     .step {
         display: flex;
         align-items: center;
-        gap: 16px;
-        transition: all .4s ease;
+        gap: 14px;
+        transition: all .4s
     }
 
     .step-ico {
         width: 28px;
         height: 28px;
         border-radius: 50%;
-        border: 0.5px solid rgba(255,255,255,.15);
+        border: .5px solid rgba(255, 255, 255, .12);
         display: flex;
         align-items: center;
         justify-content: center;
         flex-shrink: 0;
-        font-size: 11px;
-        color: rgba(255,255,255,.25);
+        font-size: 10px;
+        color: rgba(255, 255, 255, .2);
         transition: all .4s;
         font-family: var(--font-serif);
-        font-style: italic;
+        font-style: italic
     }
 
-    .step.active .step-ico { border-color: var(--rose); color: var(--rose); }
-    .step.done .step-ico   { border-color: rgba(255,255,255,.2); color: rgba(255,255,255,.35); }
+    .step.active .step-ico {
+        border-color: var(--rose-lt);
+        color: var(--rose-lt)
+    }
+
+    .step.done .step-ico {
+        border-color: rgba(255, 255, 255, .15);
+        color: rgba(255, 255, 255, .3)
+    }
 
     .step-txt {
         font-size: 12px;
-        letter-spacing: 0.3px;
-        color: rgba(255,255,255,.22);
-        transition: color .4s;
+        color: rgba(255, 255, 255, .2);
+        transition: color .4s
     }
 
-    .step.active .step-txt { color: rgba(255,255,255,.65); }
-    .step.done .step-txt   { color: rgba(255,255,255,.28); }
+    .step.active .step-txt {
+        color: rgba(255, 255, 255, .6)
+    }
 
-    .pulse-dots { display: flex; gap: 8px; }
+    .step.done .step-txt {
+        color: rgba(255, 255, 255, .25)
+    }
+
+    .pulse-dots {
+        display: flex;
+        gap: 7px
+    }
 
     .pdot {
         width: 5px;
         height: 5px;
         border-radius: 50%;
-        background: var(--rose);
+        background: var(--rose-lt);
         animation: pdot 1.4s ease-in-out infinite;
-        opacity: .4;
+        opacity: .4
     }
 
-    .pdot:nth-child(2) { animation-delay: .2s; }
-    .pdot:nth-child(3) { animation-delay: .4s; }
+    .pdot:nth-child(2) {
+        animation-delay: .2s
+    }
+
+    .pdot:nth-child(3) {
+        animation-delay: .4s
+    }
 
     @keyframes pdot {
-        0%, 100% { opacity: .3; transform: scale(.8); }
-        50%       { opacity: 1; transform: scale(1.2); }
-    }
+        0%, 100% {
+            opacity: .3;
+            transform:scale(.8)
+        }
 
-    /* ══════════════════════════════
-       ЭКРАН 3: ПРОГНОЗ
-    ══════════════════════════════ */
-    #s-forecast { background: var(--rose-bg); }
+        50% {
+            opacity: 1;
+            transform: scale(1.2)
+        }
+    }/* ── ЭКРАН 3: ПРОГНОЗ ── */
+
+    #s-forecast {
+        background: var(--rose-bg);
+        flex-direction: column
+    }
 
     .fc-scroll {
         flex: 1;
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
-        padding: 52px 28px 48px;
+        padding: 0 0 80px
     }
 
-    .fc-top {
+    .fc-header {
+        background: var(--dark);
+        padding: 44px 26px 20px;
+        position: relative;
+        overflow: hidden;
+        flex-shrink: 0
+    }
+
+    .fc-header-stars {
+        position: absolute;
+        inset: 0;
+        pointer-events: none
+    }
+
+    .fc-hstar {
+        position: absolute;
+        color: rgba(255, 255, 255, .1);
+        font-size: 9px
+    }
+
+    .fc-nav {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 28px;
+        position: relative;
+        z-index: 2;
+        margin-bottom: 14px
     }
 
     .fc-back {
         background: none;
         border: none;
         cursor: pointer;
-        font-family: var(--font-sans);
-        font-size: 9px;
+        font-size: 8px;
         letter-spacing: 2px;
-        color: var(--rose-muted);
+        color: rgba(255, 255, 255, .35);
         text-transform: uppercase;
         padding: 0;
+        font-family: var(--font-sans)
     }
 
-    .fc-week-label {
-        font-size: 9px;
+    .fc-week-lbl {
+        font-size: 8px;
         letter-spacing: 1.5px;
-        color: var(--rose-lt);
-        text-transform: uppercase;
+        color: rgba(244, 167, 192, .5);
+        text-transform: uppercase
+    }
+
+    .fc-char-row {
+        display: flex;
+        align-items: flex-end;
+        gap: 14px;
+        position: relative;
+        z-index: 2
+    }
+
+    .fc-char-img {
+        width: 72px;
+        height: 88px;
+        object-fit: contain;
+        object-position: bottom;
+        flex-shrink: 0
+    }
+
+    .fc-sign-block {
+        flex: 1
     }
 
     .fc-sign {
-        font-family: var(--font-serif);
-        font-weight: 900;
-        color: var(--rose-dark);
-        line-height: 0.9;
-        letter-spacing: -2px;
-        margin-bottom: 8px;
-        white-space: nowrap;
+        font-family: var(--font-script);
+        color: var(--rose-lt);
+        line-height: 1;
+        white-space: nowrap
     }
 
     .fc-sign-sub {
-        font-family: var(--font-serif);
-        font-size: 15px;
-        font-style: italic;
-        color: var(--rose);
-        margin-bottom: 20px;
+        font-size: 7px;
+        letter-spacing: 1.5px;
+        color: rgba(255, 255, 255, .3);
+        text-transform: uppercase;
+        margin-top: 5px
     }
 
-    .fc-divider {
-        height: 0.5px;
-        background: var(--border);
-        margin-bottom: 20px;
+    .fc-char-name {
+        font-family: var(--font-serif);
+        font-size: 9px;
+        font-style: italic;
+        color: rgba(244, 167, 192, .45);
+        margin-top: 4px
     }
 
-    .fc-summary-text {
+    .fc-body {
+        padding: 12px 22px 0
+    }
+
+    .fc-summary {
+        background: var(--white);
+        border-radius: 14px;
+        padding: 12px 14px;
         font-family: var(--font-serif);
-        font-size: 15px;
+        font-size: 12px;
         font-style: italic;
-        color: var(--rose-mid);
+        color: #6a3048;
         line-height: 1.65;
-        margin-bottom: 26px;
+        margin-bottom: 14px;
+        border: 1px solid var(--border)
     }
 
     .fc-days {
         display: flex;
         gap: 3px;
-        margin-bottom: 28px;
+        margin-bottom: 16px
     }
 
     .fc-day {
         flex: 1;
         text-align: center;
-        padding: 8px 0;
-        border-radius: 8px;
+        padding: 7px 0;
+        border-radius: 8px
     }
 
-    .fc-day-name {
+    .fc-day-n {
         display: block;
-        font-size: 8px;
+        font-size: 7px;
         letter-spacing: 1px;
-        color: var(--rose-lt);
-        text-transform: uppercase;
+        color: var(--text-lt);
+        text-transform: uppercase
     }
 
-    .fc-day-num {
+    .fc-day-d {
         display: block;
         font-family: var(--font-serif);
-        font-size: 15px;
+        font-size: 13px;
         font-weight: 900;
         color: #9a7080;
-        margin-top: 3px;
+        margin-top: 2px
     }
 
-    .fc-day.active { background: var(--rose-dark); }
-    .fc-day.active .fc-day-name { color: rgba(255,255,255,.35); }
-    .fc-day.active .fc-day-num  { color: #fff; }
-    .fc-day.fav .fc-day-num { color: var(--rose); }
+    .fc-day.active {
+        background: var(--dark)
+    }
 
-    .fc-section-label {
-        font-size: 8px;
-        letter-spacing: 3px;
-        color: var(--rose-lt);
+    .fc-day.active .fc-day-n {
+        color: rgba(255, 255, 255, .3)
+    }
+
+    .fc-day.active .fc-day-d {
+        color: #fff
+    }
+
+    .fc-day.fav .fc-day-d {
+        color: var(--rose)
+    }
+
+    .fc-sec {
+        font-size: 7px;
+        letter-spacing: 2.5px;
+        color: var(--text-lt);
         text-transform: uppercase;
-        margin-bottom: 20px;
+        margin-bottom: 10px;
+        margin-top: 16px
+    }/* таблица планет — новый стильный дизайн */
+
+    .fc-planets-wrap {
+        background: var(--white);
+        border-radius: 14px;
+        overflow: hidden;
+        margin-bottom: 4px;
+        border: 1px solid var(--border)
     }
+
+    .fc-ptable {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 11px
+    }
+
+    .fc-ptable thead {
+        background: var(--dark)
+    }
+
+    .fc-ptable th {
+        text-align: left;
+        padding: 8px 12px;
+        font-size: 7px;
+        letter-spacing: 2px;
+        color: rgba(255, 255, 255, .4);
+        text-transform: uppercase;
+        font-weight: 400
+    }
+
+    .fc-ptable th:last-child {
+        text-align: right
+    }
+
+    .fc-ptable td {
+        padding: 6px 12px;
+        color: var(--text-soft);
+        border-bottom: .5px solid #fdf0f4;
+        font-family: var(--font-sans);
+        font-size: 11px
+    }
+
+    .fc-ptable tr:last-child td {
+        border-bottom: none
+    }
+
+    .fc-ptable td:first-child {
+        color: var(--text-muted);
+        font-size: 10px;
+        letter-spacing: .5px
+    }
+
+    .fc-ptable td:last-child {
+        text-align: right;
+        font-size: 10px;
+        color: var(--text-lt)
+    }
+
+    .fc-ptable .asc-row td {
+        border-top: 1px solid var(--border);
+        color: var(--rose-lt) !important;
+        background: #fdf5f7
+    }
+
+    .retro {
+        color: var(--rose);
+        font-size: 8px;
+        margin-left: 2px
+    }/* аспекты */
+
+    .fc-aspects {
+        background: var(--white);
+        border-radius: 14px;
+        padding: 12px 14px;
+        border: 1px solid var(--border)
+    }
+
+    .fc-asp-empty {
+        font-family: var(--font-serif);
+        font-size: 11px;
+        font-style: italic;
+        color: var(--text-soft);
+        text-align: center;
+        padding: 8px 0
+    }
+
+    .fc-asp-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 7px 0;
+        border-bottom: .5px solid #f5eaf0
+    }
+
+    .fc-asp-item:last-child {
+        border-bottom: none;
+        padding-bottom: 0
+    }
+
+    .fc-asp-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        flex-shrink: 0;
+        margin-top: 4px
+    }
+
+    .fc-asp-dot.good {
+        background: #90c878
+    }
+
+    .fc-asp-dot.tense {
+        background: var(--rose-lt)
+    }
+
+    .fc-asp-dot.neutral {
+        background: #f0c870
+    }
+
+    .fc-asp-body {
+        flex: 1
+    }
+
+    .fc-asp-title {
+        font-family: var(--font-sans);
+        font-size: 9px;
+        font-weight: 700;
+        color: var(--text);
+        letter-spacing: .3px;
+        margin-bottom: 2px
+    }
+
+    .fc-asp-text {
+        font-family: var(--font-serif);
+        font-size: 10px;
+        font-style: italic;
+        color: var(--text-soft);
+        line-height: 1.5
+    }
+
+    .fc-asp-badge {
+        font-size: 7px;
+        letter-spacing: 1px;
+        padding: 2px 7px;
+        border-radius: 10px;
+        text-transform: uppercase;
+        flex-shrink: 0;
+        margin-top: 3px;
+        font-weight: 700
+    }
+
+    .fc-asp-badge.good {
+        background: #e8f5e0;
+        color: #4a8030
+    }
+
+    .fc-asp-badge.tense {
+        background: #fce8f0;
+        color: var(--rose)
+    }
+
+    .fc-asp-badge.neutral {
+        background: #fef3e0;
+        color: #a07030
+    }/* прогноз */
 
     .fc-item {
-        margin-bottom: 24px;
-        padding-bottom: 24px;
-        border-bottom: 0.5px solid var(--border);
-    }
-
-    .fc-item:last-child {
-        border-bottom: none;
-        margin-bottom: 0;
-        padding-bottom: 0;
+        background: var(--white);
+        border-radius: 14px;
+        padding: 12px 14px;
+        margin-bottom: 8px;
+        border: 1px solid var(--border)
     }
 
     .fc-item-head {
         display: flex;
-        align-items: baseline;
         justify-content: space-between;
-        margin-bottom: 9px;
+        align-items: baseline;
+        margin-bottom: 8px
     }
 
     .fc-item-title {
-        font-family: var(--font-serif);
-        font-size: 22px;
-        font-weight: 900;
-        color: var(--rose-dark);
-        letter-spacing: -0.5px;
+        font-family: var(--font-script);
+        font-size: 20px;
+        color: var(--text)
     }
 
-    .fc-score-num {
+    .fc-score-n {
         font-family: var(--font-serif);
-        font-size: 30px;
+        font-size: 26px;
         font-weight: 900;
         color: var(--rose);
-        line-height: 1;
+        line-height: 1
     }
 
-    .fc-score-max {
-        font-size: 10px;
-        color: var(--rose-lt);
-        font-weight: 300;
-        margin-left: 1px;
+    .fc-score-m {
+        font-size: 9px;
+        color: var(--text-lt);
+        margin-left: 1px
     }
 
     .fc-bar {
         height: 1.5px;
         background: var(--border);
         border-radius: 1px;
-        margin-bottom: 11px;
-        overflow: hidden;
+        margin-bottom: 9px;
+        overflow: hidden
     }
 
     .fc-bar-fill {
         height: 100%;
-        background: var(--rose);
+        background: linear-gradient(90deg, var(--rose-lt), var(--rose));
         border-radius: 1px;
         width: 0%;
-        transition: width 1s ease;
+        transition: width 1s ease
     }
 
     .fc-item-text {
         font-family: var(--font-serif);
-        font-size: 13px;
+        font-size: 11px;
         font-style: italic;
-        color: var(--rose-soft);
-        line-height: 1.7;
-    }
+        color: var(--text-soft);
+        line-height: 1.65
+    }/* кнопка обновить — яркая */
 
     .fc-refresh {
-        margin-top: 36px;
+        margin-top: 14px;
         width: 100%;
         padding: 14px;
-        background: transparent;
-        border: 0.5px solid var(--border);
-        border-radius: 4px;
+        background: linear-gradient(135deg, #e8306a, #c4104a);
+        border: none;
+        border-radius: 30px;
         font-family: var(--font-sans);
         font-size: 9px;
-        letter-spacing: 3px;
-        color: var(--rose-muted);
+        font-weight: 700;
+        letter-spacing: 2.5px;
+        color: #fff;
         text-transform: uppercase;
         cursor: pointer;
-        transition: background .2s;
+        box-shadow: 0 4px 16px rgba(196, 16, 74, .3);
+        transition: opacity .2s, transform .15s
     }
 
-    .fc-refresh:active { background: var(--border); }
+    .fc-refresh:active {
+        opacity: .85;
+        transform: scale(.97)
+    }/* липкая кнопка канала */
+
+    .fc-sticky {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 10px 22px 16px;
+        background: linear-gradient(to bottom, transparent, var(--rose-bg) 40%);
+        pointer-events: none
+    }
+
+    .fc-sticky .ch-btn {
+        pointer-events: all;
+        box-shadow: 0 4px 20px rgba(28, 10, 20, .25)
+    }
 
     @media (min-width: 500px) {
-        body { display: flex; align-items: center; justify-content: center; }
-        #app { height: 860px; border-radius: 44px; overflow: hidden; box-shadow: 0 40px 120px rgba(0,0,0,.5); }
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center
+        }
+
+        #app {
+            height: 860px;
+            border-radius: 44px;
+            overflow: hidden;
+            box-shadow: 0 40px 120px rgba(0, 0, 0, .6)
+        }
     }
     </style>
 </head>
 <body>
-<div id="app">
+    <div id="app">
 
-    <!-- ЭКРАН 1: ВВОД -->
-    <div id="s-input" class="screen">
-        <div class="input-top">
-            <div class="input-brand-left">@blondy_club<br><span style="color:rgba(255,255,255,.1)">2026</span></div>
-            <div class="input-brand-right">Астро<br>неделя</div>
-        </div>
-        <div class="input-hero">
-            <span class="hero-word">Astro</span>
-            <span class="hero-word accent">Week.</span>
-            <div class="hero-mid">
-                <div class="hero-mid-line"></div>
-                <div class="hero-mid-label">твой гороскоп</div>
-                <div class="hero-mid-line"></div>
+        <!-- ЭКРАН 1: ВВОД -->
+        <div id="s-input" class="screen">
+            <div class="input-top">
+                <div class="input-brand">
+                    @blondy_club
+                    <br>
+                    <span style="opacity:.4">2026</span>
+                </div>
+                <div class="input-brand-r">astro ✦</div>
             </div>
-            <span class="hero-word-sm">на каждую<br>неделю</span>
-        </div>
-        <div class="input-fields">
-            <div class="ifield">
-                <label for="f-date">Дата рождения</label>
-                <input id="f-date" type="text" placeholder="ДД · ММ · ГГГГ" maxlength="10" inputmode="numeric">
+            <div class="input-hero">
+                <span class="hero-w">Astro</span>
+                <span class="hero-w acc">Week.</span>
+                <div class="hero-mid">
+                    <div class="hero-mid-line"></div>
+                    <div class="hero-mid-txt">твой гороскоп</div>
+                    <div class="hero-mid-line"></div>
+                </div>
+                <span class="hero-sm">на каждую неделю</span>
             </div>
-            <div class="field-row-split">
+            <div class="input-fields">
                 <div class="ifield">
-                    <label for="f-time">Время</label>
-                    <input id="f-time" type="text" placeholder="ЧЧ:ММ" maxlength="5" inputmode="numeric">
+                    <label for="f-date">Дата рождения</label>
+                    <input id="f-date" type="text" placeholder="ДД · ММ · ГГГГ" maxlength="10" inputmode="numeric">
                 </div>
-                <div class="ifield">
-                    <label for="f-city">Город</label>
-                    <input id="f-city" type="text" placeholder="Москва">
+                <div class="field-split">
+                    <div class="ifield">
+                        <label for="f-time">Время</label>
+                        <input id="f-time" type="text" placeholder="ЧЧ:ММ" maxlength="5" inputmode="numeric">
+                    </div>
+                    <div class="ifield">
+                        <label for="f-city">Город</label>
+                        <input id="f-city" type="text" placeholder="Москва">
+                    </div>
+                </div>
+                <div id="error-msg" class="error-msg"></div>
+                <div class="input-cta">
+                    <span class="cta-label">читать звёзды</span>
+                    <button id="btn-submit" class="cta-btn">
+                        <div class="cta-arrow"></div>
+                    </button>
+                </div>
+                <a class="ch-btn" id="ch-btn-1" href="https://t.me/BLONDY_club" target="_blank">
+                    <div class="ch-sticker">
+                        <img id="ch-img-1" src="" alt="">
+                    </div>
+                    <div class="ch-sep"></div>
+                    <div class="ch-content">
+                        <div class="ch-handle">@BLONDY_CLUB</div>
+                        <div class="ch-sub">женская кофемания — сплетничаем и движемся к целям</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- ЭКРАН 2: ЗАГРУЗКА -->
+        <div id="s-loading" class="screen hidden">
+            <div class="load-title">Читаем звёзды для вас</div>
+            <div class="steps">
+                <div class="step idle" id="step1">
+                    <div class="step-ico">I</div>
+                    <span class="step-txt">Определяем часовой пояс и координаты</span>
+                </div>
+                <div class="step idle" id="step2">
+                    <div class="step-ico">II</div>
+                    <span class="step-txt">Вычисляем положения планет</span>
+                </div>
+                <div class="step idle" id="step3">
+                    <div class="step-ico">III</div>
+                    <span class="step-txt">Считаем аспекты и составляем прогноз</span>
                 </div>
             </div>
-            <div id="error-msg" class="error-msg"></div>
-            <div class="input-cta">
-                <span class="cta-label">читать звёзды</span>
-                <button id="btn-submit" class="cta-btn"><div class="cta-arrow"></div></button>
+            <div class="pulse-dots">
+                <div class="pdot"></div>
+                <div class="pdot"></div>
+                <div class="pdot"></div>
+            </div>
+        </div>
+
+        <!-- ЭКРАН 3: ПРОГНОЗ -->
+        <div id="s-forecast" class="screen hidden">
+            <div class="fc-scroll">
+                <div class="fc-header">
+                    <div class="fc-header-stars" id="fc-hstars"></div>
+                    <div class="fc-nav">
+                        <button class="fc-back" id="btn-back">← назад</button>
+                        <span class="fc-week-lbl" id="fc-week-lbl">—</span>
+                    </div>
+                    <div class="fc-char-row">
+                        <img class="fc-char-img" id="fc-char-img" src="" alt="">
+                        <div class="fc-sign-block">
+                            <div class="fc-sign" id="fc-sign">—</div>
+                            <div class="fc-sign-sub" id="fc-sign-sub">—</div>
+                            <div class="fc-char-name" id="fc-char-name"></div>
+                        </div>
+                    </div>
+                </div>
+                <svg viewBox="0 0 430 28" style="display:block;width:100%;height:28px;background:#f9f0f4;margin-top:-1px" preserveAspectRatio="none">
+                    <path d="M0,0 Q30,24 60,8 Q90,0 120,20 Q150,28 180,10 Q210,0 240,18 Q270,28 300,12 Q330,4 360,20 Q390,28 430,10 L430,0 Z" fill="#1c0a14"/>
+                </svg>
+                <div class="fc-body">
+                    <div class="fc-summary" id="fc-summary"></div>
+                    <div class="fc-days" id="fc-days"></div>
+
+                    <div class="fc-sec">натальная карта</div>
+                    <div class="fc-planets-wrap">
+                        <table class="fc-ptable">
+                            <thead>
+                                <tr>
+                                    <th>Планета</th>
+                                    <th>Знак</th>
+                                    <th>Градус</th>
+                                </tr>
+                            </thead>
+                            <tbody id="fc-planets-tbody"></tbody>
+                        </table>
+                    </div>
+
+                    <div class="fc-sec">аспекты дня</div>
+                    <div class="fc-aspects" id="fc-aspects"></div>
+
+                    <div class="fc-sec">прогноз на неделю</div>
+                    <div class="fc-item">
+                        <div class="fc-item-head">
+                            <span class="fc-item-title">Любовь</span>
+                            <span>
+                                <span class="fc-score-n" id="sc-love">—</span>
+                                <span class="fc-score-m">/5</span>
+                            </span>
+                        </div>
+                        <div class="fc-bar">
+                            <div class="fc-bar-fill" id="bar-love"></div>
+                        </div>
+                        <div class="fc-item-text" id="txt-love"></div>
+                    </div>
+                    <div class="fc-item">
+                        <div class="fc-item-head">
+                            <span class="fc-item-title">Дружба</span>
+                            <span>
+                                <span class="fc-score-n" id="sc-friends">—</span>
+                                <span class="fc-score-m">/5</span>
+                            </span>
+                        </div>
+                        <div class="fc-bar">
+                            <div class="fc-bar-fill" id="bar-friends"></div>
+                        </div>
+                        <div class="fc-item-text" id="txt-friends"></div>
+                    </div>
+                    <div class="fc-item">
+                        <div class="fc-item-head">
+                            <span class="fc-item-title">Карьера</span>
+                            <span>
+                                <span class="fc-score-n" id="sc-career">—</span>
+                                <span class="fc-score-m">/5</span>
+                            </span>
+                        </div>
+                        <div class="fc-bar">
+                            <div class="fc-bar-fill" id="bar-career"></div>
+                        </div>
+                        <div class="fc-item-text" id="txt-career"></div>
+                    </div>
+                    <div class="fc-item">
+                        <div class="fc-item-head">
+                            <span class="fc-item-title">Финансы</span>
+                            <span>
+                                <span class="fc-score-n" id="sc-finance">—</span>
+                                <span class="fc-score-m">/5</span>
+                            </span>
+                        </div>
+                        <div class="fc-bar">
+                            <div class="fc-bar-fill" id="bar-finance"></div>
+                        </div>
+                        <div class="fc-item-text" id="txt-finance"></div>
+                    </div>
+                    <div class="fc-item">
+                        <div class="fc-item-head">
+                            <span class="fc-item-title">Энергия</span>
+                            <span>
+                                <span class="fc-score-n" id="sc-health">—</span>
+                                <span class="fc-score-m">/5</span>
+                            </span>
+                        </div>
+                        <div class="fc-bar">
+                            <div class="fc-bar-fill" id="bar-health"></div>
+                        </div>
+                        <div class="fc-item-text" id="txt-health"></div>
+                    </div>
+                    <button class="fc-refresh" id="btn-refresh">✦ Обновить прогноз ✦</button>
+                    <div style="height:16px"></div>
+                </div>
+            </div>
+            <div class="fc-sticky">
+                <a class="ch-btn" id="ch-btn-2" href="https://t.me/BLONDY_club" target="_blank">
+                    <div class="ch-sticker">
+                        <img id="ch-img-2" src="" alt="">
+                    </div>
+                    <div class="ch-sep"></div>
+                    <div class="ch-content">
+                        <div class="ch-handle">@BLONDY_CLUB</div>
+                        <div class="ch-sub">женская кофемания — сплетничаем и движемся к целям</div>
+                    </div>
+                </a>
             </div>
         </div>
     </div>
 
-    <!-- ЭКРАН 2: ЗАГРУЗКА -->
-    <div id="s-loading" class="screen hidden">
-        <div class="load-title">Читаем звёзды для вас</div>
-        <div class="steps">
-            <div class="step idle" id="step1"><div class="step-ico">I</div><span class="step-txt">Определяем часовой пояс и координаты</span></div>
-            <div class="step idle" id="step2"><div class="step-ico">II</div><span class="step-txt">Вычисляем положения планет</span></div>
-            <div class="step idle" id="step3"><div class="step-ico">III</div><span class="step-txt">Составляем прогноз</span></div>
-        </div>
-        <div class="pulse-dots">
-            <div class="pdot"></div><div class="pdot"></div><div class="pdot"></div>
-        </div>
-    </div>
+    <script src="https://cdn.jsdelivr.net/npm/luxon@3.5.0/build/global/luxon.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/astronomy-engine@2.1.19/astronomy.browser.min.js"></script>
+    <script>
+    const STICKERS = [
+    "data:image/webp;base64,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",
+    "data:image/webp;base64,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",
+    "data:image/webp;base64,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",
+    "data:image/webp;base64,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",
+    "data:image/webp;base64,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",
+    "data:image/webp;base64,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",
+    "data:image/webp;base64,UklGRkgMAABXRUJQVlA4WAoAAAAQAAAAYwAAYwAAQUxQSFsDAAABoEVtmyFJiohUW2Pbtm3btm1rbdu2bdvebdtWKfNfVv0Z8dfV3kTEBDBZeeKMy5743Qv/7i/96Zp+ghEbMfCWHAjVyTreyhCCk2EOfagaMAOZd+9au2JQgiCh+RWVgB6oKnj3YDdLPWPw6za4aufdNqWhUCxhWza4Hsh5cpCmktbpfj/IWPdGX65O9ILfQVLP+0t6GmrwltfXgbz+jGuGxXD5jCHv2iC1U/3+ykjZjKGfgfR2/vlmclkTfgIVC8/EymSOTQYlAz9O1uQxRvwGilZe11Qaa3oGqOr7vI8s+rB0ULdwjy6H6PYpKFx5faQcze8FleufbyJFxPw6peyfBgsZ2rwOapeciJbAmlevWN3LnYR7jW8ExZ2cAwmu8S7fqwaedydZblkz6pWDkiv7cJeSLjjq+b9Y1dCl5o+B+k7htTOEO20/IACqHlrezBXePYUC35crB7iij6umwPlj5VjhRtwumwIoumS85kaLp4HEqvsGRbrAe+TSUPtwf8uFiPk2Ec8Na+xCo6uARu9bHdvi8c7fERH4sn0HPH10DRGQ3CsOL3YnUJk5XuC1fIiM3CV4Wr9kMgo2aWiRC/1klBzmaE3vADLLLhFYos8vdJRfzLEi5tSEgbgDQGfZpVi8+e2UnGPIWvcvCKm4iiOZEyoJKb8MK2aTTUjpSYbc+AYgtPigQGr5CCXpkzjWk4T43ktiuLztq4SUntaQWLvn6HCSx3IkrfcHdFTfG8WQjQFf05GzVGCZQ38jw/NqK4atj0gnI39rNN6QZCr830+LQBM9v6LC+14vDa/T21R4XmzD0Hnbl6mofaQhHmv9HBWVN0Xh8Y4fUVF2QcOzZlZTkbeR4bd9DajMXSnQIpf7yCjY3zExJq55HA+Nd/oEyLQrslN++f69s615SPH7A3T8u1N4Q/tQzPGFQK7/xxWxIbR9HQguu75bcNHrAxT5vligBdX8CaDYKb6mcVBd0kkCO31fTBD6yFqawM67kBjERD9RAJ73p1n/Zk7xkAXg++WqsZGMMd4zjzAACGQxxliXVNoA/tHhizAgunxMn9HqSAZ5Rqd9H3nI03s9UGSTJxIW3v3Sb9Qxrdm8twPkJe4vBOpZy4ccID/pYgiDQyrDwTUQDlPDgh0W/v8IAFZQOCDGCAAAkCMAnQEqZABkAD5RII5FI6GhFeh2cDgFBLKAZzYLznnZP+Y8O4e51/Trd5d8k6sQc0fyqUFcf9ao123CAFuy8engrGjdGehb1IPRASoRptm3sZG0f4E0XyrDxHfVQ1JN6fEoY/TwQIkmIhp9UNTVa8Iw3EUhkBkThiJacTpDYpi4RNeR3hY4953IgkM279FMMLVNdrkruSDqZW3e227JHbi7vw2OuUB/kqrm/aXC2bH/4CsuMpnd3VHuIfb0Qo5OUxa1u1kyX9dAub6T9GH5S+GnJC1IwaIETK2JOXwHy7XE48ktglbfxlg3nRPV9S8UuFvuA4H+t6v1a89QJTa9TUcwOood6hf/B40UtGHCSJC1fCgei8TQDB0EMau5CnAbwA/RWAAA/v4G5n5r9TYS3wVqZ/+pox1nQDEm5oo4/mL3JHn9i4/0GcvL7o959hB0Gs54s6ch56pygeqdh+JXy0zAaoYi3RVuM2NcNxpI8zH/QJ0UJStTRqFpOsTt2DRSCJbxc/LOPGi48T25A2fSmjwv/r5wztJ9vXutliMxwKSkpUvLD1B4F750vI4WsJskdtgl9SiCT9xR5GvecdBM6svJI1kIvmh6JApk3ReTqOs3kOYC5jXXn/7PvapVGrSpkK2Q0HAHwbzXlo0VhnM0TgcQLsLo4F1431Tj7Ddb0fBxf261j6mQtcETmr/4NH/bn9uv/+aQdRDEqO3ERX8xcJrMDFVuP20fjg86+bryO3cyyzuaK6Bm7IJMkcXtwqj/GG+v/7az26/53qf/lqp6P/6i23yD8U7AOVWYqOrqF1+z3RKfg/DXTUOm8n8L1wRCAXDzHGfpyv0rZeXkZIUKAD35lxJd2kjm+wdWwQ8fWlk+xkLkJVRPV10awMNhRl+m3kCLnFY9Lkhzx4v0ybGUkzAhX8eiVOfanZ/TVbQOTpT4rtjuhny8ohFXEvAL8Wv+CGJQyk6NTpfTM5t+sbXUq9v4sy483kQi4rogMtQheM6zTsttldXjrQVkUuP+55eWXDQUlyFi5LgSOyCl5iaAVmrZlXfKz83PYGkmkzi4TVX/uzfJXtXVDIl4HCmxP9quJv5mtH4dmQoFyCToNgo934/+/jGq8l5XwlBjowb/FMa1rp/FtB8KmFZbbDHyKw3emVtg+m4nOUTS2G/6p8y4JgzT41DtLBW2Svav1H7We0FR+2IFbSqAqan2JZfbPphhfgae5Dm9UovnfyT1qqJvKDDRWzpf4QnNQfHaQu5kzcYnbA7gqS+yeIuKkLy5P1+PjC28IetS6GrZeuzTKSjDIvV4WWGJUgN8dQv+Yz2SBSH9ANzOOyoxBTdWVtq6feoaKywW39/rpNPgceCfLpbXT07Pxq3xdzGj3UFHZILCtihlF5ejx4MCwYdkJN7V0S1sUHgJR+ECI6EmBzQsz3PuPYsumTlM8bxfNW+j2ZWmAd+iNYF54J0xvkXT0x4Ck07ecaUNteC8XsSX/dCi7NL2xd9WYMGFAIhmeWWshP61549iSGQBNS7HQFOaS8HEXHTTdsAQ3xjO4D+hp7kPAVYW3yRuho72xxyJ+EnHB/O0MccoCmNGI3a0BCPSUc1FFuXCAflB+A1frh+RTX6PiQEzMLoj2PLtSC/CdvjZWjnMB6xJLN1WNE7cWzU0hFPFFnl+1XRoVgbx9yVTjuCsry5Ce61F/TePptvmVA1NX9deWX31GS5xRbi06TZAbmEBv+9xcKF+zJCyH+5cMgq0PmFFJNfIp+J2+C+C/eSHpn0lgxS0nK145n/BGU1FAvH3vAcT6jOiTeM292HCuZ1vFYZ0CZ8U3R9kfcA6f1uwt11C50PHnaQee757at2y89huEHs75JL9toELefpwZuepuiOjJxt2gkZlkWtr7ACRwPHK6NOxqM/aKuS9NLzzE4+9CilhHGHumsY0H9bON+4AwFDV+F/DyAfPAaw9L4HRvF/9U9WmYKYrXDs0aUSpZT/SZGFesaPlSSH06t1JYTXiCtGWIGVm+iS4nPZkdv9SZFQpS80Ewpp7JQCTZD1jbfHeqie0l5hQHW7JuchE9dV6mkVAPQpd7gdrqAoY5qdoDKEuTPa+rP+Ov6FVAQfDEI8o02yuldHr5LvL822HAZqAxjXg/o1oAvD9a7SIZJttR4xvE7Fpa4tUUEDpUIp8HumAsbaBnVRFdKawXhrSnkVZiAq1/1MATj1mfMTpDwTUuunCECEgSMbh3d/w2rNPXgXxxaPjGCCSPKE2kbDzmuVtZ5FZmL4erubHEJWnYsNsZfCgaNhHj3iQetNArEFg4w/7qfSz+57QKlDx3Rh8NwOwS1ufI6wwYqD6b2W/9bWffAIi8hG4iVZm1A5I1QQghZKpj1f6NIU62krXHizau2/4DxbXn7EzYzU9D2Mk4eNK14PHO74ypa1+8KeKL/tKFY3GRBHuPkqGYyCX+70br5VpsHi4ua0YCXQQlbPsiaZ4BvLpu2qFZNWhdFpynm+Mz+5tQZIIVBuizf6QvS5psslqfOXysqHJydSqDFKI3f/+GJozuArUTcjHZh56mKPdtQ0TV9GfW4ZKOP0sHq78uyFwoB2S1V7lP/XrTa3lbkDRfiOnQtm/0vXUeurgGuCENrGjjfImaWxrbdGhRlbZ9OAQ9nEZ+Ru/4QwzCJ7wo15s3oPbOpD/dKcGSoO3IsnyVf2fufmXTUZ6rejplkAJRb1fcWSW3bO5f177A3/y1YzaAIdKJw9UM1BXQaPInG1bfuxkCCSYmZI1cXX6csRefPmYOxk3H8SmxtboHICfrCLNmd419n4UbqB3hSDxELjOH3vnzAKJiROgembGhkeAWvS0lq+eu/4A5zMWtUEq83WGTIHaX6ZP3Jm91eZqfeC9cNXZj6g9IqZUpkNE3ILCReqfvZoNkIFmkCjSxS4S7OLOxFMA3hXf0pbMGOE84AX7vaOKpJ3t7/0L77BN0YP6nWirnr1U8CV2rGSLaXirJnox1VwFAlr0YsAAAAA=",
+    "data:image/webp;base64,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",
+    "data:image/webp;base64,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",
+    "data:image/webp;base64,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",
+    "data:image/webp;base64,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",
+    "data:image/webp;base64,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",
+    ];
+    const STICKER_CHANNEL = "data:image/webp;base64,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";
 
-    <!-- ЭКРАН 3: ПРОГНОЗ -->
-    <div id="s-forecast" class="screen hidden">
-        <div class="fc-scroll">
-            <div class="fc-top">
-                <button class="fc-back" id="btn-back">← назад</button>
-                <span class="fc-week-label" id="fc-week-label">—</span>
-            </div>
-            <div class="fc-sign" id="fc-sign">—</div>
-            <div class="fc-sign-sub" id="fc-sign-sub">—</div>
-            <div class="fc-divider"></div>
-            <div class="fc-summary-text" id="fc-summary"></div>
-            <div class="fc-days" id="fc-days"></div>
-            <div class="fc-section-label">прогноз на неделю</div>
+    // Inject channel sticker
+    document.getElementById('ch-img-1').src = STICKER_CHANNEL;
+    document.getElementById('ch-img-2').src = STICKER_CHANNEL;
 
-            <div class="fc-item">
-                <div class="fc-item-head">
-                    <span class="fc-item-title">Любовь</span>
-                    <span><span class="fc-score-num" id="sc-love">—</span><span class="fc-score-max">/5</span></span>
-                </div>
-                <div class="fc-bar"><div class="fc-bar-fill" id="bar-love"></div></div>
-                <div class="fc-item-text" id="txt-love"></div>
-            </div>
+    const CHAR_NAMES = ['как Рэй из чужого города — дерзкая и непредсказуемая', 'как Бри Ван де Камп — безупречна и утончённа', 'как Кэрри Брэдшоу — остроумна и неотразима', 'как Одри Хепберн — нежная и глубокая', 'как Ким Кардашьян — царственна и амбициозна', 'как Леди Гага — нестандартна и смела', 'как Анджелина Джоли — магнетична и свободна', 'как героиня нуара — загадочна и опасна', 'как Оливия Поуп — целеустремлённа и мудра', 'как Одри в "Завтрак у Тиффани" — грациозна и мечтает', 'как звезда вечеринки — харизматична и непредсказуема', 'как Ди Каприо в женском обличии — романтична'];
 
-            <div class="fc-item">
-                <div class="fc-item-head">
-                    <span class="fc-item-title">Дружба</span>
-                    <span><span class="fc-score-num" id="sc-friends">—</span><span class="fc-score-max">/5</span></span>
-                </div>
-                <div class="fc-bar"><div class="fc-bar-fill" id="bar-friends"></div></div>
-                <div class="fc-item-text" id="txt-friends"></div>
-            </div>
-
-            <div class="fc-item">
-                <div class="fc-item-head">
-                    <span class="fc-item-title">Карьера</span>
-                    <span><span class="fc-score-num" id="sc-career">—</span><span class="fc-score-max">/5</span></span>
-                </div>
-                <div class="fc-bar"><div class="fc-bar-fill" id="bar-career"></div></div>
-                <div class="fc-item-text" id="txt-career"></div>
-            </div>
-
-            <div class="fc-item">
-                <div class="fc-item-head">
-                    <span class="fc-item-title">Финансы</span>
-                    <span><span class="fc-score-num" id="sc-finance">—</span><span class="fc-score-max">/5</span></span>
-                </div>
-                <div class="fc-bar"><div class="fc-bar-fill" id="bar-finance"></div></div>
-                <div class="fc-item-text" id="txt-finance"></div>
-            </div>
-
-            <div class="fc-item">
-                <div class="fc-item-head">
-                    <span class="fc-item-title">Энергия</span>
-                    <span><span class="fc-score-num" id="sc-health">—</span><span class="fc-score-max">/5</span></span>
-                </div>
-                <div class="fc-bar"><div class="fc-bar-fill" id="bar-health"></div></div>
-                <div class="fc-item-text" id="txt-health"></div>
-            </div>
-
-            <button class="fc-refresh" id="btn-refresh">Обновить прогноз</button>
-        </div>
-    </div>
-
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/luxon@3.5.0/build/global/luxon.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/astronomy-engine@2.1.19/astronomy.browser.min.js"></script>
-<script>
-const FORECAST_API='https://astro-v2.onrender.com';
-const tg=window.Telegram?.WebApp;
-if(tg){tg.ready();tg.expand();}
-
-const SR=["Овен","Телец","Близнецы","Рак","Лев","Дева","Весы","Скорпион","Стрелец","Козерог","Водолей","Рыбы"];
-const SS=["♈","♉","♊","♋","♌","♍","♎","♏","♐","♑","♒","♓"];
-const signOf=lon=>Math.floor((((lon%360)+360)%360)/30);
-const toR=d=>d*Math.PI/180,toD=r=>r*180/Math.PI;
-
-function JD(yr,mo,dy,hr,mn){if(mo<=2){yr--;mo+=12;}const A=Math.floor(yr/100),B=2-A+Math.floor(A/4);return Math.floor(365.25*(yr+4716))+Math.floor(30.6001*(mo+1))+dy+hr/24+mn/1440+B-1524.5;}
-function sunLon(jd){const n=jd-2451545,L=(280.460+0.9856474*n)%360,g=toR((357.528+0.9856003*n)%360);return((L+1.915*Math.sin(g)+0.020*Math.sin(2*g))%360+360)%360;}
-function moonLon(jd){const d=jd-2451545,L0=(218.316+13.176396*d)%360,M=toR((134.963+13.064993*d)%360),Ms=toR((357.529+0.985600*d)%360),F=toR((93.272+13.229350*d)%360),D=toR((297.850+12.190749*d)%360);const dL=6.289*Math.sin(M)-1.274*Math.sin(2*D-M)+0.658*Math.sin(2*D)-0.186*Math.sin(Ms)-0.059*Math.sin(2*M-2*D)-0.057*Math.sin(M-2*D+Ms)+0.053*Math.sin(M+2*D)+0.046*Math.sin(2*D-Ms)+0.041*Math.sin(M-Ms)-0.035*Math.sin(D)-0.031*Math.sin(M+Ms)-0.015*Math.sin(2*F-2*D)+0.011*Math.sin(M-4*D);return((L0+dL)%360+360)%360;}
-function geoLon(hLon,sunL,a){const pl=toR(hLon),el=toR((sunL+180)%360),gx=a*Math.cos(pl)-Math.cos(el),gy=a*Math.sin(pl)-Math.sin(el);return((toD(Math.atan2(gy,gx))%360)+360)%360;}
-function helio(jd,Lc,Ld,Mc,Md,eq){const T=(jd-2451545)/36525;let L=((Lc+Ld*T)%360+360)%360;const M=toR(((Mc+Md*(jd-2451545))%360+360)%360);eq.forEach((c,i)=>L+=c*Math.sin((i+1)*M));return((L%360)+360)%360;}
-const PC={mercury:[[252.251,149474.072],[174.795,4.09233445],[23.440,2.9818,0.5255,0.1058,0.0241,0.0053],0.387],venus:[[181.980,58519.213],[212.256,1.60213034],[0.7758,0.0033],0.723],mars:[[355.433,19141.696],[19.387,0.52402068],[10.6912,0.6228,0.0503,0.0046],1.524],jupiter:[[34.352,3036.303],[20.900,0.08308529],[5.5549,0.1683,0.0071],5.203],saturn:[[50.077,1223.511],[317.021,0.03344422],[6.3585,0.2204,0.0106],9.537],uranus:[[314.055,429.864],[141.050,0.01172834],[5.3042,0.1534],19.189],neptune:[[304.349,219.883],[256.225,0.00598103],[1.0302,0.0058],30.070]};
-function planetLon(jd,name){if(name==='pluto'){const T=(jd-2451545)/36525;return((238.95+144.96*T)%360+360)%360;}const[L,M,eq,a]=PC[name];return geoLon(helio(jd,L[0],L[1],M[0],M[1],eq),sunLon(jd),a);}
-function retro(jd,name){const f=name==='moon'?moonLon:name==='sun'?sunLon:(j)=>planetLon(j,name);let d=f(jd+1)-f(jd-1);if(d>180)d-=360;if(d<-180)d+=360;return d<0;}
-const ASTRO_BODY={mercury:'Mercury',venus:'Venus',mars:'Mars',jupiter:'Jupiter',saturn:'Saturn',uranus:'Uranus',neptune:'Neptune',pluto:'Pluto'};
-function astroTime(utc){const A=window.Astronomy;return A?A.MakeTime(new Date(Date.UTC(utc.y,utc.mo-1,utc.d,utc.h,utc.mi,0))):null;}
-function geoEcl(A,body,t){return((A.Ecliptic(A.GeoVector(body,t,true)).elon%360)+360)%360;}
-function sunEcl(A,t){return((A.SunPosition(t).elon%360)+360)%360;}
-function retroA(A,t,body){let d=geoEcl(A,body,t.AddDays(1))-geoEcl(A,body,t.AddDays(-1));if(d>180)d-=360;if(d<-180)d+=360;return d<0;}
-function gmst(jd){const T=(jd-2451545)/36525;return((280.46061837+360.98564736629*(jd-2451545)+0.000387933*T*T-T*T*T/38710000)%360+360)%360;}
-function obliquity(jd){const T=(jd-2451545)/36525;return 23.439291111-0.013004167*T-0.0000001639*T*T+0.0000005036*T*T*T;}
-function degNorm(x){x=x%360;return x<0?x+360:x;}
-function asc2(xDeg,lat,sine,cose){const VS=1e-10;let ass=-Math.tan(toR(lat))*sine+cose*Math.cos(toR(xDeg));if(Math.abs(ass)<VS)ass=0;let sinx=Math.sin(toR(xDeg));if(Math.abs(sinx)<VS)sinx=0;if(sinx===0)ass=ass<0?-VS:VS;else if(ass===0)ass=sinx<0?-90:90;else ass=toD(Math.atan2(sinx,ass));if(ass<0)ass+=180;return ass;}
-function asc1(x1,lat,sine,cose){const VS=1e-10,n=Math.trunc(degNorm(x1)/90+1),f=lat;if(Math.abs(90-f)<VS)return 180;if(Math.abs(90+f)<VS)return 0;let ass;if(n===1)ass=asc2(x1,f,sine,cose);else if(n===2)ass=180-asc2(180-x1,-f,sine,cose);else if(n===3)ass=180+asc2(x1-180,-f,sine,cose);else ass=360-asc2(360-x1,f,sine,cose);return degNorm(ass);}
-function ascLon(jd,lat,lon){const armc=degNorm(gmst(jd)+lon),eps=obliquity(jd);return asc1(armc+90,lat,Math.sin(toR(eps)),Math.cos(toR(eps)));}
-
-const CITIES={'москв':[55.75,37.62,3],'moscow':[55.75,37.62,3],'питер':[59.95,30.32,3],'петербург':[59.95,30.32,3],'спб':[59.95,30.32,3],'новосибирск':[54.99,82.90,7],'екатеринбург':[56.84,60.60,5],'краснодар':[45.04,38.98,3],'сочи':[43.60,39.73,3],'казань':[55.79,49.12,3],'нижний новгород':[56.33,44.00,3],'нижний':[56.33,44.00,3],'самара':[53.20,50.15,4],'уфа':[54.74,55.97,5],'омск':[54.99,73.37,6],'красноярск':[56.01,92.87,7],'иркутск':[52.29,104.30,8],'владивосток':[43.11,131.88,10],'хабаровск':[48.48,135.08,10],'калининград':[54.71,20.51,2],'воронеж':[51.67,39.18,3],'ростов':[47.22,39.72,3],'волгоград':[48.71,44.52,3],'пермь':[58.01,56.23,5],'челябинск':[55.15,61.43,5],'тюмень':[57.15,68.99,5],'барнаул':[53.36,83.74,7],'томск':[56.50,84.97,7],'киев':[50.45,30.52,2],'київ':[50.45,30.52,2],'kyiv':[50.45,30.52,2],'харьков':[49.99,36.23,2],'одесса':[46.48,30.73,2],'львов':[49.84,24.03,2],'минск':[53.90,27.57,3],'minsk':[53.90,27.57,3],'алматы':[43.24,76.89,6],'ташкент':[41.30,69.27,5],'london':[51.51,-0.13,0],'лондон':[51.51,-0.13,0],'paris':[48.85,2.35,1],'париж':[48.85,2.35,1],'berlin':[52.52,13.41,1],'берлин':[52.52,13.41,1],'rome':[41.90,12.48,1],'рим':[41.90,12.48,1],'madrid':[40.42,-3.70,1],'мадрид':[40.42,-3.70,1],'istanbul':[41.01,28.96,3],'стамбул':[41.01,28.96,3],'amsterdam':[52.37,4.90,1],'варшава':[52.23,21.01,1],'warsaw':[52.23,21.01,1],'vienna':[48.21,16.37,1],'вена':[48.21,16.37,1],'helsinki':[60.17,24.94,2],'хельсинки':[60.17,24.94,2],'stockholm':[59.33,18.06,1],'стокгольм':[59.33,18.06,1],'tallinn':[59.44,24.75,2],'таллин':[59.44,24.75,2],'riga':[56.95,24.11,2],'рига':[56.95,24.11,2],'vilnius':[54.69,25.28,2],'вильнюс':[54.69,25.28,2],'athens':[37.98,23.73,2],'афины':[37.98,23.73,2],'new york':[40.71,-74.01,-5],'нью-йорк':[40.71,-74.01,-5],'los angeles':[34.05,-118.24,-8],'чикаго':[41.88,-87.63,-6],'chicago':[41.88,-87.63,-6],'miami':[25.77,-80.19,-5],'beijing':[39.91,116.39,8],'пекин':[39.91,116.39,8],'tokyo':[35.68,139.69,9],'токио':[35.68,139.69,9],'seoul':[37.57,126.98,9],'сеул':[37.57,126.98,9],'dubai':[25.20,55.27,4],'дубай':[25.20,55.27,4],'delhi':[28.63,77.22,5.5],'mumbai':[19.08,72.88,5.5],'bangkok':[13.75,100.52,7],'бангкок':[13.75,100.52,7],'singapore':[1.35,103.82,8],'сингапур':[1.35,103.82,8],'sydney':[-33.87,151.21,10],'сидней':[-33.87,151.21,10],'cairo':[30.04,31.24,2],'каир':[30.04,31.24,2]};
-function findCityFallback(name){const lo=name.toLowerCase().trim();for(const[k,v]of Object.entries(CITIES))if(lo.includes(k)||k.includes(lo))return{lat:v[0],lon:v[1],tzHours:v[2]};for(const[k,v]of Object.entries(CITIES))if(lo.length>=4&&k.startsWith(lo.slice(0,4)))return{lat:v[0],lon:v[1],tzHours:v[2]};return null;}
-function luxonOffset(h){const s=h>=0?'+':'-',a=Math.abs(Number(h)),w=Math.floor(a+1e-9),m=Math.round((a-w)*60);return m===0?`UTC${s}${w}`:`UTC${s}${w}:${String(m).padStart(2,'0')}`;}
-const _geoCache=Object.create(null);
-const COUNTRY_ISO={'россия':'RU','рф':'RU','russia':'RU','украина':'UA','ukraine':'UA','україна':'UA','беларусь':'BY','belarus':'BY','казахстан':'KZ','kazakhstan':'KZ','сша':'US','usa':'US','америка':'US','united states':'US','германия':'DE','germany':'DE','франция':'FR','france':'FR','великобритания':'GB','uk':'GB','england':'GB','англия':'GB','италия':'IT','italy':'IT','испания':'ES','spain':'ES','польша':'PL','poland':'PL','китай':'CN','china':'CN','япония':'JP','japan':'JP','индия':'IN','india':'IN','турция':'TR','turkey':'TR','австралия':'AU','australia':'AU','канада':'CA','canada':'CA','финляндия':'FI','finland':'FI','швеция':'SE','sweden':'SE','норвегия':'NO','norway':'NO','греция':'GR','greece':'GR','австрия':'AT','austria':'AT','нидерланды':'NL','netherlands':'NL','бельгия':'BE','belgium':'BE','швейцария':'CH','switzerland':'CH'};
-const US_STATES=new Set(['AL','AK','AZ','AR','CA','CO','CT','DE','DC','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY']);
-function isoHint(t){t=String(t).trim().toLowerCase();if(COUNTRY_ISO[t])return COUNTRY_ISO[t];if(/^[a-z]{2}$/i.test(t)){const u=t.toUpperCase();if(US_STATES.has(u))return null;return u;}return null;}
-function pickGeoRow(results,raw){if(!results||!results.length)return null;let list=results;const i=raw.indexOf(',');if(i!==-1){const hint=raw.slice(i+1).trim(),iso=isoHint(hint);if(iso){const f=list.filter(r=>(r.country_code||'').toUpperCase()===iso);if(f.length)list=f;}else if(hint.length>=2){const hl=hint.toLowerCase();const f=list.filter(r=>(r.country||'').toLowerCase().includes(hl)||(r.admin1||'').toLowerCase().includes(hl));if(f.length)list=f;}}return[...list].sort((a,b)=>(b.population||0)-(a.population||0))[0];}
-async function resolvePlace(q){const ck=q.toLowerCase().trim();if(_geoCache[ck])return _geoCache[ck];try{const name=q.includes(',')?q.slice(0,q.indexOf(',')).trim():q;const r=await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(name)}&count=12&language=ru`,{signal:AbortSignal.timeout(5000)});if(!r.ok)throw new Error('geo');const j=await r.json();const row=j.results&&j.results.length?pickGeoRow(j.results,q):null;if(row){const p={lat:row.latitude,lon:row.longitude,timezone:row.timezone||luxonOffset(Math.round(row.longitude/15)),name:row.name||q,label:[row.name,row.admin1,row.country].filter(Boolean).join(' · '),source:'open_meteo'};_geoCache[ck]=p;return p;}}catch(e){}const fb=findCityFallback(q);if(!fb)throw new Error(`Город не найден: ${q}`);const p={lat:fb.lat,lon:fb.lon,timezone:luxonOffset(fb.tzHours),name:q,label:q,source:'local'};_geoCache[ck]=p;return p;}
-function wallToUtc(y,mo,d,h,mi,zone){const DateTime=window.luxon?.DateTime;if(!DateTime)throw new Error('Luxon не загружен');const dt=DateTime.fromObject({year:y,month:mo,day:d,hour:h,minute:mi,second:0},{zone});if(!dt.isValid)throw new Error('Некорректная дата');const u=dt.toUTC();return{y:u.year,mo:u.month,d:u.day,h:u.hour,mi:u.minute};}
-
-async function calcChart(dateStr,timeStr,cityName){
-    const[d,m,y]=dateStr.split('.').map(Number);
-    const hasTime=timeStr&&/^\d{2}:\d{2}$/.test(timeStr);
-    let hr=12,mn=0;if(hasTime)[hr,mn]=timeStr.split(':').map(Number);
-    const place=await resolvePlace(cityName);
-    const lat=Number(place.lat),lon=Number(place.lon);
-    const utc=wallToUtc(y,m,d,hr,mn,place.timezone);
-    const jd=JD(utc.y,utc.mo,utc.d,utc.h,utc.mi);
-    const A=window.Astronomy,at=A?astroTime(utc):null;
-    function plLon(k){if(at&&A){if(k==='sun')return sunEcl(A,at);if(k==='moon')return geoEcl(A,A.Body.Moon,at);return geoEcl(A,A.Body[ASTRO_BODY[k]],at);}if(k==='sun')return sunLon(jd);if(k==='moon')return moonLon(jd);return planetLon(jd,k);}
-    function plRetro(k){if(at&&A&&ASTRO_BODY[k])return retroA(A,at,A.Body[ASTRO_BODY[k]]);return retro(jd,k);}
-    const PLANETS=[{n:'Солнце',lon:plLon('sun'),retro:false},{n:'Луна',lon:plLon('moon'),retro:false},{n:'Меркурий',lon:plLon('mercury'),retro:plRetro('mercury')},{n:'Венера',lon:plLon('venus'),retro:plRetro('venus')},{n:'Марс',lon:plLon('mars'),retro:plRetro('mars')},{n:'Юпитер',lon:plLon('jupiter'),retro:plRetro('jupiter')},{n:'Сатурн',lon:plLon('saturn'),retro:plRetro('saturn')},{n:'Уран',lon:plLon('uranus'),retro:plRetro('uranus')},{n:'Нептун',lon:plLon('neptune'),retro:plRetro('neptune')},{n:'Плутон',lon:plLon('pluto'),retro:plRetro('pluto')}];
-    const asc=hasTime?ascLon(jd,lat,lon):null;
-    return{jd,lat,lon,timezone:place.timezone,placeName:place.label||place.name,hasTime,planets:PLANETS,ascendant:asc};
-}
-
-const FIRE=new Set([0,4,8]),EARTH=new Set([1,5,9]),AIR=new Set([2,6,10]);
-function elem(si){if(FIRE.has(si))return'fire';if(EARTH.has(si))return'earth';if(AIR.has(si))return'air';return'water';}
-
-const TEXTS={
-    summary:{fire:["Марс активизирует твою карту — неделя насыщена. Не торопись с решениями в среду, когда напряжение достигнет пика.","Солнце дарит уверенность и ясность цели. Неделя подходит для старта нового — звёзды благосклонны.","Энергия высока, но рассеянность опасна. Сфокусируйся на главном и не распыляйся."],earth:["Сатурн напоминает о важных делах, которые откладывались. Неделя требует дисциплины — но награда весомая.","Планеты указывают на период сбора плодов. Терпение и методичность принесут результат.","Стабильная неделя с акцентом на завершение начатого. Фундамент, который ты закладываешь, держит годами."],air:["Меркурий активен — слова, идеи и встречи определяют неделю. Используй коммуникативный талант.","Интеллектуальная неделя: решения приходят через диалог. Не стесняйся советоваться.","Информационный поток высок. Фильтруй главное и не позволяй мелочам украсть фокус."],water:["Нептун усиливает интуицию — доверяй внутреннему голосу в ключевых решениях.","Эмоциональная неделя: чувства говорят громче логики. Позволь себе прислушаться.","Луна подчёркивает чувствительность. Неделя для глубоких разговоров и личных открытий."]},
-    love:{fire:["Страстная неделя — Венера активизирует твою карту. Смело делай первый шаг, звёзды на твоей стороне.","Искра в воздухе ощущается. Существующие отношения обретут новую глубину, одиноким — шанс на яркую встречу.","Марс добавляет смелости сердцу. Не сдерживай чувства — искренность сейчас ценится выше осторожности."],earth:["Спокойная, уютная неделя в отношениях. Небольшие знаки внимания скажут больше громких слов.","Венера советует больше времени проводить вместе. Совместный ужин или прогулка создадут нужное настроение.","Стабильность — твой главный козырь. Близкие ценят надёжность, и это заметно."],air:["Общение — ключ ко всему на этой неделе. Разговор по душам с любимым человеком расставит всё по местам.","Лёгкость и искры в диалоге. Совместная идея или план на будущее сблизит вас больше, чем ты ожидаешь.","Флирт и остроумие — твоё оружие. Партнёр в восхищении, а если ты свободна — флирт может стать чем-то большим."],water:["Интуиция подскажет, что именно нужно сказать любимому человеку. Доверяй своим ощущениям.","Эмоциональная глубина привлекает — на этой неделе особенно. Откройся, и тебя поймут.","Луна усиливает чувствительность. Не избегай разговора о чувствах — он давно необходим."]},
-    friends:{fire:["Социальная неделя: тебя тянет к людям, и это взаимно. Давняя идея провести время вместе — реализуй наконец.","Харизма на пике. Друзья рады твоей компании, а новые знакомства могут оказаться очень полезными.","Совместный проект с другом принесёт неожиданный результат. Действуй, не откладывая."],earth:["Неделя для надёжных, проверенных связей. Старый друг напомнит о себе — ответь.","Небольшой круг близких людей важнее широкого социального выхода. Качество — твой приоритет.","Помощь другу сейчас вернётся сторицей. Не отказывай, если просят о поддержке."],air:["Оживлённые встречи и интересные беседы — твоя стихия на этой неделе. Прими приглашение.","Новое знакомство может перерасти в крепкую дружбу. Будь открыта.","Групповая динамика работает на тебя. Инициируй встречу — все давно этого ждали."],water:["Чуткость к настроению друзей сделает тебя незаменимым собеседником. Один разговор может изменить многое.","Кто-то из близких нуждается в твоей поддержке, но не решается попросить. Протяни руку первой.","Интуиция подскажет, кому позвонить. Не игнорируй это ощущение."]},
-    career:{fire:["Марс даёт импульс — время для смелых шагов. Презентуй идею, о которой думала.","Инициатива вознаграждается. Руководство замечает тех, кто берёт на себя ответственность.","Энергия высокая — используй её для сложных задач в начале недели, пока запал не угас."],earth:["Методичность окупается. Завершай начатое — незаконченные дела начинают давить.","Детальная проработка проекта сейчас важнее скорости. Ошибки обойдутся дороже промедления.","Коллеги оценят основательность. Тихая работа в этот период говорит сама за себя."],air:["Переговоры и коммуникации — в твою пользу. Идеальное время для встреч и договорённостей.","Свежий взгляд на старую проблему даст неожиданное решение. Доверяй своей гибкости.","Нетворкинг сейчас важнее рутины. Полезный контакт может прийти из неожиданного источника."],water:["Интуиция в рабочих вопросах особенно сильна. Доверяй первому ощущению при принятии решений.","Творческий подход к задаче удивит коллег. Не бойся предложить нестандартный путь.","Атмосфера в команде важна — ты чувствуешь её тонкости. Сгладь напряжение, и это заметят."]},
-    finance:{fire:["Импульсивные траты под угрозой. Посчитай дважды перед большой покупкой.","Возможность дохода есть, но она требует действия, а не ожидания. Сделай первый шаг.","Инвестиция в себя — обучение, здоровье, инструменты — окупится быстрее, чем кажется."],earth:["Спокойная, стабильная неделя для финансов. Плановые расходы — без сюрпризов.","Момент для пересмотра бюджета и небольших накоплений. Маленький шаг сейчас — большой результат потом.","Отложи крупные покупки до следующей недели — сначала пойми, что действительно необходимо."],air:["Неожиданный финансовый разговор может открыть новые возможности. Будь внимательна к деталям.","Информация — твой главный актив на этой неделе. Изучи вопрос перед принятием решения.","Небольшая гибкость в расходах поможет использовать выгодный момент. Главное — не перегибать."],water:["Финансовая интуиция обострена. Если что-то кажется подозрительным — так и есть, не торопись.","Забытый долг или возврат может проявиться неожиданно. Неделя для финансовых сюрпризов.","Эмоциональные траты — главный риск. Не шопись на эмоциях, подожди сутки."]},
-    health:{fire:["Энергия высокая, но не расходуй её бездумно. Чередуй активность с отдыхом.","Физическая нагрузка принесёт удовольствие и разрядит напряжение. Лучшее время — утро.","Следи за темпом: азарт хорош, но перегрев опасен. Пей больше воды."],earth:["Тело просит режима. Сон, еда по расписанию, прогулки — всё это даёт эффект именно сейчас.","Накопившееся напряжение даёт о себе знать. Массаж или тёплая ванна вечером — лучшее лекарство.","Умеренная нагрузка и свежий воздух восстанавливают лучше любого стимулятора."],air:["Нервная система требует внимания. Меньше экрана перед сном, больше спокойных вечеров.","Голова работает быстро, но нуждается в паузах. Практика осознанного дыхания творит чудеса.","Лёгкая физическая активность — йога, прогулки — поможет сбросить умственное напряжение."],water:["Чувствительность к окружению высокая — избегай токсичных ситуаций и людей.","Сон и водный баланс — твои главные союзники на этой неделе. Не пренебрегай.","Эмоциональное состояние напрямую влияет на физическое. Позволь себе отдых без чувства вины."]}
-};
-
-const FAV_DAYS={fire:['Вторник','Пятница'],earth:['Понедельник','Четверг'],air:['Среда','Суббота'],water:['Понедельник','Пятница']};
-const ELEM_SCORE={fire:4,earth:3,air:4,water:3};
-function pick(arr,seed){return arr[Math.abs(Math.floor(seed))%arr.length];}
-
-function generateForecast(chart){
-    const P=chart.planets,sunEl=elem(signOf(P[0].lon)),moonEl=elem(signOf(P[1].lon)),ascEl=chart.ascendant!=null?elem(signOf(chart.ascendant)):sunEl;
-    const seed=Math.floor(chart.jd)%97,base=ELEM_SCORE[sunEl],mb=moonEl===sunEl?1:0;
-    const ratings={love:Math.min(5,Math.max(1,base+mb+(seed%3)-1)),friends:Math.min(5,Math.max(1,base+(seed%2))),career:Math.min(5,Math.max(1,ELEM_SCORE[ascEl]+((seed+1)%3)-1)),finance:Math.min(5,Math.max(1,ELEM_SCORE[ascEl]+((seed+2)%2))),health:Math.min(5,Math.max(1,base+((seed+3)%3)-1))};
-    return{summary:pick(TEXTS.summary[sunEl],seed),favorable_days:FAV_DAYS[sunEl],love:{rating:ratings.love,text:pick(TEXTS.love[moonEl],seed+1)},friends:{rating:ratings.friends,text:pick(TEXTS.friends[sunEl],seed+2)},career:{rating:ratings.career,text:pick(TEXTS.career[ascEl],seed+3)},finance:{rating:ratings.finance,text:pick(TEXTS.finance[ascEl],seed+4)},health:{rating:ratings.health,text:pick(TEXTS.health[moonEl],seed+5)}};
-}
-
-async function buildLocalResponse(dateStr,timeStr,cityName){
-    const chart=await calcChart(dateStr,timeStr,cityName),fc=generateForecast(chart);
-    const today=new Date(),mon=new Date(today);mon.setDate(today.getDate()-((today.getDay()||7)-1));
-    const sun=new Date(mon);sun.setDate(mon.getDate()+6);
-    const fmt=dt=>`${String(dt.getDate()).padStart(2,'0')}.${String(dt.getMonth()+1).padStart(2,'0')}.${dt.getFullYear()}`;
-    const P=chart.planets;
-    return{_raw:chart,_meta:{city:chart.placeName,timezone:chart.timezone},natal:{sun:{sign:SR[signOf(P[0].lon)],symbol:SS[signOf(P[0].lon)]},moon:{sign:SR[signOf(P[1].lon)],symbol:SS[signOf(P[1].lon)]},ascendant:chart.ascendant!=null?{sign:SR[signOf(chart.ascendant)]}:{sign:null}},forecast:fc,week_start:fmt(mon),week_end:fmt(sun)};
-}
-
-function showScreen(id,dir='right'){document.querySelectorAll('.screen').forEach(s=>{s.classList.toggle('hidden',s.id!==id);s.classList.toggle('slide-left',s.id!==id&&dir==='left');});}
-function setStep(id,st){const el=document.getElementById(id);el.className=`step ${st}`;el.querySelector('.step-ico').textContent=st==='done'?'✓':st==='active'?id.replace('step',''):'·';}
-const delay=ms=>new Promise(r=>setTimeout(r,ms));
-function showError(m){const e=document.getElementById('error-msg');e.textContent=m;e.classList.add('visible');}
-function clearError(){document.getElementById('error-msg').classList.remove('visible');}
-
-function validate(date,time,city){
-    if(!/^\d{2}\.\d{2}\.\d{4}$/.test(date))return'Введи дату в формате ДД.ММ.ГГГГ';
-    const[d,m,y]=date.split('.').map(Number);
-    if(y<1900||y>new Date().getFullYear())return'Некорректный год рождения';
-    const t=new Date(y,m-1,d);if(t.getFullYear()!==y||t.getMonth()!==m-1||t.getDate()!==d)return'Некорректная дата рождения';
-    if(time){if(!/^\d{2}:\d{2}$/.test(time))return'Время: формат ЧЧ:ММ';const[hh,mm]=time.split(':').map(Number);if(hh>23||mm>59)return'Некорректное время';}
-    if(!city.trim()||city.trim().length<2)return'Введи город рождения';
-    return null;
-}
-
-document.getElementById('f-date').addEventListener('input',e=>{let v=e.target.value.replace(/\D/g,'');if(v.length>2)v=v.slice(0,2)+'.'+v.slice(2);if(v.length>5)v=v.slice(0,5)+'.'+v.slice(5);e.target.value=v.slice(0,10);});
-document.getElementById('f-time').addEventListener('input',e=>{let v=e.target.value.replace(/\D/g,'');if(v.length>2)v=v.slice(0,2)+':'+v.slice(2);e.target.value=v.slice(0,5);});
-
-const DAY=['пн','вт','ср','чт','пт','сб','вс'];
-const DMAP={'понедельник':'пн','вторник':'вт','среда':'ср','четверг':'чт','пятница':'пт','суббота':'сб','воскресенье':'вс'};
-
-function buildDays(ws,favDays){
-    const strip=document.getElementById('fc-days');strip.innerHTML='';
-    const[d,m,y]=ws.split('.').map(Number),mon=new Date(y,m-1,d),tod=new Date();
-    const fav=new Set((favDays||[]).map(s=>DMAP[s.toLowerCase()]||s.toLowerCase().slice(0,2)));
-    for(let i=0;i<7;i++){
-        const dt=new Date(mon);dt.setDate(mon.getDate()+i);
-        const isT=dt.getFullYear()===tod.getFullYear()&&dt.getMonth()===tod.getMonth()&&dt.getDate()===tod.getDate();
-        const el=document.createElement('div');el.className='fc-day'+(isT?' active':fav.has(DAY[i])?' fav':'');
-        el.innerHTML=`<span class="fc-day-name">${DAY[i]}</span><span class="fc-day-num">${dt.getDate()}</span>`;
-        strip.appendChild(el);
+    const FORECAST_API = 'https://astro-v2.onrender.com';
+    const tg = window.Telegram?.WebApp;
+    if (tg) {
+        tg.ready();
+        tg.expand();
     }
-}
 
-function fitSignSize(name){
-    const l=name.length;
-    if(l<=4)return'clamp(64px,18vw,80px)';
-    if(l<=6)return'clamp(50px,14vw,64px)';
-    if(l<=8)return'clamp(40px,11vw,52px)';
-    return'clamp(34px,9vw,44px)';
-}
+    const SR = ["Овен", "Телец", "Близнецы", "Рак", "Лев", "Дева", "Весы", "Скорпион", "Стрелец", "Козерог", "Водолей", "Рыбы"];
+    const SR_EN = ["aries", "taurus", "gemini", "cancer", "leo", "virgo", "libra", "scorpio", "sagittarius", "capricorn", "aquarius", "pisces"];
+    const signOf = lon => Math.floor((((lon % 360) + 360) % 360) / 30);
+    const toR = d => d * Math.PI / 180,
+        toD = r => r * 180 / Math.PI;
 
-function renderForecast(data){
-    const{natal,forecast,week_start,week_end}=data;
-    document.getElementById('fc-week-label').textContent=`${week_start} — ${week_end}`;
-    const signEl=document.getElementById('fc-sign');
-    signEl.textContent=natal.sun.sign.toUpperCase();
-    signEl.style.fontSize=fitSignSize(natal.sun.sign);
-    const sub=[];
-    if(natal.ascendant&&natal.ascendant.sign)sub.push(`Асц. ${natal.ascendant.sign}`);
-    sub.push(`Луна в ${natal.moon.sign}`);
-    document.getElementById('fc-sign-sub').textContent=sub.join(' · ');
-    document.getElementById('fc-summary').textContent=forecast.summary;
-    buildDays(week_start,forecast.favorable_days);
-    [['love','sc-love','bar-love','txt-love'],['friends','sc-friends','bar-friends','txt-friends'],['career','sc-career','bar-career','txt-career'],['finance','sc-finance','bar-finance','txt-finance'],['health','sc-health','bar-health','txt-health']].forEach(([k,sid,bid,tid],i)=>{
-        const s=forecast[k]||{rating:3,text:''};
-        document.getElementById(sid).textContent=s.rating;
-        document.getElementById(tid).textContent=s.text;
-        setTimeout(()=>{document.getElementById(bid).style.width=`${s.rating*20}%`;},200+i*120);
+    function lonToDegMin(lon) {
+        let x = (((lon % 360) + 360) % 360) % 30,
+            d = Math.floor(x + 1e-9),
+            m = Math.floor((x - d) * 60 + 0.5);
+        if (m >= 60) {
+            d++;
+            m = 0;
+        }
+        if (d >= 30)
+            d = 0;
+        return `${d}°${String(m).padStart(2, "0")}′`;
+    }
+
+    function JD(yr, mo, dy, hr, mn) {
+        if (mo <= 2) {
+            yr--;
+            mo += 12;
+        }
+        const A = Math.floor(yr / 100),
+            B = 2 - A + Math.floor(A / 4);
+        return Math.floor(365.25 * (yr + 4716)) + Math.floor(30.6001 * (mo + 1)) + dy + hr / 24 + mn / 1440 + B - 1524.5;
+    }
+    function sunLon(jd) {
+        const n = jd - 2451545,
+            L = (280.460 + 0.9856474 * n) % 360,
+            g = toR((357.528 + 0.9856003 * n) % 360);
+        return ((L + 1.915 * Math.sin(g) + 0.020 * Math.sin(2 * g)) % 360 + 360) % 360;
+    }
+    function moonLon(jd) {
+        const d = jd - 2451545,
+            L0 = (218.316 + 13.176396 * d) % 360,
+            M = toR((134.963 + 13.064993 * d) % 360),
+            Ms = toR((357.529 + 0.985600 * d) % 360),
+            F = toR((93.272 + 13.229350 * d) % 360),
+            D = toR((297.850 + 12.190749 * d) % 360);
+        const dL = 6.289 * Math.sin(M) - 1.274 * Math.sin(2 * D - M) + 0.658 * Math.sin(2 * D) - 0.186 * Math.sin(Ms) - 0.059 * Math.sin(2 * M - 2 * D) - 0.057 * Math.sin(M - 2 * D + Ms) + 0.053 * Math.sin(M + 2 * D) + 0.046 * Math.sin(2 * D - Ms) + 0.041 * Math.sin(M - Ms) - 0.035 * Math.sin(D) - 0.031 * Math.sin(M + Ms) - 0.015 * Math.sin(2 * F - 2 * D) + 0.011 * Math.sin(M - 4 * D);
+        return ((L0 + dL) % 360 + 360) % 360;
+    }
+    function geoLon(hLon, sunL, a) {
+        const pl = toR(hLon),
+            el = toR((sunL + 180) % 360),
+            gx = a * Math.cos(pl) - Math.cos(el),
+            gy = a * Math.sin(pl) - Math.sin(el);
+        return ((toD(Math.atan2(gy, gx)) % 360) + 360) % 360;
+    }
+    function helio(jd, Lc, Ld, Mc, Md, eq) {
+        const T = (jd - 2451545) / 36525;
+        let L = ((Lc + Ld * T) % 360 + 360) % 360;
+        const M = toR(((Mc + Md * (jd - 2451545)) % 360 + 360) % 360);
+        eq.forEach((c, i) => L += c * Math.sin((i + 1) * M));
+        return ((L % 360) + 360) % 360;
+    }
+    const PC = {
+        mercury: [[252.251, 149474.072], [174.795, 4.09233445], [23.440, 2.9818, 0.5255, 0.1058, 0.0241, 0.0053], 0.387],
+        venus: [[181.980, 58519.213], [212.256, 1.60213034], [0.7758, 0.0033], 0.723],
+        mars: [[355.433, 19141.696], [19.387, 0.52402068], [10.6912, 0.6228, 0.0503, 0.0046], 1.524],
+        jupiter: [[34.352, 3036.303], [20.900, 0.08308529], [5.5549, 0.1683, 0.0071], 5.203],
+        saturn: [[50.077, 1223.511], [317.021, 0.03344422], [6.3585, 0.2204, 0.0106], 9.537],
+        uranus: [[314.055, 429.864], [141.050, 0.01172834], [5.3042, 0.1534], 19.189],
+        neptune: [[304.349, 219.883], [256.225, 0.00598103], [1.0302, 0.0058], 30.070]
+    };
+    function planetLon(jd, name) {
+        if (name === "pluto") {
+            const T = (jd - 2451545) / 36525;
+            return ((238.95 + 144.96 * T) % 360 + 360) % 360;
+        }
+        const [L, M, eq, a] = PC[name];
+        return geoLon(helio(jd, L[0], L[1], M[0], M[1], eq), sunLon(jd), a);
+    }
+    function retro(jd, name) {
+        const f = name === "moon" ? moonLon : name === "sun" ? sunLon : (j) => planetLon(j, name);
+        let d = f(jd + 1) - f(jd - 1);
+        if (d > 180)
+            d -= 360;
+        if (d < -180)
+            d += 360;
+        return d < 0;
+    }
+    const ASTRO_BODY = {
+        mercury: "Mercury",
+        venus: "Venus",
+        mars: "Mars",
+        jupiter: "Jupiter",
+        saturn: "Saturn",
+        uranus: "Uranus",
+        neptune: "Neptune",
+        pluto: "Pluto"
+    };
+    function astroTime(utc) {
+        const A = window.Astronomy;
+        return A ? A.MakeTime(new Date(Date.UTC(utc.y, utc.mo - 1, utc.d, utc.h, utc.mi, 0))) : null;
+    }
+    function geoEcl(A, body, t) {
+        return ((A.Ecliptic(A.GeoVector(body, t, true)).elon % 360) + 360) % 360;
+    }
+    function sunEcl(A, t) {
+        return ((A.SunPosition(t).elon % 360) + 360) % 360;
+    }
+    function retroA(A, t, body) {
+        let d = geoEcl(A, body, t.AddDays(1)) - geoEcl(A, body, t.AddDays(-1));
+        if (d > 180)
+            d -= 360;
+        if (d < -180)
+            d += 360;
+        return d < 0;
+    }
+    function gmst(jd) {
+        const T = (jd - 2451545) / 36525;
+        return ((280.46061837 + 360.98564736629 * (jd - 2451545) + 0.000387933 * T * T - T * T * T / 38710000) % 360 + 360) % 360;
+    }
+    function obliquity(jd) {
+        const T = (jd - 2451545) / 36525;
+        return 23.439291111 - 0.013004167 * T - 0.0000001639 * T * T + 0.0000005036 * T * T * T;
+    }
+    function degNorm(x) {
+        x = x % 360;
+        return x < 0 ? x + 360 : x;
+    }
+    function asc2(xDeg, lat, sine, cose) {
+        const VS = 1e-10;
+        let ass = -Math.tan(toR(lat)) * sine + cose * Math.cos(toR(xDeg));
+        if (Math.abs(ass) < VS)
+            ass = 0;
+        let sinx = Math.sin(toR(xDeg));
+        if (Math.abs(sinx) < VS)
+            sinx = 0;
+        if (sinx === 0)
+            ass = ass < 0 ? -VS : VS;
+        else if (ass === 0)
+            ass = sinx < 0 ? -90 : 90;
+        else
+            ass = toD(Math.atan2(sinx, ass));
+        if (ass < 0)
+            ass += 180;
+        return ass;
+    }
+    function asc1(x1, lat, sine, cose) {
+        const VS = 1e-10,
+            n = Math.trunc(degNorm(x1) / 90 + 1),
+            f = lat;
+        if (Math.abs(90 - f) < VS)
+            return 180;
+        if (Math.abs(90 + f) < VS)
+            return 0;
+        let ass;
+        if (n === 1)
+            ass = asc2(x1, f, sine, cose);
+        else if (n === 2)
+            ass = 180 - asc2(180 - x1, -f, sine, cose);
+        else if (n === 3)
+            ass = 180 + asc2(x1 - 180, -f, sine, cose);
+        else
+            ass = 360 - asc2(360 - x1, f, sine, cose);
+        return degNorm(ass);
+    }
+    function ascLon(jd, lat, lon) {
+        const armc = degNorm(gmst(jd) + lon),
+            eps = obliquity(jd);
+        return asc1(armc + 90, lat, Math.sin(toR(eps)), Math.cos(toR(eps)));
+    }
+
+    // АСПЕКТЫ ДНЯ
+    const ASPECT_TYPES = [{
+        name: "Соединение",
+        angle: 0,
+        orb: 8,
+        type: "neutral"
+    }, {
+        name: "Секстиль",
+        angle: 60,
+        orb: 6,
+        type: "good"
+    }, {
+        name: "Квадрат",
+        angle: 90,
+        orb: 8,
+        type: "tense"
+    }, {
+        name: "Трин",
+        angle: 120,
+        orb: 8,
+        type: "good"
+    }, {
+        name: "Оппозиция",
+        angle: 180,
+        orb: 8,
+        type: "tense"
+    }];
+    function angDiff(a, b) {
+        let d = Math.abs(((a - b) + 360) % 360);
+        return d > 180 ? 360 - d : d;
+    }
+    const ASP_TEXTS = {
+        "Соединение": {
+            sun: {
+                neutral: "Мощный импульс энергии — важны твои намерения"
+            },
+            moon: {
+                neutral: "Глубокий контакт с чувствами и интуицией"
+            },
+            mercury: {
+                neutral: "Активный день для коммуникаций и новых идей"
+            },
+            venus: {
+                neutral: "Тяга к гармонии, красоте и приятным вещам"
+            },
+            mars: {
+                neutral: "Сильный порыв к действию — используй"
+            },
+            jupiter: {
+                good: "Расширение возможностей, оптимизм"
+            },
+            saturn: {
+                neutral: "Время структурировать планы и взять ответственность"
+            },
+            default: {
+                neutral: "Значимый аспект — обрати внимание на этот день"
+            }
+        },
+        "Трин": {
+            sun: {
+                good: "Лёгкость и поток — всё получается само"
+            },
+            moon: {
+                good: "Эмоциональное равновесие и приятные события"
+            },
+            mercury: {
+                good: "Переговоры и решения даются легко"
+            },
+            venus: {
+                good: "Романтика и красота — отличный день для свиданий"
+            },
+            mars: {
+                good: "Энергия течёт плавно, продуктивность высокая"
+            },
+            jupiter: {
+                good: "Удача сопутствует — используй момент"
+            },
+            saturn: {
+                good: "Планы реализуются стабильно и без помех"
+            },
+            default: {
+                good: "Гармоничный аспект — день идёт в плюс"
+            }
+        },
+        "Секстиль": {
+            sun: {
+                good: "Небольшой, но заметный подъём уверенности"
+            },
+            moon: {
+                good: "Хорошее настроение и тёплые встречи"
+            },
+            mercury: {
+                good: "Свежие идеи и приятные разговоры"
+            },
+            venus: {
+                good: "Лёгкий флирт и приятные сюрпризы"
+            },
+            mars: {
+                good: "Достаточно энергии для новых начинаний"
+            },
+            jupiter: {
+                good: "Маленькая удача — замечай её"
+            },
+            saturn: {
+                good: "Полезный момент для планирования"
+            },
+            default: {
+                good: "Мягкий позитивный аспект дня"
+            }
+        },
+        "Квадрат": {
+            sun: {
+                tense: "Внутренний конфликт — ищи баланс между желанием и реальностью"
+            },
+            moon: {
+                tense: "Эмоциональное напряжение — не принимай решений на эмоциях"
+            },
+            mercury: {
+                tense: "Недопонимания в общении — перечитай сообщения дважды"
+            },
+            venus: {
+                tense: "Напряжение в отношениях или с деньгами — притормози"
+            },
+            mars: {
+                tense: "Риск конфликта — сначала думай, потом говори"
+            },
+            jupiter: {
+                tense: "Самонадеянность может подвести — будь реалисткой"
+            },
+            saturn: {
+                tense: "Препятствия на пути — это временно, держись"
+            },
+            default: {
+                tense: "Сложный аспект — день требует осторожности"
+            }
+        },
+        "Оппозиция": {
+            sun: {
+                tense: "Противостояние с окружением — ищи компромисс"
+            },
+            moon: {
+                tense: "Эмоциональные качели, напряжение в отношениях"
+            },
+            mercury: {
+                tense: "Разные точки зрения — слушай, прежде чем отвечать"
+            },
+            venus: {
+                tense: "Дисбаланс в отношениях — поговори честно"
+            },
+            mars: {
+                tense: "Конфликтный день — лучше избегать споров"
+            },
+            jupiter: {
+                tense: "Переоценка ситуации — будь осторожна с обещаниями"
+            },
+            saturn: {
+                tense: "Чувство блокировки — не форсируй, это пройдёт"
+            },
+            default: {
+                tense: "Напряжённый аспект — сохраняй спокойствие"
+            }
+        },
+    };
+    const TRANSIT_NAMES = {
+        sun: "☉ Солнце",
+        moon: "☽ Луна",
+        mercury: "☿ Меркурий",
+        venus: "♀ Венера",
+        mars: "♂ Марс",
+        jupiter: "♃ Юпитер",
+        saturn: "♄ Сатурн",
+        uranus: "♅ Уран",
+        neptune: "♆ Нептун"
+    };
+    const NATAL_NAMES = {
+        sun: "Солнцем",
+        moon: "Луной",
+        mercury: "Меркурием",
+        venus: "Венерой",
+        mars: "Марсом",
+        jupiter: "Юпитером",
+        saturn: "Сатурном",
+        uranus: "Ураном",
+        neptune: "Нептуном",
+        asc: "Асц."
+    };
+    function getAspText(aspName, nk, type) {
+        const pool = (ASP_TEXTS[aspName] || {})[nk] || (ASP_TEXTS[aspName] || {}).default || {};
+        return pool[type] || pool.good || pool.tense || pool.neutral || "Значимый аспект дня";
+    }
+
+    function calcDailyAspects(natalPlanets, natalAsc) {
+        const A = window.Astronomy,
+            now = new Date(),
+            todayUtc = {
+                y: now.getUTCFullYear(),
+                mo: now.getUTCMonth() + 1,
+                d: now.getUTCDate(),
+                h: now.getUTCHours(),
+                mi: now.getUTCMinutes()
+            };
+        const jdNow = JD(todayUtc.y, todayUtc.mo, todayUtc.d, todayUtc.h, todayUtc.mi),
+            at = A ? astroTime(todayUtc) : null;
+        function tLon(key) {
+            if (at && A) {
+                if (key === "sun")
+                    return sunEcl(A, at);
+                if (key === "moon")
+                    return geoEcl(A, A.Body.Moon, at);
+                if (ASTRO_BODY[key])
+                    return geoEcl(A, A.Body[ASTRO_BODY[key]], at);
+            }
+            if (key === "sun")
+                return sunLon(jdNow);
+            if (key === "moon")
+                return moonLon(jdNow);
+            return planetLon(jdNow, key);
+        }
+        const tKeys = ["sun", "moon", "mercury", "venus", "mars", "jupiter", "saturn"];
+        const transits = {};
+        tKeys.forEach(k => transits[k] = tLon(k));
+        const natal = {};
+        natalPlanets.forEach(p => {
+            natal[p.key] = p.lon;
+        });
+        if (natalAsc != null)
+            natal.asc = natalAsc;
+        const aspects = [],
+            seen = new Set();
+        tKeys.forEach(tk => {
+            Object.keys(natal).forEach(nk => {
+                const diff = angDiff(transits[tk], natal[nk]);
+                ASPECT_TYPES.forEach(asp => {
+                    if (Math.abs(diff - asp.angle) <= asp.orb) {
+                        const key = `${tk}-${nk}-${asp.name}`;
+                        if (!seen.has(key)) {
+                            seen.add(key);
+                            const text = getAspText(asp.name, nk, asp.type);
+                            aspects.push({
+                                title: `${TRANSIT_NAMES[tk] || tk} ${asp.name} → ${NATAL_NAMES[nk] || nk}`,
+                                text,
+                                type: asp.type,
+                                aspName: asp.name,
+                                orb: Math.abs(diff - asp.angle).toFixed(1)
+                            });
+                        }
+                    }
+                });
+            });
+        });
+        aspects.sort((a, b) => Number(a.orb) - Number(b.orb));
+        return aspects.slice(0, 5);
+    }
+
+    // ГОРОДА
+    const CITIES = {
+        "москв": [55.75, 37.62, 3],
+        "moscow": [55.75, 37.62, 3],
+        "питер": [59.95, 30.32, 3],
+        "петербург": [59.95, 30.32, 3],
+        "спб": [59.95, 30.32, 3],
+        "новосибирск": [54.99, 82.90, 7],
+        "екатеринбург": [56.84, 60.60, 5],
+        "краснодар": [45.04, 38.98, 3],
+        "сочи": [43.60, 39.73, 3],
+        "казань": [55.79, 49.12, 3],
+        "нижний новгород": [56.33, 44.00, 3],
+        "нижний": [56.33, 44.00, 3],
+        "самара": [53.20, 50.15, 4],
+        "уфа": [54.74, 55.97, 5],
+        "омск": [54.99, 73.37, 6],
+        "красноярск": [56.01, 92.87, 7],
+        "иркутск": [52.29, 104.30, 8],
+        "владивосток": [43.11, 131.88, 10],
+        "хабаровск": [48.48, 135.08, 10],
+        "калининград": [54.71, 20.51, 2],
+        "воронеж": [51.67, 39.18, 3],
+        "ростов": [47.22, 39.72, 3],
+        "волгоград": [48.71, 44.52, 3],
+        "пермь": [58.01, 56.23, 5],
+        "челябинск": [55.15, 61.43, 5],
+        "тюмень": [57.15, 68.99, 5],
+        "барнаул": [53.36, 83.74, 7],
+        "томск": [56.50, 84.97, 7],
+        "киев": [50.45, 30.52, 2],
+        "київ": [50.45, 30.52, 2],
+        "kyiv": [50.45, 30.52, 2],
+        "харьков": [49.99, 36.23, 2],
+        "одесса": [46.48, 30.73, 2],
+        "львов": [49.84, 24.03, 2],
+        "минск": [53.90, 27.57, 3],
+        "minsk": [53.90, 27.57, 3],
+        "алматы": [43.24, 76.89, 6],
+        "ташкент": [41.30, 69.27, 5],
+        "london": [51.51, -0.13, 0],
+        "лондон": [51.51, -0.13, 0],
+        "paris": [48.85, 2.35, 1],
+        "париж": [48.85, 2.35, 1],
+        "berlin": [52.52, 13.41, 1],
+        "берлин": [52.52, 13.41, 1],
+        "rome": [41.90, 12.48, 1],
+        "рим": [41.90, 12.48, 1],
+        "madrid": [40.42, -3.70, 1],
+        "мадрид": [40.42, -3.70, 1],
+        "istanbul": [41.01, 28.96, 3],
+        "стамбул": [41.01, 28.96, 3],
+        "amsterdam": [52.37, 4.90, 1],
+        "варшава": [52.23, 21.01, 1],
+        "warsaw": [52.23, 21.01, 1],
+        "vienna": [48.21, 16.37, 1],
+        "вена": [48.21, 16.37, 1],
+        "helsinki": [60.17, 24.94, 2],
+        "хельсинки": [60.17, 24.94, 2],
+        "stockholm": [59.33, 18.06, 1],
+        "стокгольм": [59.33, 18.06, 1],
+        "tallinn": [59.44, 24.75, 2],
+        "таллин": [59.44, 24.75, 2],
+        "riga": [56.95, 24.11, 2],
+        "рига": [56.95, 24.11, 2],
+        "vilnius": [54.69, 25.28, 2],
+        "вильнюс": [54.69, 25.28, 2],
+        "athens": [37.98, 23.73, 2],
+        "афины": [37.98, 23.73, 2],
+        "new york": [40.71, -74.01, -5],
+        "нью-йорк": [40.71, -74.01, -5],
+        "los angeles": [34.05, -118.24, -8],
+        "чикаго": [41.88, -87.63, -6],
+        "chicago": [41.88, -87.63, -6],
+        "miami": [25.77, -80.19, -5],
+        "beijing": [39.91, 116.39, 8],
+        "пекин": [39.91, 116.39, 8],
+        "tokyo": [35.68, 139.69, 9],
+        "токио": [35.68, 139.69, 9],
+        "seoul": [37.57, 126.98, 9],
+        "сеул": [37.57, 126.98, 9],
+        "dubai": [25.20, 55.27, 4],
+        "дубай": [25.20, 55.27, 4],
+        "delhi": [28.63, 77.22, 5.5],
+        "mumbai": [19.08, 72.88, 5.5],
+        "bangkok": [13.75, 100.52, 7],
+        "бангкок": [13.75, 100.52, 7],
+        "singapore": [1.35, 103.82, 8],
+        "сингапур": [1.35, 103.82, 8],
+        "sydney": [-33.87, 151.21, 10],
+        "сидней": [-33.87, 151.21, 10],
+        "cairo": [30.04, 31.24, 2],
+        "каир": [30.04, 31.24, 2]
+    };
+    function findCity(name) {
+        const lo = name.toLowerCase().trim();
+        for (const [k, v] of Object.entries(CITIES))
+            if (lo.includes(k) || k.includes(lo))
+                return {
+                    lat: v[0],
+                    lon: v[1],
+                    tzHours: v[2]
+                };
+        for (const [k, v] of Object.entries(CITIES))
+            if (lo.length >= 4 && k.startsWith(lo.slice(0, 4)))
+                return {
+                    lat: v[0],
+                    lon: v[1],
+                    tzHours: v[2]
+                };
+        return null;
+    }
+    function luxOffset(h) {
+        const s = h >= 0 ? "+" : "-",
+            a = Math.abs(Number(h)),
+            w = Math.floor(a + 1e-9),
+            m = Math.round((a - w) * 60);
+        return m === 0 ? `UTC${s}${w}` : `UTC${s}${w}:${String(m).padStart(2, "0")}`;
+    }
+    const _gc = Object.create(null);
+    const CISO = {
+        "россия": "RU",
+        "рф": "RU",
+        "russia": "RU",
+        "украина": "UA",
+        "ukraine": "UA",
+        "україна": "UA",
+        "беларусь": "BY",
+        "belarus": "BY",
+        "казахстан": "KZ",
+        "kazakhstan": "KZ",
+        "сша": "US",
+        "usa": "US",
+        "германия": "DE",
+        "germany": "DE",
+        "франция": "FR",
+        "france": "FR",
+        "великобритания": "GB",
+        "uk": "GB",
+        "england": "GB",
+        "италия": "IT",
+        "italy": "IT",
+        "испания": "ES",
+        "spain": "ES",
+        "польша": "PL",
+        "poland": "PL",
+        "китай": "CN",
+        "china": "CN",
+        "япония": "JP",
+        "japan": "JP",
+        "индия": "IN",
+        "india": "IN",
+        "турция": "TR",
+        "turkey": "TR",
+        "австралия": "AU",
+        "australia": "AU",
+        "канада": "CA",
+        "canada": "CA",
+        "финляндия": "FI",
+        "finland": "FI",
+        "швеция": "SE",
+        "sweden": "SE",
+        "норвегия": "NO",
+        "norway": "NO",
+        "нидерланды": "NL",
+        "netherlands": "NL"
+    };
+    const USS = new Set(["AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "DC", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"]);
+    function isoH(t) {
+        t = String(t).trim().toLowerCase();
+        if (CISO[t])
+            return CISO[t];
+        if (/^[a-z]{2}$/i.test(t)) {
+            const u = t.toUpperCase();
+            if (USS.has(u))
+                return null;
+            return u;
+        }
+        return null;
+    }
+    function pickRow(results, raw) {
+        if (!results || !results.length)
+            return null;
+        let list = results;
+        const i = raw.indexOf(",");
+        if (i !== -1) {
+            const hint = raw.slice(i + 1).trim(),
+                iso = isoH(hint);
+            if (iso) {
+                const f = list.filter(r => (r.country_code || "").toUpperCase() === iso);
+                if (f.length)
+                    list = f;
+            } else if (hint.length >= 2) {
+                const hl = hint.toLowerCase();
+                const f = list.filter(r => (r.country || "").toLowerCase().includes(hl) || (r.admin1 || "").toLowerCase().includes(hl));
+                if (f.length)
+                    list = f;
+            }
+        }
+        return [...list].sort((a, b) => (b.population || 0) - (a.population || 0))[0];
+    }
+    async function resolvePlace(q) {
+        const ck = q.toLowerCase().trim();
+        if (_gc[ck])
+            return _gc[ck];
+        try {
+            const name = q.includes(",") ? q.slice(0, q.indexOf(",")).trim() : q;
+            const r = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(name)}&count=12&language=ru`, {
+                signal: AbortSignal.timeout(5000)
+            });
+            if (!r.ok)
+                throw new Error("geo");
+            const j = await r.json();
+            const row = j.results && j.results.length ? pickRow(j.results, q) : null;
+            if (row) {
+                const p = {
+                    lat: row.latitude,
+                    lon: row.longitude,
+                    timezone: row.timezone || luxOffset(Math.round(row.longitude / 15)),
+                    name: row.name || q,
+                    label: [row.name, row.admin1, row.country].filter(Boolean).join(" · "),
+                    source: "open_meteo"
+                };
+                _gc[ck] = p;
+                return p;
+            }
+        } catch (e) {}
+        const fb = findCity(q);
+        if (!fb)
+            throw new Error(`Город не найден: ${q}`);
+        const p = {
+            lat: fb.lat,
+            lon: fb.lon,
+            timezone: luxOffset(fb.tzHours),
+            name: q,
+            label: q,
+            source: "local"
+        };
+        _gc[ck] = p;
+        return p;
+    }
+    function wallToUtc(y, mo, d, h, mi, zone) {
+        const DateTime = window.luxon?.DateTime;
+        if (!DateTime)
+            throw new Error("Luxon не загружен");
+        const dt = DateTime.fromObject({
+            year: y,
+            month: mo,
+            day: d,
+            hour: h,
+            minute: mi,
+            second: 0
+        }, {
+            zone
+        });
+        if (!dt.isValid)
+            throw new Error("Некорректная дата");
+        const u = dt.toUTC();
+        return {
+            y: u.year,
+            mo: u.month,
+            d: u.day,
+            h: u.hour,
+            mi: u.minute
+        };
+    }
+
+    async function calcChart(dateStr, timeStr, cityName) {
+        const [d, m, y] = dateStr.split(".").map(Number);
+        const hasTime = timeStr && /^\d{2}:\d{2}$/.test(timeStr);
+        let hr = 12,
+            mn = 0;
+        if (hasTime)
+            [hr, mn] = timeStr.split(":").map(Number);
+        const place = await resolvePlace(cityName);
+        const lat = Number(place.lat),
+            lon = Number(place.lon);
+        const utc = wallToUtc(y, m, d, hr, mn, place.timezone);
+        const jd = JD(utc.y, utc.mo, utc.d, utc.h, utc.mi);
+        const A = window.Astronomy,
+            at = A ? astroTime(utc) : null;
+        function plLon(k) {
+            if (at && A) {
+                if (k === "sun")
+                    return sunEcl(A, at);
+                if (k === "moon")
+                    return geoEcl(A, A.Body.Moon, at);
+                if (ASTRO_BODY[k])
+                    return geoEcl(A, A.Body[ASTRO_BODY[k]], at);
+            }
+            if (k === "sun")
+                return sunLon(jd);
+            if (k === "moon")
+                return moonLon(jd);
+            return planetLon(jd, k);
+        }
+        function plRetro(k) {
+            if (at && A && ASTRO_BODY[k])
+                return retroA(A, at, A.Body[ASTRO_BODY[k]]);
+            return retro(jd, k);
+        }
+        const PLANETS = [
+        {
+            key: "sun",
+            n: "Солнце",
+            s: "☉",
+            lon: plLon("sun"),
+            retro: false
+        },
+        {
+            key: "moon",
+            n: "Луна",
+            s: "☽",
+            lon: plLon("moon"),
+            retro: false
+        },
+        {
+            key: "mercury",
+            n: "Меркурий",
+            s: "☿",
+            lon: plLon("mercury"),
+            retro: plRetro("mercury")
+        },
+        {
+            key: "venus",
+            n: "Венера",
+            s: "♀",
+            lon: plLon("venus"),
+            retro: plRetro("venus")
+        },
+        {
+            key: "mars",
+            n: "Марс",
+            s: "♂",
+            lon: plLon("mars"),
+            retro: plRetro("mars")
+        },
+        {
+            key: "jupiter",
+            n: "Юпитер",
+            s: "♃",
+            lon: plLon("jupiter"),
+            retro: plRetro("jupiter")
+        },
+        {
+            key: "saturn",
+            n: "Сатурн",
+            s: "♄",
+            lon: plLon("saturn"),
+            retro: plRetro("saturn")
+        },
+        {
+            key: "uranus",
+            n: "Уран",
+            s: "♅",
+            lon: plLon("uranus"),
+            retro: plRetro("uranus")
+        },
+        {
+            key: "neptune",
+            n: "Нептун",
+            s: "♆",
+            lon: plLon("neptune"),
+            retro: plRetro("neptune")
+        },
+        {
+            key: "pluto",
+            n: "Плутон",
+            s: "♇",
+            lon: plLon("pluto"),
+            retro: plRetro("pluto")
+        },
+        ];
+        const asc = hasTime ? ascLon(jd, lat, lon) : null;
+        return {
+            jd,
+            lat,
+            lon,
+            timezone: place.timezone,
+            placeName: place.label || place.name,
+            hasTime,
+            planets: PLANETS,
+            ascendant: asc
+        };
+    }
+
+    const FIRE = new Set([0, 4, 8]),
+        EARTH = new Set([1, 5, 9]),
+        AIR = new Set([2, 6, 10]);
+    function elem(si) {
+        if (FIRE.has(si))
+            return "fire";
+        if (EARTH.has(si))
+            return "earth";
+        if (AIR.has(si))
+            return "air";
+        return "water";
+    }
+    const TEXTS = {
+        summary: {
+            fire: ["Марс активизирует твою карту — неделя насыщена. Не торопись с решениями в среду.", "Солнце дарит уверенность. Неделя подходит для старта нового — звёзды благосклонны.", "Энергия высока, но рассеянность опасна. Сфокусируйся на главном."],
+            earth: ["Сатурн напоминает о важных делах. Неделя требует дисциплины — но награда весомая.", "Планеты указывают на период сбора плодов. Терпение принесёт результат.", "Стабильная неделя с акцентом на завершение начатого."],
+            air: ["Меркурий активен — слова, идеи и встречи определяют неделю. Используй коммуникативный талант.", "Интеллектуальная неделя: решения приходят через диалог.", "Информационный поток высок. Фильтруй главное."],
+            water: ["Нептун усиливает интуицию — доверяй внутреннему голосу.", "Эмоциональная неделя: чувства говорят громче логики.", "Луна подчёркивает чувствительность. Неделя для глубоких разговоров."]
+        },
+        love: {
+            fire: ["Страстная неделя — Венера активизирует твою карту. Смело делай первый шаг.", "Искра в воздухе ощущается. Существующие отношения обретут новую глубину.", "Марс добавляет смелости сердцу. Не сдерживай чувства."],
+            earth: ["Спокойная, уютная неделя в отношениях. Небольшие знаки внимания скажут больше слов.", "Венера советует больше времени проводить вместе.", "Стабильность — твой главный козырь. Близкие ценят надёжность."],
+            air: ["Общение — ключ ко всему. Разговор по душам расставит всё по местам.", "Лёгкость и искры в диалоге. Совместная идея сблизит вас.", "Флирт и остроумие — твоё оружие."],
+            water: ["Интуиция подскажет, что именно нужно сказать. Доверяй своим ощущениям.", "Эмоциональная глубина привлекает — на этой неделе особенно.", "Луна усиливает чувствительность. Не избегай разговора о чувствах."]
+        },
+        friends: {
+            fire: ["Социальная неделя — тебя тянет к людям, и это взаимно.", "Харизма на пике. Новые знакомства могут оказаться очень полезными.", "Совместный проект с другом принесёт неожиданный результат."],
+            earth: ["Неделя для надёжных, проверенных связей. Старый друг напомнит о себе.", "Небольшой круг близких людей важнее широкого выхода.", "Помощь другу сейчас вернётся сторицей."],
+            air: ["Оживлённые встречи и интересные беседы — прими приглашение.", "Новое знакомство может перерасти в крепкую дружбу.", "Инициируй встречу — все давно этого ждали."],
+            water: ["Чуткость к настроению друзей сделает тебя незаменимым собеседником.", "Кто-то из близких нуждается в поддержке — протяни руку первой.", "Интуиция подскажет, кому позвонить."]
+        },
+        career: {
+            fire: ["Марс даёт импульс — время для смелых шагов. Презентуй идею.", "Инициатива вознаграждается. Руководство замечает активных.", "Энергия высокая — используй её для сложных задач."],
+            earth: ["Методичность окупается. Завершай начатое.", "Детальная проработка сейчас важнее скорости.", "Коллеги оценят основательность."],
+            air: ["Переговоры — в твою пользу. Идеальное время для встреч.", "Свежий взгляд на старую проблему даст неожиданное решение.", "Нетворкинг сейчас важнее рутины."],
+            water: ["Интуиция в рабочих вопросах особенно сильна.", "Творческий подход удивит коллег.", "Сгладь напряжение в команде — и это заметят."]
+        },
+        finance: {
+            fire: ["Импульсивные траты под угрозой. Посчитай дважды перед покупкой.", "Возможность дохода есть, но она требует действия.", "Инвестиция в себя окупится быстрее, чем кажется."],
+            earth: ["Стабильная неделя для финансов. Плановые расходы — без сюрпризов.", "Момент для пересмотра бюджета.", "Отложи крупные покупки — сначала пойми, что необходимо."],
+            air: ["Неожиданный финансовый разговор откроет новые возможности.", "Информация — твой главный актив. Изучи вопрос перед решением.", "Небольшая гибкость в расходах поможет использовать выгодный момент."],
+            water: ["Финансовая интуиция обострена. Если что-то кажется подозрительным — так и есть.", "Забытый долг или возврат может проявиться неожиданно.", "Эмоциональные траты — главный риск. Не шопься на эмоциях."]
+        },
+        health: {
+            fire: ["Энергия высокая, но не расходуй её бездумно. Чередуй активность с отдыхом.", "Физическая нагрузка принесёт удовольствие. Лучшее время — утро.", "Следи за темпом: азарт хорош, но перегрев опасен."],
+            earth: ["Тело просит режима. Сон, еда по расписанию, прогулки.", "Накопившееся напряжение даёт о себе знать. Тёплая ванна вечером — лучшее лекарство.", "Умеренная нагрузка восстанавливает лучше любого стимулятора."],
+            air: ["Нервная система требует внимания. Меньше экрана перед сном.", "Голова работает быстро, но нуждается в паузах.", "Лёгкая физическая активность поможет сбросить умственное напряжение."],
+            water: ["Чувствительность к окружению высокая — избегай токсичных ситуаций.", "Сон и водный баланс — твои главные союзники.", "Позволь себе отдых без чувства вины."]
+        },
+    };
+    const FAV_DAYS = {
+        fire: ["Вторник", "Пятница"],
+        earth: ["Понедельник", "Четверг"],
+        air: ["Среда", "Суббота"],
+        water: ["Понедельник", "Пятница"]
+    };
+    const ELEM_SCORE = {
+        fire: 4,
+        earth: 3,
+        air: 4,
+        water: 3
+    };
+    function pick(arr, seed) {
+        return arr[Math.abs(Math.floor(seed)) % arr.length];
+    }
+
+    function generateForecast(chart) {
+        const P = chart.planets,
+            sunEl = elem(signOf(P[0].lon)),
+            moonEl = elem(signOf(P[1].lon));
+        const ascEl = chart.ascendant != null ? elem(signOf(chart.ascendant)) : sunEl;
+        const seed = Math.floor(chart.jd) % 97,
+            base = ELEM_SCORE[sunEl],
+            mb = moonEl === sunEl ? 1 : 0;
+        const ratings = {
+            love: Math.min(5, Math.max(1, base + mb + (seed % 3) - 1)),
+            friends: Math.min(5, Math.max(1, base + (seed % 2))),
+            career: Math.min(5, Math.max(1, ELEM_SCORE[ascEl] + ((seed + 1) % 3) - 1)),
+            finance: Math.min(5, Math.max(1, ELEM_SCORE[ascEl] + ((seed + 2) % 2))),
+            health: Math.min(5, Math.max(1, base + ((seed + 3) % 3) - 1))
+        };
+        return {
+            summary: pick(TEXTS.summary[sunEl], seed),
+            favorable_days: FAV_DAYS[sunEl],
+            love: {
+                rating: ratings.love,
+                text: pick(TEXTS.love[moonEl], seed + 1)
+            },
+            friends: {
+                rating: ratings.friends,
+                text: pick(TEXTS.friends[sunEl], seed + 2)
+            },
+            career: {
+                rating: ratings.career,
+                text: pick(TEXTS.career[ascEl], seed + 3)
+            },
+            finance: {
+                rating: ratings.finance,
+                text: pick(TEXTS.finance[ascEl], seed + 4)
+            },
+            health: {
+                rating: ratings.health,
+                text: pick(TEXTS.health[moonEl], seed + 5)
+            }
+        };
+    }
+
+    async function buildLocalResponse(dateStr, timeStr, cityName) {
+        const chart = await calcChart(dateStr, timeStr, cityName),
+            fc = generateForecast(chart);
+        const today = new Date(),
+            mon = new Date(today);
+        mon.setDate(today.getDate() - ((today.getDay() || 7) - 1));
+        const sun = new Date(mon);
+        sun.setDate(mon.getDate() + 6);
+        const fmt = dt => `${String(dt.getDate()).padStart(2, "0")}.${String(dt.getMonth() + 1).padStart(2, "0")}.${dt.getFullYear()}`;
+        const P = chart.planets;
+        const dailyAspects = calcDailyAspects(P, chart.ascendant);
+        return {
+            _raw: chart,
+            _meta: {
+                city: chart.placeName,
+                timezone: chart.timezone
+            },
+            natal: {
+                sun: {
+                    sign: SR[signOf(P[0].lon)],
+                    signIdx: signOf(P[0].lon)
+                },
+                moon: {
+                    sign: SR[signOf(P[1].lon)]
+                },
+                ascendant: chart.ascendant != null ? {
+                    sign: SR[signOf(chart.ascendant)],
+                    symbol: ""
+                } : {
+                    sign: null
+                },
+                planets: P
+            },
+            forecast: fc,
+            dailyAspects,
+            week_start: fmt(mon),
+            week_end: fmt(sun)
+        };
+    }
+
+    function showScreen(id, dir="right") {
+        document.querySelectorAll(".screen").forEach(s => {
+            s.classList.toggle("hidden", s.id !== id);
+            s.classList.toggle("slide-left", s.id !== id && dir === "left");
+        });
+    }
+    function setStep(id, st) {
+        const el = document.getElementById(id);
+        el.className = `step ${st}`;
+        el.querySelector(".step-ico").textContent = st === "done" ? "✓" : id.replace("step", "");
+    }
+    const delay = ms => new Promise(r => setTimeout(r, ms));
+    function showError(m) {
+        const e = document.getElementById("error-msg");
+        e.textContent = m;
+        e.classList.add("visible");
+    }
+    function clearError() {
+        document.getElementById("error-msg").classList.remove("visible");
+    }
+
+    function validate(date, time, city) {
+        if (!/^\d{2}\.\d{2}\.\d{4}$/.test(date))
+            return "Введи дату в формате ДД.ММ.ГГГГ";
+        const [d, m, y] = date.split(".").map(Number);
+        if (y < 1900 || y > new Date().getFullYear())
+            return "Некорректный год рождения";
+        const t = new Date(y, m - 1, d);
+        if (t.getFullYear() !== y || t.getMonth() !== m - 1 || t.getDate() !== d)
+            return "Некорректная дата рождения";
+        if (time) {
+            if (!/^\d{2}:\d{2}$/.test(time))
+                return "Время: формат ЧЧ:ММ";
+            const [hh, mm] = time.split(":").map(Number);
+            if (hh > 23 || mm > 59)
+                return "Некорректное время";
+        }
+        if (!city.trim() || city.trim().length < 2)
+            return "Введи город рождения";
+        return null;
+    }
+
+    document.getElementById("f-date").addEventListener("input", e => {
+        let v = e.target.value.replace(/\D/g, "");
+        if (v.length > 2)
+            v = v.slice(0, 2) + "." + v.slice(2);
+        if (v.length > 5)
+            v = v.slice(0, 5) + "." + v.slice(5);
+        e.target.value = v.slice(0, 10);
     });
-    document.querySelector('.fc-scroll').scrollTop=0;
-}
+    document.getElementById("f-time").addEventListener("input", e => {
+        let v = e.target.value.replace(/\D/g, "");
+        if (v.length > 2)
+            v = v.slice(0, 2) + ":" + v.slice(2);
+        e.target.value = v.slice(0, 5);
+    });
 
-async function handleSubmit(){
-    const date=document.getElementById('f-date').value.trim(),time=document.getElementById('f-time').value.trim(),city=document.getElementById('f-city').value.trim();
-    const err=validate(date,time,city);if(err){showError(err);return;}clearError();
-    showScreen('s-loading');setStep('step1','active');setStep('step2','idle');setStep('step3','idle');
-    let place;
-    try{place=await resolvePlace(city);}catch(e){showScreen('s-input');showError(e.message||'Город не найден.');return;}
-    setStep('step1','done');setStep('step2','active');
-    let data;
-    try{
-        const resp=await fetch(`${FORECAST_API}/api/chart`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({birth_date:date,birth_time:time||'',lat:place.lat,lon:place.lon,timezone:place.timezone,city_name:place.label||place.name||city}),signal:AbortSignal.timeout(8000)});
-        if(!resp.ok)throw new Error(`${resp.status}`);
-        data=await resp.json();
-    }catch(e){
-        console.warn('Backend недоступен, локальный расчёт:',e.message);
-        try{data=await buildLocalResponse(date,time,city);}catch(e2){showScreen('s-input');showError(e2.message||'Произошла ошибка.');return;}
+    const DAY = ["пн", "вт", "ср", "чт", "пт", "сб", "вс"];
+    const DMAP = {
+        "понедельник": "пн",
+        "вторник": "вт",
+        "среда": "ср",
+        "четверг": "чт",
+        "пятница": "пт",
+        "суббота": "сб",
+        "воскресенье": "вс"
+    };
+
+    function buildDays(ws, favDays) {
+        const strip = document.getElementById("fc-days");
+        strip.innerHTML = "";
+        const [d, m, y] = ws.split(".").map(Number),
+            mon = new Date(y, m - 1, d),
+            tod = new Date();
+        const fav = new Set((favDays || []).map(s => DMAP[s.toLowerCase()] || s.toLowerCase().slice(0, 2)));
+        for (let i = 0; i < 7; i++) {
+            const dt = new Date(mon);
+            dt.setDate(mon.getDate() + i);
+            const isT = dt.getFullYear() === tod.getFullYear() && dt.getMonth() === tod.getMonth() && dt.getDate() === tod.getDate();
+            const el = document.createElement("div");
+            el.className = "fc-day" + (isT ? " active" : fav.has(DAY[i]) ? " fav" : "");
+            el.innerHTML = `<span class="fc-day-n">${DAY[i]}</span><span class="fc-day-d">${dt.getDate()}</span>`;
+            strip.appendChild(el);
+        }
     }
-    setStep('step2','done');setStep('step3','active');
-    await delay(400);setStep('step3','done');await delay(300);
-    renderForecast(data);showScreen('s-forecast');
-}
 
-document.getElementById('btn-submit').addEventListener('click',handleSubmit);
-document.getElementById('btn-back').addEventListener('click',()=>showScreen('s-input','left'));
-document.getElementById('btn-refresh').addEventListener('click',()=>showScreen('s-input','left'));
-document.getElementById('f-city').addEventListener('keydown',e=>{if(e.key==='Enter')handleSubmit();});
-</script>
+    function fitSignSize(name) {
+        const l = name.length;
+        if (l <= 4)
+            return "clamp(42px,12vw,52px)";
+        if (l <= 6)
+            return "clamp(34px,10vw,44px)";
+        if (l <= 8)
+            return "clamp(28px,8vw,36px)";
+        return "clamp(24px,7vw,30px)";
+    }
+
+    function renderAspects(aspects) {
+        const el = document.getElementById("fc-aspects");
+        el.innerHTML = "";
+        if (!aspects || !aspects.length) {
+            el.innerHTML = '<div class="fc-asp-empty">Сегодня нет значимых аспектов — спокойный день.</div>';
+            return;
+        }
+        aspects.forEach(asp => {
+            const div = document.createElement("div");
+            div.className = "fc-asp-item";
+            div.innerHTML = `<div class="fc-asp-dot ${asp.type}"></div><div class="fc-asp-body"><div class="fc-asp-title">${asp.title}</div><div class="fc-asp-text">${asp.text}</div></div><div class="fc-asp-badge ${asp.type}">${asp.aspName}</div>`;
+            el.appendChild(div);
+        });
+    }
+
+    function addStars() {
+        const c = document.getElementById("fc-hstars");
+        [[12, 8], [70, 5], [85, 22], [28, 32], [52, 15], [90, 38], [8, 48], [44, 7], [62, 42], [78, 14]].forEach(([l, t]) => {
+            const s = document.createElement("span");
+            s.className = "fc-hstar";
+            s.style.left = l + "%";
+            s.style.top = t + "%";
+            s.textContent = Math.random() > .5 ? "✦" : "·";
+            c.appendChild(s);
+        });
+    }
+
+    function renderForecast(data) {
+        const {natal, forecast, dailyAspects, week_start, week_end} = data;
+        document.getElementById("fc-week-lbl").textContent = `${week_start} — ${week_end}`;
+        const signIdx = natal.sun.signIdx || signOf(data._raw?.planets?.[0]?.lon || 0) || 0;
+        const charImg = document.getElementById("fc-char-img");
+        charImg.src = STICKERS[signIdx] || STICKERS[0];
+        const signEl = document.getElementById("fc-sign");
+        signEl.textContent = natal.sun.sign;
+        signEl.style.fontSize = fitSignSize(natal.sun.sign);
+        document.getElementById("fc-char-name").textContent = CHAR_NAMES[signIdx] || "";
+        const sub = [];
+        if (natal.ascendant && natal.ascendant.sign)
+            sub.push(`Асц. ${natal.ascendant.sign}`);
+        sub.push(`Луна в ${natal.moon.sign}`);
+        document.getElementById("fc-sign-sub").textContent = sub.join(" · ");
+        document.getElementById("fc-summary").textContent = forecast.summary;
+        buildDays(week_start, forecast.favorable_days);
+
+        const tb = document.getElementById("fc-planets-tbody");
+        tb.innerHTML = "";
+        (natal.planets || []).forEach(p => {
+            const si = signOf(p.lon),
+                deg = lonToDegMin(p.lon);
+            const tr = document.createElement("tr");
+            tr.innerHTML = `<td>${p.n}</td><td>${SR[si]}</td><td>${deg}${p.retro ? '<span class="retro">℞</span>' : " "}</td>`;
+            tb.appendChild(tr);
+        });
+        if (natal.ascendant && natal.ascendant.sign) {
+            const tr = document.createElement("tr");
+            tr.className = "asc-row";
+            tr.innerHTML = `<td>Асцендент</td><td>${natal.ascendant.sign}</td><td></td>`;
+            tb.appendChild(tr);
+        }
+
+        renderAspects(dailyAspects);
+        [["love", "sc-love", "bar-love", "txt-love"], ["friends", "sc-friends", "bar-friends", "txt-friends"], ["career", "sc-career", "bar-career", "txt-career"], ["finance", "sc-finance", "bar-finance", "txt-finance"], ["health", "sc-health", "bar-health", "txt-health"]].forEach(([k, sid, bid, tid], i) => {
+            const s = forecast[k] || {
+                rating: 3,
+                text: ""
+            };
+            document.getElementById(sid).textContent = s.rating;
+            document.getElementById(tid).textContent = s.text;
+            setTimeout(() => {
+                document.getElementById(bid).style.width = `${s.rating * 20}%`;
+            }, 200 + i * 120);
+        });
+        addStars();
+        document.querySelector(".fc-scroll").scrollTop = 0;
+    }
+
+    async function handleSubmit() {
+        const date = document.getElementById("f-date").value.trim(),
+            time = document.getElementById("f-time").value.trim(),
+            city = document.getElementById("f-city").value.trim();
+        const err = validate(date, time, city);
+        if (err) {
+            showError(err);
+            return;
+        }
+        clearError();
+        showScreen("s-loading");
+        setStep("step1", "active");
+        setStep("step2", "idle");
+        setStep("step3", "idle");
+        let place;
+        try {
+            place = await resolvePlace(city);
+        } catch (e) {
+            showScreen("s-input");
+            showError(e.message || "Город не найден.");
+            return;
+        }
+        setStep("step1", "done");
+        setStep("step2", "active");
+        let data;
+        try {
+            const resp = await fetch(`${FORECAST_API}/api/chart`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    birth_date: date,
+                    birth_time: time || "",
+                    lat: place.lat,
+                    lon: place.lon,
+                    timezone: place.timezone,
+                    city_name: place.label || place.name || city
+                }),
+                signal: AbortSignal.timeout(8000)
+            });
+            if (!resp.ok)
+                throw new Error(`${resp.status}`);
+            data = await resp.json();
+            if (data && !data.dailyAspects) {
+                try {
+                    const chart = await calcChart(date, time, city);
+                    data.dailyAspects = calcDailyAspects(chart.planets, chart.ascendant);
+                    if (!data.natal)
+                        data.natal = {};
+                    if (!data.natal.signIdx && data._raw)
+                        data.natal.signIdx = signOf(data._raw.planets?.[0]?.lon || 0);
+                } catch (e) {
+                    data.dailyAspects = [];
+                }
+            }
+        } catch (e) {
+            console.warn("Backend недоступен, локальный расчёт:", e.message);
+            try {
+                data = await buildLocalResponse(date, time, city);
+            } catch (e2) {
+                showScreen("s-input");
+                showError(e2.message || "Произошла ошибка.");
+                return;
+            }
+        }
+        setStep("step2", "done");
+        setStep("step3", "active");
+        await delay(400);
+        setStep("step3", "done");
+        await delay(300);
+        renderForecast(data);
+        showScreen("s-forecast");
+    }
+
+    document.getElementById("btn-submit").addEventListener("click", handleSubmit);
+    document.getElementById("btn-back").addEventListener("click", () => showScreen("s-input", "left"));
+    document.getElementById("btn-refresh").addEventListener("click", () => showScreen("s-input", "left"));
+    document.getElementById("f-city").addEventListener("keydown", e => {
+        if (e.key === "Enter")
+            handleSubmit();
+    });
+    </script>
 </body>
 </html>
