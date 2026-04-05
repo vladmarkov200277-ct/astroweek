@@ -64,116 +64,107 @@
 
     .screen.slide-left.hidden {
         transform: translateX(-32px)
-    }/* ── ЭКРАН 1: ВВОД ── */
+    }/* ── ЭКРАН 1: ВВОД (новый дизайн) ── */
 
     #s-input {
         background: var(--dark);
-        justify-content: space-between;
-        padding: 52px 30px 32px
-    }
-
-    .input-top {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start
-    }
-
-    .input-brand {
-        font-size: 8px;
-        font-weight: 400;
-        letter-spacing: 3px;
-        color: rgba(255, 255, 255, .28);
-        text-transform: uppercase;
-        line-height: 1.8
-    }
-
-    .input-brand-r {
-        font-family: var(--font-script);
-        font-size: 13px;
-        color: rgba(244, 167, 192, .4)
-    }
-
-    .input-hero {
-        flex: 1;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
         display: flex;
         flex-direction: column;
-        justify-content: center;
-        padding: 20px 0 16px
     }
 
-    .hero-w {
-        font-family: var(--font-serif);
+    .s1-top {
+        background: #1c0a14;
+        padding: 52px 28px 24px;
+        position: relative;
+        overflow: hidden;
+        flex-shrink: 0;
+    }
+
+    .s1-star {
+        position: absolute;
+        pointer-events: none;
+        z-index: 1;
+        font-size: 11px;
+    }
+
+    .s1-brand {
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 3px;
+        color: rgba(255,255,255,.38);
+        text-transform: uppercase;
+        margin-bottom: 20px;
+        position: relative;
+        z-index: 2;
+    }
+
+    .s1-h1 {
+        font-family: 'DM Sans', sans-serif;
+        font-size: clamp(58px, 18vw, 84px);
         font-weight: 900;
         color: #fff;
-        line-height: .88;
+        line-height: .86;
         letter-spacing: -2px;
+        text-transform: uppercase;
         display: block;
-        font-size: clamp(68px, 20vw, 90px)
+        position: relative;
+        z-index: 2;
     }
 
-    .hero-w.acc {
-        font-style: italic;
-        color: var(--rose-lt)
+    .s1-h2 {
+        font-family: 'Dancing Script', cursive;
+        font-size: clamp(58px, 18vw, 84px);
+        color: #f472b6;
+        line-height: .92;
+        display: block;
+        position: relative;
+        z-index: 2;
     }
 
-    .hero-mid {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        margin: 12px 0
+    .s1-wave {
+        display: block;
+        width: 100%;
+        flex-shrink: 0;
+        margin-top: -1px;
+        background: #f2dce8;
     }
 
-    .hero-mid-line {
+    .s1-body {
+        background: #f2dce8;
+        padding: 22px 28px 28px;
         flex: 1;
-        height: .5px;
-        background: rgba(255, 255, 255, .1)
     }
 
-    .hero-mid-txt {
-        font-size: 8px;
-        letter-spacing: 3px;
-        color: rgba(255, 255, 255, .2);
-        text-transform: uppercase
-    }
-
-    .hero-sm {
-        font-family: var(--font-script);
-        font-size: clamp(26px, 8vw, 36px);
-        color: rgba(255, 255, 255, .28);
-        line-height: 1.1
-    }
-
-    .input-fields {
-        display: flex;
-        flex-direction: column
-    }
-
-    .field-split {
-        display: flex;
-        gap: 20px
-    }
-
-    .field-split .ifield {
-        flex: 1
+    .s1-intro {
+        font-family: 'Playfair Display', serif;
+        font-size: 14px;
+        font-style: italic;
+        color: #8b1a4a;
+        line-height: 1.6;
+        margin-bottom: 22px;
     }
 
     .ifield {
-        border-bottom: .5px solid rgba(255, 255, 255, .12);
-        padding: 12px 0;
-        transition: border-color .2s
+        border-bottom: 1.5px solid #d4a8c0;
+        padding: 11px 0;
+        margin-bottom: 4px;
+        transition: border-color .2s;
     }
 
     .ifield:focus-within {
-        border-color: var(--rose-lt)
+        border-color: #e8317a;
     }
 
     .ifield label {
         display: block;
-        font-size: 7px;
+        font-size: 9px;
+        font-weight: 700;
         letter-spacing: 2.5px;
-        color: rgba(255, 255, 255, .22);
+        color: #f472b6;
         text-transform: uppercase;
-        margin-bottom: 6px
+        margin-bottom: 6px;
     }
 
     .ifield input {
@@ -181,72 +172,93 @@
         background: transparent;
         border: none;
         outline: none;
-        font-family: var(--font-script);
-        font-size: 16px;
-        color: rgba(255, 255, 255, .7);
-        caret-color: var(--rose-lt);
-        -webkit-appearance: none
+        font-family: 'DM Sans', sans-serif;
+        font-size: 17px;
+        font-weight: 400;
+        color: #1c0a14;
+        caret-color: #e8317a;
+        -webkit-appearance: none;
     }
 
     .ifield input::placeholder {
-        font-family: var(--font-sans);
-        font-size: 12px;
-        color: rgba(255, 255, 255, .15);
-        font-style: normal
+        color: #c4a0b4;
+        font-size: 15px;
+        font-weight: 300;
+        font-style: normal;
+        font-family: 'DM Sans', sans-serif;
     }
 
     .error-msg {
         font-size: 11px;
-        color: #f87090;
+        color: #e8317a;
         margin-top: 10px;
         display: none;
         font-family: var(--font-serif);
-        font-style: italic
+        font-style: italic;
     }
 
     .error-msg.visible {
-        display: block
+        display: block;
     }
 
-    .input-cta {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding-top: 20px
-    }
-
-    .cta-label {
-        font-family: var(--font-serif);
-        font-size: 13px;
-        font-style: italic;
-        color: rgba(255, 255, 255, .35)
-    }
-
-    .cta-btn {
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        background: var(--rose-lt);
+    .btn-cta {
+        margin-top: 22px;
+        width: 100%;
+        padding: 18px;
+        background: #e8317a;
         border: none;
+        border-radius: 100px;
+        font-family: 'DM Sans', sans-serif;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 2.5px;
+        color: #fff;
+        text-transform: uppercase;
         cursor: pointer;
+        box-shadow: 0 8px 28px rgba(232,49,122,.4);
+        transition: transform .15s, box-shadow .15s, background .15s;
+        display: block;
+        text-align: center;
+    }
+
+    .btn-cta:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 36px rgba(232,49,122,.5);
+        background: #d42a6e;
+    }
+
+    .btn-cta:active {
+        transform: translateY(0);
+    }
+
+    .s1-deco {
+        text-align: center;
+        font-size: 12px;
+        color: #d4a0bc;
+        letter-spacing: 4px;
+        margin-top: 12px;
+    }
+
+    .stars-row {
         display: flex;
-        align-items: center;
         justify-content: center;
-        transition: transform .15s, opacity .15s;
-        flex-shrink: 0
+        gap: 10px;
+        padding: 8px 0 20px;
+        background: #f2dce8;
     }
 
-    .cta-btn:active {
-        transform: scale(.92);
-        opacity: .85
+    .mini-star {
+        width: 6px;
+        height: 6px;
+        background: #f472b6;
+        clip-path: polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
+        opacity: .4;
     }
 
-    .cta-arrow {
-        width: 16px;
-        height: 16px;
-        border-top: 2px solid var(--dark);
-        border-right: 2px solid var(--dark);
-        transform: rotate(45deg) translate(-2px, 2px)
+    .mini-star:nth-child(3) {
+        opacity: .85;
+        width: 8px;
+        height: 8px;
     }/* канал-кнопка */
 
     .ch-btn {
@@ -879,56 +891,55 @@
 
         <!-- ЭКРАН 1: ВВОД -->
         <div id="s-input" class="screen">
-            <div class="input-top">
-                <div class="input-brand">
-                    @blondy_club
-                    <br>
-                    <span style="opacity:.4">2026</span>
-                </div>
-                <div class="input-brand-r">astro ✦</div>
+            <div class="s1-top" id="s1top">
+                <div class="s1-brand">@BLONDY_CLUB</div>
+                <span class="s1-h1">ASTRO</span>
+                <span class="s1-h2">Week.</span>
             </div>
-            <div class="input-hero">
-                <span class="hero-w">Astro</span>
-                <span class="hero-w acc">Week.</span>
-                <div class="hero-mid">
-                    <div class="hero-mid-line"></div>
-                    <div class="hero-mid-txt">твой гороскоп</div>
-                    <div class="hero-mid-line"></div>
-                </div>
-                <span class="hero-sm">на каждую неделю</span>
-            </div>
-            <div class="input-fields">
+
+            <svg class="s1-wave" viewBox="0 0 430 46" preserveAspectRatio="none" height="46" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;flex-shrink:0;margin-top:-1px;background:#f2dce8;">
+                <path d="M0,0 Q26,40 58,16 Q90,0 128,32 Q156,46 188,22 Q218,4 256,36 Q286,52 328,22 Q358,8 394,30 Q412,40 430,20 L430,0 Z" fill="#1c0a14"/>
+            </svg>
+
+            <div class="s1-body">
+                <p class="s1-intro">Введи данные рождения — звёзды расскажут, что ждёт тебя на этой неделе</p>
+
                 <div class="ifield">
                     <label for="f-date">Дата рождения</label>
-                    <input id="f-date" type="text" placeholder="ДД · ММ · ГГГГ" maxlength="10" inputmode="numeric">
+                    <input id="f-date" type="text" placeholder="ДД.ММ.ГГГГ" maxlength="10" inputmode="numeric" autocomplete="off">
                 </div>
-                <div class="field-split">
-                    <div class="ifield">
-                        <label for="f-time">Время</label>
-                        <input id="f-time" type="text" placeholder="ЧЧ:ММ" maxlength="5" inputmode="numeric">
-                    </div>
-                    <div class="ifield">
-                        <label for="f-city">Город</label>
-                        <input id="f-city" type="text" placeholder="Москва">
-                    </div>
+                <div class="ifield">
+                    <label for="f-city">Город</label>
+                    <input id="f-city" type="text" placeholder="Москва" autocomplete="off">
                 </div>
+                <div class="ifield">
+                    <label for="f-time">Время рождения</label>
+                    <input id="f-time" type="text" placeholder="необязательно" maxlength="5" inputmode="numeric" autocomplete="off">
+                </div>
+
                 <div id="error-msg" class="error-msg"></div>
-                <div class="input-cta">
-                    <span class="cta-label">читать звёзды</span>
-                    <button id="btn-submit" class="cta-btn">
-                        <div class="cta-arrow"></div>
-                    </button>
-                </div>
+
+                <button id="btn-submit" class="btn-cta">✦ ЧИТАТЬ ЗВЁЗДЫ ✦</button>
+                <div class="s1-deco">✦ · ✦ · ✦</div>
+
                 <a class="ch-btn" id="ch-btn-1" href="https://t.me/BLONDY_club" target="_blank">
                     <div class="ch-sticker">
-                        <img id="ch-img-1" src="" alt="">
+                        <img id="ch-img-1" src="" alt="" style="width:56px;height:56px;object-fit:cover;object-position:center top;display:block;">
                     </div>
                     <div class="ch-sep"></div>
                     <div class="ch-content">
                         <div class="ch-handle">@BLONDY_CLUB</div>
-                        <div class="ch-sub">женская кофемания — сплетничаем и движемся к целям</div>
+                        <div class="ch-sub">женская кофемания</div>
                     </div>
                 </a>
+            </div>
+
+            <div class="stars-row">
+                <div class="mini-star"></div>
+                <div class="mini-star"></div>
+                <div class="mini-star"></div>
+                <div class="mini-star"></div>
+                <div class="mini-star"></div>
             </div>
         </div>
 
@@ -2325,6 +2336,19 @@
         if (e.key === "Enter")
             handleSubmit();
     });
+
+    // Звёздочки на первом экране
+    (function(){
+        var c = document.getElementById('s1top');
+        if (!c) return;
+        [[10,14,'rgba(255,255,255,.55)'],[76,7,'rgba(244,114,182,.65)'],[88,30,'rgba(255,255,255,.35)'],[30,42,'rgba(255,255,255,.4)'],[54,18,'rgba(244,114,182,.45)'],[93,57,'rgba(255,255,255,.28)'],[14,62,'rgba(244,114,182,.3)'],[48,7,'rgba(255,255,255,.6)']].forEach(function(s){
+            var e = document.createElement('span');
+            e.className = 's1-star';
+            e.style.cssText = 'left:' + s[0] + '%;top:' + s[1] + '%;color:' + s[2] + ';';
+            e.textContent = Math.random() > .5 ? '✦' : '·';
+            c.appendChild(e);
+        });
+    })();
     </script>
 </body>
 </html>
